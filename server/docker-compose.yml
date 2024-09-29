@@ -1,0 +1,40 @@
+version: '3.7'
+
+x-envv: &env
+  DATASOURCE_URL: ${DATASOURCE_URL}
+  DB_USER: ${DB_USER}
+  DB_PASSWORD: ${DB_PASSWORD}
+
+services:
+  db:
+    image: postgres:latest
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: local
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  nginx:
+    image: nginx
+    ports:
+      - ${NGINX_PORT_HTTP}:80
+      - ${NGINX_PORT_HTTPS}:443
+    volumes:
+      - ./nginx/${PROFILE}/conf.d:/etc/nginx/conf.d
+      - ${NGINX_SSL_CERTIFICATE}
+      - ${NGINX_SSL_CERTIFICATE_KEY}
+      - ../client/build/:/client/build/
+    depends_on: [ server ]
+
+  server:
+    environment: *env
+    build: ./
+    volumes:
+      - ../client:/client/
+    depends_on: [ db ]
+
+volumes:
+  pgdata:
