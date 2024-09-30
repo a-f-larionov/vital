@@ -1,12 +1,12 @@
-package com.example.demo;
+package com.vital;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ServerLM {
+public class VitalP {
 
 	public static void main(String[] args) {
-		var context = SpringApplication.run(ServerLM.class, args);
+		SpringApplication.run(VitalP.class, args);
 	}
 }

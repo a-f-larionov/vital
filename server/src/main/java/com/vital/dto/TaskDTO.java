@@ -1,4 +1,6 @@
-package com.example.demo;
+package com.vital.dto;
+
+import com.vital.entities.TaskEntity;
 
 import jakarta.validation.constraints.Size;
 

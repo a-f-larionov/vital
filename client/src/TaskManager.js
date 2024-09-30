@@ -1,6 +1,14 @@
 function TaskManager() {
 }
 
+TaskManager.increment = function (task, tasks, setTasks) {
+
+    fetch_("/api/task-increment", "post", task)
+        .then((r) => {
+            console.log('task-increment ...', r);
+        })
+};
+
 TaskManager.create = function (title, tasks, setTasks) {
     console.log("create task" + title);
 
@@ -12,6 +20,13 @@ TaskManager.create = function (title, tasks, setTasks) {
     };
 
     tasks.push(task);
+
+    this.flush(tasks, setTasks);
+}
+
+TaskManager.taskUpdate = function (task, tasks, setTasks) {
+
+    task.needUpdate = true;
 
     this.flush(tasks, setTasks);
 }
@@ -35,7 +50,18 @@ TaskManager.flush = function (tasks, setTasks) {
             prs.push(fetch_('/api/tasks-delete', 'post', { id: task.id })
                 .then((r) => {
                     if (r == null) return;
+
                     task.toDelete = false;
+                    tasks = tasks.filter(t => t.id !== task.id);
+                })
+            );
+        }
+        if (task.needUpdate === true) {
+            prs.push(fetch_('/api/tasks-update', 'post', { id: task.id, title: task.title })
+                .then((r) => {
+                    if (r == null) return;
+
+                    task.needUpdate = false;
                 })
             );
         }

@@ -1,6 +1,12 @@
+import { Box } from '@mui/material';
+
 
 function Title() {
-    return <h4 align="center">Motivate Your Self!</h4>
+
+    return (
+        <Box align="center" >Vital Progression!</Box>
+    )
+
 }
 
 export default Title;
