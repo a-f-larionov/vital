@@ -78,54 +78,49 @@ TaskManager.flush = function (tasks, setTasks) {
 
     tasks.forEach(task => {
         if (task.needFlush === true) {
-            prs.push(fetch_('/api/tasks-add', 'post', task)
-                .then((r) => {
-                    console.log("tasks-add ...", r);
-                    if (r == null) return;
-                    task.needFlush = false;
-                })
-            );
-        }
-        if (task.toDelete === true) {
-            prs.push(fetch_('/api/tasks-delete', 'post', { id: task.id })
-                .then((r) => {
-                    if (r == null) return;
-
-                    task.toDelete = false;
-                    tasks = tasks.filter(t => t.id !== task.id);
-                })
-            );
-        }
-        if (task.needUpdate === true) {
-            prs.push(fetch_('/api/tasks-update', 'post', { id: task.id, title: task.title })
-                .then((r) => {
-                    if (r == null) return;
-
-                    task.needUpdate = false;
-                })
-            );
-        }
-        task.tiks.forEach((tik) => {
-            if (tik.needFlush) {
-                fetch_("/api/tiks-add", 'post', tik)
+            prs.push(
+                fetch_('/api/tasks-add', 'post', task)
                     .then((r) => {
                         if (r == null) return;
-                        tik.needFlush = false;
-                    })
-                console.log('flush tik');
-                console.log(tik);
+                        task.needFlush = false;
+                    }));
+        }
+        if (task.toArchive === true) {
+            prs.push(
+                fetch_('/api/tasks-archive', 'post', { id: task.id })
+                    .then((r) => {
+                        if (r == null) return;
+                        task.toArchive = false;
+                        tasks = tasks.filter(t => t.id !== task.id);
+                    }));
+        }
+        if (task.needUpdate === true) {
+            prs.push(
+                fetch_('/api/tasks-update', 'post', { id: task.id, title: task.title })
+                    .then((r) => {
+                        if (r == null) return;
+                        task.needUpdate = false;
+                    }));
+        }
+        task.tiks.forEach((tik) => {
+            if (tik.needFlush === true) {
+                prs.push(
+                    fetch_("/api/tiks-add", 'post', tik)
+                        .then((r) => {
+                            if (r == null) return;
+                            tik.needFlush = false;
+                        }));
             }
         });
     });
 
-    console.log("flush 2", prs);
     Promise.all(prs).then((a) => {
         localStorage.tasks = JSON.stringify(tasks);
         setTasks([...tasks]);
     });
 }
-TaskManager.delete = function (task, tasks, setTasks) {
-    task.toDelete = true;
+TaskManager.archive = function (task, tasks, setTasks) {
+    task.toArchive = true;
 
     this.flush(tasks, setTasks);
 }

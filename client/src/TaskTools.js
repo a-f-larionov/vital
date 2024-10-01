@@ -50,8 +50,8 @@ function TaskTools({ task, tasks, setTasks }) {
         TaskManager.increment(task, tasks, setTasks);
     }
 
-    function deleteHandler({ task, tasks, setTasks }) {
-        TaskManager.delete(task, tasks, setTasks);
+    function archiveHandler({ task, tasks, setTasks }) {
+        TaskManager.archive(task, tasks, setTasks);
         menuHandleClose();
     }
 
@@ -97,7 +97,7 @@ function TaskTools({ task, tasks, setTasks }) {
                     <EditIcon />
                 </MenuItem>
 
-                <MenuItem onClick={() => deleteHandler({ task, tasks, setTasks })}>
+                <MenuItem onClick={() => archiveHandler({ task, tasks, setTasks })}>
                     <DeleteIcon />
                 </MenuItem>
 

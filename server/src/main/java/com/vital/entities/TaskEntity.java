@@ -24,10 +24,12 @@ public class TaskEntity {
     @Size(min = 1)
     private String title;
 
-    private String m1Title;
-    private String m2Title;
-    private String m3Title;
-    private String m4Title;
+    private Boolean isArchived = false;
+
+    private String m1Title = "";
+    private String m2Title = "";
+    private String m3Title = "";
+    private String m4Title = "";
 
     public TaskEntity(TaskDTO task) {
         this.id = task.getId();

@@ -33,10 +33,6 @@ function TaskTable({ tasks, setTasks }) {
               );
             })
           }
-          {/* <TableCell align="center" border="1px">7 д.&nbsp;</TableCell>
-          <TableCell align="center">30 д.&nbsp;</TableCell>
-          <TableCell align="center"><b>18.</b></TableCell>
-           */}
           <TableCell align="center"></TableCell>
         </TableRow>
       </TableHead>

@@ -34,9 +34,11 @@ public class TaskController {
         return new ResponseDTO("OK");
     }
 
-    @PostMapping("/api/tasks-delete")
-    public ResponseDTO taskDelete(@RequestBody TaskDTO dto) {
-        taskRepository.deleteById(dto.getId());
+    @PostMapping("/api/tasks-archive")
+    public ResponseDTO taskArchive(@RequestBody TaskDTO taskDTO) {
+        var entity = taskRepository.findById(taskDTO.getId());
+        entity.setIsArchived(true);
+        taskRepository.save(entity);
         return new ResponseDTO("OK");
     }
 
@@ -60,7 +62,7 @@ public class TaskController {
         var tiks = taskTiksRepository.findAll();
         var groupedTiks = tiks.stream()
                 .collect(Collectors.groupingBy(TikEntity::getTid));
-                
+
         return list.stream()
                 .map(entity -> new TaskDTO(entity, groupedTiks.getOrDefault(entity.getId(), new ArrayList())))
                 .toList();
@@ -95,4 +97,4 @@ public class TaskController {
         return new ResponseDTO("OK");
     }
 
-}   
+}
