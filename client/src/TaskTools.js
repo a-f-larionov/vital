@@ -1,4 +1,6 @@
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
@@ -6,14 +8,11 @@ import { Box, Button, Input } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React from "react";
 import TaskManager from "./TaskManager";
-import CheckIcon from '@mui/icons-material/Check';
-import CloseIcon from '@mui/icons-material/Close';
 
 
 function TaskTools({ task, tasks, setTasks }) {
@@ -120,19 +119,13 @@ function TaskTools({ task, tasks, setTasks }) {
                     },
                 }}
             >
-                <DialogTitle>Measurement</DialogTitle>
+                <DialogTitle>Метрика</DialogTitle>
                 <DialogContent>
-                    <Input
-                        autoFocus
-                        required
-                        margin="dense"
-                        name="title"
-                        label="Название"
-                        type="text"
-                        fullWidth
-                        variant="standard"
-                        defaultValue={task.title}
+                    <Input autoFocus required type="text"
+                        margin="dense" label="Название" fullWidth variant="standard"
+                        name="title" defaultValue={task.title}
                     />
+                    Метрика 1:<Input name="m1Title"></Input>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={dialogHandleClose}>

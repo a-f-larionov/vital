@@ -8,4 +8,4 @@ cd ..
 cd server
 call mvn clean install -DskipTests
 
-docker compose up -d --build"
+docker compose up -d --build

@@ -1,6 +1,8 @@
 package com.vital.controllers;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -9,39 +11,38 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vital.dto.ResponseDTO;
 import com.vital.dto.TaskDTO;
+import com.vital.dto.TikDTO;
 import com.vital.entities.TaskEntity;
-import com.vital.repositories.TaskDaysRepository;
+import com.vital.entities.TikEntity;
+import com.vital.repositories.TiksRepository;
 import com.vital.repositories.TaskRepository;
 
 @RestController
 public class TaskController {
 
     final TaskRepository taskRepository;
-    final TaskDaysRepository taskDaysRepository;
+    final TiksRepository taskTiksRepository;
 
-    TaskController(TaskRepository taskRepository, TaskDaysRepository taskDaysRepository) {
+    TaskController(TaskRepository taskRepository, TiksRepository taskDaysRepository) {
         this.taskRepository = taskRepository;
-        this.taskDaysRepository = taskDaysRepository;
+        this.taskTiksRepository = taskDaysRepository;
     }
 
     @PostMapping("/api/tasks-add")
-    public ResponseDTO taskAdd(@RequestBody TaskDTO task) {
-        taskRepository.save(new TaskEntity(task));
+    public ResponseDTO taskAdd(@RequestBody TaskDTO dto) {
+        taskRepository.save(new TaskEntity(dto));
         return new ResponseDTO("OK");
     }
 
     @PostMapping("/api/tasks-delete")
-    public ResponseDTO taskDelete(@RequestBody TaskDTO task) {
-        taskRepository.deleteById(task.getId());
+    public ResponseDTO taskDelete(@RequestBody TaskDTO dto) {
+        taskRepository.deleteById(dto.getId());
         return new ResponseDTO("OK");
     }
 
     @PostMapping("/api/tasks-update")
     public ResponseDTO taskUpdate(@RequestBody TaskDTO dto) {
 
-        System.out.println("------------------------------");
-        System.out.println(dto.getId());
-        System.out.println(dto.getTitle());
         var taskEntity = taskRepository.findById(dto.getId());
 
         taskEntity.setTitle(dto.getTitle());
@@ -56,39 +57,42 @@ public class TaskController {
 
         var list = taskRepository.findAll();
 
+        var tiks = taskTiksRepository.findAll();
+        var groupedTiks = tiks.stream()
+                .collect(Collectors.groupingBy(TikEntity::getTid));
+                
         return list.stream()
-                .map(entity -> new TaskDTO(entity))
+                .map(entity -> new TaskDTO(entity, groupedTiks.getOrDefault(entity.getId(), new ArrayList())))
                 .toList();
 
     }
 
-    @PostMapping("/api/task-incremt")
-    public ResponseDTO taskIncrement(@RequestBody TaskDTO task) {
+    @PostMapping("/api/tiks-add")
+    public ResponseDTO tikAdd(@RequestBody TikDTO tikDto) {
 
-        // taskDaysRepository.incrementByTid(task.getId());
+        TikEntity entity = new TikEntity(tikDto);
+
+        taskTiksRepository.save(entity);
 
         return new ResponseDTO("OK");
     }
 
     @PostMapping("/api/task-days-info")
     public ResponseDTO taskDaysInfo(@RequestBody TaskDTO task) {
-        // taskDaysRepository.findByTidAndDT(task.getId());
 
         return new ResponseDTO("OK");
     }
 
     @PostMapping("/api/task-month-info")
     public ResponseDTO taskMonthInfo(@RequestBody TaskDTO task) {
-        // taskDaysRepository.findByTidAndDT(task.getId());
 
         return new ResponseDTO("OK");
     }
 
     @PostMapping("/api/task-calendar-year-info")
     public ResponseDTO taskCalendarYearInfo(@RequestBody TaskDTO task) {
-        // taskDaysRepository.findByTidAndDT(task.getId());
 
         return new ResponseDTO("OK");
     }
 
-}
+}   

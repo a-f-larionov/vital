@@ -1,12 +1,52 @@
 function TaskManager() {
 }
 
+TaskManager.getTable = function (tasks) {
+
+    let out = {};
+
+    let dates = [-5, -4, -3, -2, -1, 0]
+        .map((offset) => { return new Date(new Date().getTime() + (offset * 86400000)) });
+
+
+    out.cols = dates.map((date) => { return { title: date.getDate() }; });
+    out.rows = tasks.map((task) => {
+        return {
+            id: task.id, task: task,
+            title: task.title,
+            cells: dates.map((date) => {
+                return {
+                    title: task.tiks
+                        .filter((tik) => {
+                            return new Date(tik.datetime).getDate() ===
+                                date.getDate();
+                        })
+                        .reduce((r, tik) => { return r + tik.times; }, 0)
+                };
+            })
+        }
+    })
+
+    return out;
+}
+
 TaskManager.increment = function (task, tasks, setTasks) {
 
-    fetch_("/api/task-increment", "post", task)
-        .then((r) => {
-            console.log('task-increment ...', r);
-        })
+    let date = new Date();
+    task.tiks.push({
+        id: crypto.randomUUID(),
+        tid: task.id,
+        datetime: new Date().toISOString(),
+        seconds: 0,
+        times: 1,
+        m1: 0,
+        m2: 0,
+        m3: 0,
+        m4: 0,
+        needFlush: true
+    });
+
+    this.flush(tasks, setTasks);
 };
 
 TaskManager.create = function (title, tasks, setTasks) {
@@ -15,7 +55,7 @@ TaskManager.create = function (title, tasks, setTasks) {
     let task = {
         id: crypto.randomUUID(),
         title: title,
-        counter: 0,
+        tiks: [],
         needFlush: true
     };
 
@@ -65,6 +105,17 @@ TaskManager.flush = function (tasks, setTasks) {
                 })
             );
         }
+        task.tiks.forEach((tik) => {
+            if (tik.needFlush) {
+                fetch_("/api/tiks-add", 'post', tik)
+                    .then((r) => {
+                        if (r == null) return;
+                        tik.needFlush = false;
+                    })
+                console.log('flush tik');
+                console.log(tik);
+            }
+        });
     });
 
     console.log("flush 2", prs);
@@ -86,6 +137,7 @@ TaskManager.load = function (tasks, setTasks) {
         .then((r) => {
             console.log("tasks-list result", r);
             if (r == null) {
+                // skip data from server
                 setTasks(tasks);
             } else {
                 console.log(r);
