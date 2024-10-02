@@ -11,8 +11,8 @@ public interface TiksRepository extends PagingAndSortingRepository<TikEntity, St
 
     public void save(TikEntity entity);
 
-    @Query(nativeQuery = true, value =
-     "SELECT MAX(id) as id, tid, date_trunc('day', datetime) as datetime, sum(times) as times,sum(seconds) as seconds, SUM(m1) as m1, SUM(m2) as m2, SUM(m3) as m3, SUM(m4) as m4 FROM tik_entity group by tid, date_trunc('day', datetime)")
+    // @Query(nativeQuery = true, value =
+    //  "SELECT MAX(id) as id, tid, date_trunc('day', datetime) as datetime, sum(times) as times,sum(seconds) as seconds, SUM(m1) as m1, SUM(m2) as m2, SUM(m3) as m3, SUM(m4) as m4 FROM tik_entity group by tid, date_trunc('day', datetime)")
     public List<TikEntity> findAll();
     // increment by tid and dt
 

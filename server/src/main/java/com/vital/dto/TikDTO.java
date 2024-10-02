@@ -1,5 +1,6 @@
 package com.vital.dto;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -17,7 +18,8 @@ public class TikDTO {
     private String id;
     private String tid;
 
-    private LocalDateTime datetime;
+    private Instant datetime;
+    //private LocalDateTime datetime;
 
     private Long times;
     private Long seconds;

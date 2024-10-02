@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import { Box, Button, Input } from "@mui/material";
+import { Box, Button, Grid, Grid2, Input } from "@mui/material";
 import TaskManager from './TaskManager';
 import React from 'react';
 
@@ -40,13 +40,18 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                 },
             }}
         >
-            <DialogTitle>Метрика</DialogTitle>
-            <DialogContent>
-                <Input autoFocus required type="text"
-                    margin="dense" label="Название" fullWidth variant="standard"
-                    name="title" defaultValue={task.title}
-                />
-                Метрика 1:<Input name="m1Title"></Input>
+            <DialogTitle>Метрики задачи</DialogTitle>
+            <DialogContent sx={{ flexGrow: 1 }}>
+                <Grid2 container spacing={3}>
+                    <Grid2 size={3}>Название:</Grid2>
+                    <Grid2 size={9}>
+                        <Input autoFocus required type="text"
+                            margin="dense" label="Название" fullWidth variant="standard"
+                            name="title" defaultValue={task.title} />
+                    </Grid2>
+                    <Grid2 size={3} >Метрика А:</Grid2>
+                    <Grid2 size={9}><Input fullWidth name="m1Title"></Input></Grid2>
+                </Grid2>
             </DialogContent>
             <DialogActions>
                 <Button onClick={dialogHandleClose}>

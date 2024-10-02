@@ -1,5 +1,7 @@
 package com.vital.controllers;
 
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -57,9 +59,14 @@ public class TaskController {
     @GetMapping("/api/tasks-list")
     public List<TaskDTO> getTasks() {
 
-        var list = taskRepository.findAll();
+        var list = taskRepository.findByIsArchivedFalse();
 
         var tiks = taskTiksRepository.findAll();
+        
+        System.out.println("-----------------");
+        System.out.println(tiks.getFirst().getDatetime());
+        System.out.println(ZoneId.systemDefault());
+    
         var groupedTiks = tiks.stream()
                 .collect(Collectors.groupingBy(TikEntity::getTid));
 

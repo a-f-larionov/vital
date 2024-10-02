@@ -1,5 +1,6 @@
 package com.vital.entities;
 
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -27,7 +28,7 @@ public class TikEntity {
     private String id;
 
     @CreationTimestamp
-    private LocalDateTime datetime;
+    private Instant datetime;
 
     private String tid;
 

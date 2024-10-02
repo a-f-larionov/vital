@@ -36,7 +36,7 @@ TaskManager.increment = function (task, tasks, setTasks) {
     task.tiks.push({
         id: crypto.randomUUID(),
         tid: task.id,
-        datetime: new Date().toISOString(),
+        datetime: new Date().toISOString(), // remove Z
         seconds: 0,
         times: 1,
         m1: 0,
