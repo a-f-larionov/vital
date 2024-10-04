@@ -1,3 +1,10 @@
+var apiUrl = "/api";
+if (window.location.href.search("localhost") !== -1) {
+    apiUrl = "http://localhost:8081" + apiUrl;
+}
+var apiTasks = apiUrl + "/tasks";
+var apiTiks = apiUrl + "/tiks";
+
 function TaskManager() {
 }
 
@@ -21,7 +28,7 @@ TaskManager.getTable = function (tasks) {
                             return new Date(tik.datetime).getDate() ===
                                 date.getDate();
                         })
-                        .reduce((r, tik) => { return r + tik.times; }, 0)
+                        .reduce((r, tik) => { return r + 1; }, 0)
                 };
             })
         }
@@ -32,32 +39,28 @@ TaskManager.getTable = function (tasks) {
 
 TaskManager.increment = function (task, tasks, setTasks) {
 
-    let date = new Date();
     task.tiks.push({
         id: crypto.randomUUID(),
         tid: task.id,
         datetime: new Date().toISOString(), // remove Z
-        seconds: 0,
-        times: 1,
-        m1: 0,
-        m2: 0,
-        m3: 0,
-        m4: 0,
+
+        m1: 10,
+        m2: 20,
+        m3: 30,
+        m4: 40,
+
         needFlush: true
     });
 
     this.flush(tasks, setTasks);
 };
 
-TaskManager.create = function (title, tasks, setTasks) {
-    console.log("create task" + title);
+TaskManager.create = function (task, tasks, setTasks) {
+    console.log("create task:" + task.title);
 
-    let task = {
-        id: crypto.randomUUID(),
-        title: title,
-        tiks: [],
-        needFlush: true
-    };
+    task.id = crypto.randomUUID();
+    task.tiks = [];
+    task.needFlush = true;
 
     tasks.push(task);
 
@@ -79,7 +82,7 @@ TaskManager.flush = function (tasks, setTasks) {
     tasks.forEach(task => {
         if (task.needFlush === true) {
             prs.push(
-                fetch_('/api/tasks-add', 'post', task)
+                fetch_(apiTasks + '/add', 'post', task)
                     .then((r) => {
                         if (r == null) return;
                         task.needFlush = false;
@@ -87,7 +90,7 @@ TaskManager.flush = function (tasks, setTasks) {
         }
         if (task.toArchive === true) {
             prs.push(
-                fetch_('/api/tasks-archive', 'post', { id: task.id })
+                fetch_(apiTasks + '/archive', 'post', { id: task.id })
                     .then((r) => {
                         if (r == null) return;
                         task.toArchive = false;
@@ -96,7 +99,7 @@ TaskManager.flush = function (tasks, setTasks) {
         }
         if (task.needUpdate === true) {
             prs.push(
-                fetch_('/api/tasks-update', 'post', { id: task.id, title: task.title })
+                fetch_(apiTasks + '/update', 'post', { id: task.id, title: task.title })
                     .then((r) => {
                         if (r == null) return;
                         task.needUpdate = false;
@@ -105,7 +108,7 @@ TaskManager.flush = function (tasks, setTasks) {
         task.tiks.forEach((tik) => {
             if (tik.needFlush === true) {
                 prs.push(
-                    fetch_("/api/tiks-add", 'post', tik)
+                    fetch_(apiTiks + "/add", 'post', tik)
                         .then((r) => {
                             if (r == null) return;
                             tik.needFlush = false;
@@ -128,9 +131,9 @@ TaskManager.archive = function (task, tasks, setTasks) {
 TaskManager.load = function (tasks, setTasks) {
     console.log("load");
 
-    fetch_('/api/tasks-list')
+    fetch_(apiTasks + '/list')
         .then((r) => {
-            console.log("tasks-list result", r);
+            console.log("api/tasks/list result", r);
             if (r == null) {
                 // skip data from server
                 setTasks(tasks);
@@ -160,7 +163,9 @@ TaskManager.init = function (setTasks) {
 
 function fetch_(url, method, body) {
 
-    console.log("fetch : " + url);
+    if (!method) method = "get";
+
+    console.log("fetch : " + url + " " + method);
 
     return fetch(url, {
         method: method,

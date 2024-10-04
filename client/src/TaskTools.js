@@ -78,7 +78,8 @@ function TaskTools({ task, tasks, setTasks }) {
 
             </Menu>
 
-            <TaskDialog setOpenCallback={(handler) => { doOpenDialog = handler }} task={task} tasks={tasks} setTasks={setTasks} />
+            <TaskDialog setOpenCallback={(handler) => { doOpenDialog = handler }}
+                task={task} tasks={tasks} setTasks={setTasks} />
 
         </Box >
     );

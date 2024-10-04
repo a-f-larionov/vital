@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
- import './App.css';
+import './App.css';
 
 import React from "react";
 import { useState } from "react";
@@ -23,19 +23,19 @@ function App() {
                 <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                     <Grid2 size={13}></Grid2>
                     <Grid2 size={2}></Grid2>
-                    <Grid2 size={8}>
+                    <Grid2 size={6}>
                         <Title />
                     </Grid2>
-                    <Grid2 size={2}></Grid2>
-
+                    <Grid2 size={1}>
+                        <ToolAddTask tasks={tasks} setTasks={setTasks} />
+                    </Grid2>
 
                     <Grid2 size={13}>
                         <TaskTable tasks={tasks} setTasks={setTasks} />
                     </Grid2>
 
-
                     <Grid2 size={13}>
-                        <ToolAddTask tasks={tasks} setTasks={setTasks} />
+
                     </Grid2>
                 </Grid2>
             </React.StrictMode >

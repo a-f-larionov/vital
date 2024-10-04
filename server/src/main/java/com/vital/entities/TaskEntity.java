@@ -3,8 +3,6 @@ package com.vital.entities;
 import com.vital.dto.TaskDTO;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -18,7 +16,6 @@ import lombok.Setter;
 public class TaskEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
     @Size(min = 1)
@@ -34,6 +31,7 @@ public class TaskEntity {
     public TaskEntity(TaskDTO task) {
         this.id = task.getId();
         this.title = task.getTitle();
+        this.isArchived = false;
     }
 
 }

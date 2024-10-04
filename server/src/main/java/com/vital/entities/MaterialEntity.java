@@ -6,28 +6,25 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.AllArgsConstructor;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Setter
-@Getter
-@NoArgsConstructor
-@AllArgsConstructor
 @Entity
-public class TikEntity {
+@Getter
+@Setter
+@NoArgsConstructor
+public class MaterialEntity {
 
     @Id
     private String id;
 
+    @Size(min = 1)
+    private String title;
+
     @CreationTimestamp
-    private Instant datetime;
+    private Instant created;
 
-    private String tid;
-
-    private Long m1;
-    private Long m2;
-    private Long m3;
-    private Long m4;
+    private Instant finished;
 }

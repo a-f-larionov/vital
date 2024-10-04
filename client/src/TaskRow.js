@@ -1,14 +1,15 @@
-import { TableRow, TableCell, Tab } from "@mui/material";
+import { TableCell, TableRow } from "@mui/material";
 import TaskTools from "./TaskTools";
 
 function TaskRow({ title, cells, task, tasks, setTasks }) {
+    let i = 0;
     return (
         <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
             <TableCell component="th" scope="row" align="right">{title}</TableCell>
 
             {cells.map((cell) => {
                 return (
-                    <TableCell key={cell.title} align="center">{cell.title}</TableCell>
+                    <TableCell key={cell.title+(i++)} align="center">{cell.title}</TableCell>
                 );
             })}
 
