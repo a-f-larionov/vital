@@ -3,6 +3,7 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import PlusOneIcon from '@mui/icons-material/PlusOne';
 import { Box, Button } from "@mui/material";
 
 import Menu from '@mui/material/Menu';
@@ -45,7 +46,8 @@ function TaskTools({ task, tasks, setTasks }) {
         <Box>
             <Button variant="contained" color="success" sx={{ minWidth: 0 }}
                 onClick={() => onIncrementClick({ task, tasks, setTasks })}>
-                <ArrowCircleUpIcon fontSize="small" />
+                
+                <PlusOneIcon fontSize='small'/>
             </Button>
 
             <Button

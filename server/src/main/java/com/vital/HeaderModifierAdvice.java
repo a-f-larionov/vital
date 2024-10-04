@@ -27,7 +27,8 @@ public class HeaderModifierAdvice implements ResponseBodyAdvice<Object> {
             Class<? extends HttpMessageConverter<?>> selectedConverterType,
             ServerHttpRequest request,
             ServerHttpResponse response) {
-        response.getHeaders().add("Access-Control-Allow-Origin", "*");
+        //response.getHeaders().add("Access-Control-Allow-Origin", "*");
+        //response.getHeaders().add("Access-Control-Allow-Headers", "*");
     
         return body;
     }

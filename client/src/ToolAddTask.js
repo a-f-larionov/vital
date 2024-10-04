@@ -13,14 +13,15 @@ function ToolAddTask({ tasks, setTasks }) {
 
     return (
         <Box display="flex" justifyContent="center">
-            {/* <Input placeholder="Название задачи" inputRef={ref} ></Input> */}
-
-            <Button sx={{ minWidth: 0 }} size="small" variant="contained" color="success" onClick={onClickHandler}>
+            <Button sx={{ minWidth: 0 }} size="small"
+                variant="contained" color="success"
+                onClick={onClickHandler}>
                 <AddIcon />
             </Button>
-            <TaskDialog setOpenCallback={(handler) => { doOpenDialog = handler }}
+            <TaskDialog
+                setOpenCallback={(handler) => { doOpenDialog = handler }}
                 task={{}} tasks={tasks} setTasks={setTasks} />
-        </Box>
+        </Box >
     );
 
 }

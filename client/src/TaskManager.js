@@ -1,6 +1,8 @@
 var apiUrl = "/api";
 if (window.location.href.search("localhost") !== -1) {
-    apiUrl = "http://localhost:8081" + apiUrl;
+    let port = (new URLSearchParams(window.location.search)).get('port');
+    port = port ? port : 8081;
+    apiUrl = "http://localhost:" + port + apiUrl;
 }
 var apiTasks = apiUrl + "/tasks";
 var apiTiks = apiUrl + "/tiks";
@@ -147,7 +149,7 @@ TaskManager.load = function (tasks, setTasks) {
 
 
 TaskManager.init = function (setTasks) {
-    console.log('getTasks');
+    console.log('init:getTasks');
     let tasks = localStorage.tasks === undefined ? [] : JSON.parse(localStorage.tasks);
     console.log('getTasks 2', tasks);
     this.flush(tasks, (ts) => {

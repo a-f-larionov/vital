@@ -23,15 +23,9 @@ public class TaskEntity {
 
     private Boolean isArchived = false;
 
-    private String m1Title = "";
-    private String m2Title = "";
-    private String m3Title = "";
-    private String m4Title = "";
-
-    public TaskEntity(TaskDTO task) {
-        this.id = task.getId();
-        this.title = task.getTitle();
-        this.isArchived = false;
-    }
-
+    private String mId1 = "";
+    private String mId2 = "";
+    private String vCode1 = "";
+    private String vCode2 = "";
+    //https://habr.com/ru/articles/460377/
 }

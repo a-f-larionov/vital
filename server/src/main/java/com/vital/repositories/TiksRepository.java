@@ -11,12 +11,4 @@ public interface TiksRepository extends PagingAndSortingRepository<TikEntity, St
     public void save(TikEntity entity);
 
     public List<TikEntity> findAll();
-    // increment by tid and dt
-
-    // find by tid and beforeef dt: tid dt times, m1,m2,m3,m4
-
-    // sum week by tid: tid, times, m1,m2,m3,m4
-    // sum month by tid: tid, times, m1,m2,m3,m4
-    // sum thisYear tid: tid, times, m1,m2,m3,m4
-
 }

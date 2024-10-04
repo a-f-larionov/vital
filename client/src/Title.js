@@ -1,6 +1,5 @@
 import { Box } from '@mui/material';
 
-
 function Title() {
 
     return (

@@ -1,0 +1,29 @@
+databaseChangeLog:
+  - changeSet:
+      id: "1"
+      author: developer
+      comment: "Create Task Table"
+      changes:
+        - sqlFile:
+            path: /db/changelog/001-create-task-table.sql
+  - changeSet:
+      id: "2"
+      author: developer
+      comment: "Create Tik Table"
+      changes:
+        - sqlFile:
+            path: /db/changelog/002-create-tik-table.sql
+  - changeSet:
+      id: "3"
+      author: developer
+      comment: "Create Metrica Table"
+      changes:
+        - sqlFile:
+            path: /db/changelog/003-create-metrica-table.sql
+  - changeSet:
+      id: "4"
+      author: developer
+      comment: Metrica base data
+      changes:
+        - sqlFile:
+            path: /db/changelog/004-insert-metrica.sql
