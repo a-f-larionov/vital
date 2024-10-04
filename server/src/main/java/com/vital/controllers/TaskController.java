@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +38,7 @@ public class TaskController {
     @PostMapping("/add")
     public ResponseDTO add(@RequestBody @Valid TaskDTO taskDto, HttpEntity<byte[]> requestEntity) {
 
-        var entity = taskMapper.toEntity(taskDto);
+        var entity =  taskMapper.toEntity(taskDto);
 
         taskRepository.save(entity);
 
@@ -77,7 +76,7 @@ public class TaskController {
         return tasks.stream()
                 .map(task -> {
                     List<TikEntity> tiks2 = groupedTiks.getOrDefault(task.getId(), new ArrayList<>());
-                    return tikMapper.toDTO(task, tiks2);
+                    return taskMapper.toDTO(task, tiks2);
                 })
                 .toList();
     }

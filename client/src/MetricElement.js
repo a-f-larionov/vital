@@ -1,14 +1,14 @@
+import { FormControl, Grid2, InputLabel, MenuItem, Select } from "@mui/material";
 import React from "react";
-import { Box, Button, FormControl, Grid, Grid2, Input, InputLabel, MenuItem, Select } from "@mui/material";
 
-function MetricElement({ metrica, views, elIndex }) {
+function MetricElement({ mId, vCode, elIndex, metrica, views }) {
 
-    const [type, setType] = React.useState('');
+    const [mIdState, setMIdState] = React.useState(mId ? mId : "");
     const handleTypeChange = (event) => {
-        setType(event.target.value);
+        setMIdState(event.target.value);
     };
 
-    const [view, setView] = React.useState('');
+    const [vCodeState, setView] = React.useState(vCode ? vCode : "");
     const handleViewChange = (event) => {
         setView(event.target.value);
     };
@@ -23,7 +23,7 @@ function MetricElement({ metrica, views, elIndex }) {
                     <Select
                         labelId="select-label-type"
                         id="select-label-type"
-                        value={type}
+                        value={mIdState}
                         label="Тип"
                         name={"typeId" + elIndex}
                         onChange={handleTypeChange}>
@@ -46,7 +46,7 @@ function MetricElement({ metrica, views, elIndex }) {
                     <Select
                         labelId="select-label-view"
                         id="select-label-view"
-                        value={view}
+                        value={vCodeState}
                         label="Вид"
                         name={"viewCode" + elIndex}
                         onChange={handleViewChange}   >

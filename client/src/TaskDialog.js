@@ -1,14 +1,14 @@
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
-import { Button, FormControl, Grid2, Input, InputLabel, MenuItem, Select } from "@mui/material";
+import { Button, Grid2, Input } from "@mui/material";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
-import TaskManager from './TaskManager';
 import MetricaManager from './MetricaManager';
 import MetricElement from './MetricElement';
+import TaskManager from './TaskManager';
 
 function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
 
@@ -46,16 +46,13 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
     function dialogSaveHandler(title, mId1, mId2, vCode1, vCode2) {
         task.title = title;
         task.mId1 = mId1;
-        task.m_id1 ='123';
-        task.m_id_1 ='124';
-        task.mid_1 ='125';
-        task.mid1 ='126';
         task.mId2 = mId2;
         task.vCode1 = vCode1;
         task.vCode2 = vCode2;
 
+        console.log(task);
         if (task.id) {
-            TaskManager.taskUpdate(task, tasks, setTasks)
+            TaskManager.taskUpdate(task, tasks, setTasks);
         } else {
             TaskManager.create(task, tasks, setTasks);
         }
@@ -95,9 +92,8 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                             name="title" defaultValue={task.title} />
                     </Grid2>
 
-                    <MetricElement metrica={metrica} views={views} elIndex={1} />
-                    <MetricElement metrica={metrica} views={views} elIndex={2} />
-
+                    <MetricElement elIndex={1} mId={task.mId1} vCode={task.vCode1} metrica={metrica} views={views} />
+                    <MetricElement elIndex={2} mId={task.mId2} vCode={task.vCode2} metrica={metrica} views={views} />
 
                     <Grid2 size={3} >Материалы:</Grid2>
                     <Grid2 size={6}>

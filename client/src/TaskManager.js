@@ -17,20 +17,21 @@ TaskManager.getTable = function (tasks) {
     let dates = [-5, -4, -3, -2, -1, 0]
         .map((offset) => { return new Date(new Date().getTime() + (offset * 86400000)) });
 
-
     out.cols = dates.map((date) => { return { title: date.getDate() }; });
     out.rows = tasks.map((task) => {
         return {
-            id: task.id, task: task,
+            id: task.id,
+            task: task,
             title: task.title,
             cells: dates.map((date) => {
+
                 return {
                     title: task.tiks
                         .filter((tik) => {
-                            return new Date(tik.datetime).getDate() ===
+                            return new Date(tik.datetime * 1000).getDate() ===
                                 date.getDate();
                         })
-                        .reduce((r, tik) => { return r + 1; }, 0)
+                        .reduce((r, tik) => { return r + (task.vCode1 ? tik.m1 : 1); }, 0)
                 };
             })
         }
@@ -39,22 +40,36 @@ TaskManager.getTable = function (tasks) {
     return out;
 }
 
-TaskManager.increment = function (task, tasks, setTasks) {
+TaskManager.addTik = function (task, tasks, setTasks, m1, m2, m3, m4) {
+    m1 = m1 != undefined ? m1 : 0;
+    m2 = m2 ? m2 : 0;
+    m3 = m3 ? m3 : 0;
+    m4 = m4 ? m4 : 0;
 
     task.tiks.push({
         id: crypto.randomUUID(),
         tid: task.id,
-        datetime: new Date().toISOString(), // remove Z
 
-        m1: 10,
-        m2: 20,
-        m3: 30,
-        m4: 40,
+        datetime: new Date().getTime() / 1000, // remove Z
+
+        m1: m1,
+        m2: m2,
+        m3: m3,
+        m4: m4,
 
         needFlush: true
     });
 
     this.flush(tasks, setTasks);
+}
+
+TaskManager.commitNumber = function (task, tasks, setTasks, m1, m2, m3, m4) {
+    TaskManager.addTik(task, tasks, setTasks, m1, m2, m3, m4);
+};
+
+TaskManager.increment = function (task, tasks, setTasks, m1, m2, m3, m4) {
+
+    TaskManager.addTik(task, tasks, setTasks, m1, m2, m3, m4);
 };
 
 TaskManager.create = function (task, tasks, setTasks) {
@@ -70,8 +85,8 @@ TaskManager.create = function (task, tasks, setTasks) {
 }
 
 TaskManager.taskUpdate = function (task, tasks, setTasks) {
-
     task.needUpdate = true;
+    console.log("update task:" + task.title, task);
 
     this.flush(tasks, setTasks);
 }
@@ -101,7 +116,7 @@ TaskManager.flush = function (tasks, setTasks) {
         }
         if (task.needUpdate === true) {
             prs.push(
-                fetch_(apiTasks + '/update', 'post', { id: task.id, title: task.title })
+                fetch_(apiTasks + '/update', 'post', task)
                     .then((r) => {
                         if (r == null) return;
                         task.needUpdate = false;

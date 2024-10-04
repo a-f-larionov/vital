@@ -1,16 +1,16 @@
-import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PlusOneIcon from '@mui/icons-material/PlusOne';
-import { Box, Button } from "@mui/material";
+import { Box, Button, Input } from "@mui/material";
 
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React from "react";
 import TaskDialog from './TaskDialog';
 import TaskManager from "./TaskManager";
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 
 function TaskTools({ task, tasks, setTasks }) {
@@ -30,6 +30,13 @@ function TaskTools({ task, tasks, setTasks }) {
         TaskManager.increment(task, tasks, setTasks);
     }
 
+    let magicInputRef = React.createRef();
+
+    function onNumberCommit({ task, tasks, setTasks }) {
+        let amount = parseInt(magicInputRef.current.value);
+        TaskManager.commitNumber(task, tasks, setTasks, amount);
+    }
+
     function onArchiveClick({ task, tasks, setTasks }) {
         TaskManager.archive(task, tasks, setTasks);
         menuHandleClose();
@@ -42,13 +49,29 @@ function TaskTools({ task, tasks, setTasks }) {
         menuHandleClose();
     }
 
+
+
     return (
-        <Box>
+        <Box sx={{ minWidth: 0 }}>
+
+            {task.mId1 ?
+                <Input inputRef={magicInputRef} name='name' defaultValue={10} sx={{ minWidth: 0, width: 30 }} /> : ''
+            }
+            {task.mId1
+                ?
+                <Button variant="contained" color="success" sx={{ minWidth: 0 }}
+                    onClick={() => onNumberCommit({ task, tasks, setTasks })}
+                >
+                    <AutoFixHighIcon fontSize='small'></AutoFixHighIcon>
+
+                </Button> : ''}
+
             <Button variant="contained" color="success" sx={{ minWidth: 0 }}
-                onClick={() => onIncrementClick({ task, tasks, setTasks })}>
-                
-                <PlusOneIcon fontSize='small'/>
+                onClick={() => onIncrementClick({ task, tasks, setTasks })}
+            >
+                <PlusOneIcon fontSize='small' />
             </Button>
+
 
             <Button
                 sx={{ minWidth: 0 }}

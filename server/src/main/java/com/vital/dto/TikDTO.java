@@ -10,7 +10,7 @@ import lombok.Setter;
 @Getter
 @NoArgsConstructor
 public class TikDTO {
-    
+
     private String id;
     private String tid;
 
