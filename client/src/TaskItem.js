@@ -9,7 +9,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TaskMenu from './TaskMenu';
 
 
-function TaskItem({ title, cells, task, tasks, setTasks }) {
+function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
     let i = 0;
     return (
         <Grid2 container component={Paper} sx={{ marginBottom: 1 }}>
@@ -29,18 +29,15 @@ function TaskItem({ title, cells, task, tasks, setTasks }) {
                     <Table size="small">
                         <TableBody>
                             <TableRow >
-                                <TableCell sx={{ fontSize: 11 }}>ср</TableCell>
-                                <TableCell sx={{ fontSize: 11 }}>пн</TableCell>
-                                <TableCell sx={{ fontSize: 11 }}>сб</TableCell>
-                                <TableCell sx={{ fontSize: 11 }}>вс</TableCell>
-                                <TableCell sx={{ fontSize: 11 }}>чт</TableCell>
-                                <TableCell sx={{ fontSize: 11 }}>вт</TableCell>
+                                {cols.map((c) => {
+                                    return <TableCell sx={{ fontSize: 11 }}>{c.title}</TableCell>
+                                })}
                             </TableRow>
                             <TableRow sx={{ padding: 0 }}>
                                 {cells.map((cell) => {
                                     return <TableCell>{cell.title}</TableCell>
                                 })}
-                            
+
                             </TableRow>
                         </TableBody>
                     </Table>

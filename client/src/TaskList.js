@@ -13,6 +13,7 @@ function TaskList({ tasks, setTasks }) {
       .map(row =>
         <TaskItem
           key={row.id}
+          cols={table.cols}
           title={row.title}
           cells={row.cells}
           task={row.task} tasks={tasks} setTasks={setTasks} />
