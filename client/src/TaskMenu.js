@@ -13,7 +13,7 @@ import TaskManager from "./TaskManager";
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 
-function TaskTools({ task, tasks, setTasks }) {
+function TaskMenu({ task, tasks, setTasks }) {
 
     const [menuAnchorEl, setAnchorEl] = React.useState(null);
     const menuOpen = Boolean(menuAnchorEl);
@@ -25,17 +25,6 @@ function TaskTools({ task, tasks, setTasks }) {
     const menuHandleClose = () => {
         setAnchorEl(null);
     };
-
-    function onIncrementClick({ task, tasks, setTasks }) {
-        TaskManager.increment(task, tasks, setTasks);
-    }
-
-    let magicInputRef = React.createRef();
-
-    function onNumberCommit({ task, tasks, setTasks }) {
-        let amount = parseInt(magicInputRef.current.value);
-        TaskManager.commitNumber(task, tasks, setTasks, amount);
-    }
 
     function onArchiveClick({ task, tasks, setTasks }) {
         TaskManager.archive(task, tasks, setTasks);
@@ -49,28 +38,8 @@ function TaskTools({ task, tasks, setTasks }) {
         menuHandleClose();
     }
 
-
-
     return (
         <Box sx={{ minWidth: 0 }}>
-
-            {task.mId1 ?
-                <Input inputRef={magicInputRef} name='name' defaultValue={10} sx={{ minWidth: 0, width: 30 }} /> : ''
-            }
-            {task.mId1
-                ?
-                <Button variant="contained" color="success" sx={{ minWidth: 0 }}
-                    onClick={() => onNumberCommit({ task, tasks, setTasks })}
-                >
-                    <AutoFixHighIcon fontSize='small'></AutoFixHighIcon>
-
-                </Button> : ''}
-
-            <Button variant="contained" color="success" sx={{ minWidth: 0 }}
-                onClick={() => onIncrementClick({ task, tasks, setTasks })}
-            >
-                <PlusOneIcon fontSize='small' />
-            </Button>
 
             <Button
                 sx={{ minWidth: 0 }}
@@ -109,4 +78,4 @@ function TaskTools({ task, tasks, setTasks }) {
     );
 }
 
-export default TaskTools;
+export default TaskMenu;

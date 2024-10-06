@@ -11,11 +11,16 @@ function MetricaManager() {
 
 }
 
+MetricaManager.data = null;
 MetricaManager.load = function (callback) {
 
+    if(MetricaManager.data){
+        callback(MetricaManager.data);
+    }
     fetch_(apiMetrica + "/list")
-        .then(r => {
-            callback(r);
+        .then(metricaData => {
+            MetricaManager.data = metricaData;
+            callback(metricaData);
         });
 
 }
@@ -23,8 +28,6 @@ MetricaManager.load = function (callback) {
 function fetch_(url, method, body) {
 
     if (!method) method = "get";
-
-    console.log("fetch : " + url + " " + method);
 
     return fetch(url, {
         method: method,

@@ -73,8 +73,6 @@ TaskManager.increment = function (task, tasks, setTasks, m1, m2, m3, m4) {
 };
 
 TaskManager.create = function (task, tasks, setTasks) {
-    console.log("create task:" + task.title);
-
     task.id = crypto.randomUUID();
     task.tiks = [];
     task.needFlush = true;
@@ -86,14 +84,12 @@ TaskManager.create = function (task, tasks, setTasks) {
 
 TaskManager.taskUpdate = function (task, tasks, setTasks) {
     task.needUpdate = true;
-    console.log("update task:" + task.title, task);
-
+    
     this.flush(tasks, setTasks);
 }
 
 TaskManager.flush = function (tasks, setTasks) {
-    console.log("flush");
-
+    
     let prs = [];
 
     tasks.forEach(task => {
@@ -164,15 +160,12 @@ TaskManager.load = function (tasks, setTasks) {
 
 
 TaskManager.init = function (setTasks) {
-    console.log('init:getTasks');
-    let tasks = localStorage.tasks === undefined ? [] : JSON.parse(localStorage.tasks);
-    console.log('getTasks 2', tasks);
+    let tasks = localStorage.tasks === undefined ? [] : JSON.parse(localStorage.tasks)
     this.flush(tasks, (ts) => {
         tasks = ts;
         this.load(tasks, (ts) => {
             tasks = ts;
             localStorage.tasks = JSON.stringify(tasks);
-            console.log('getTasks 3');
             setTasks(tasks);
         })
     });
@@ -181,8 +174,6 @@ TaskManager.init = function (setTasks) {
 function fetch_(url, method, body) {
 
     if (!method) method = "get";
-
-    console.log("fetch : " + url + " " + method);
 
     return fetch(url, {
         method: method,
