@@ -14,7 +14,7 @@ TaskManager.getTable = function (tasks) {
 
     let out = {};
 
-    let dates = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0]
+    let dates = [-8, -7, -6, -5, -4, -3, -2, -1, 0]
         .map((offset) => {
             return new Date(
                 new Date().getTime() + (offset * 86400000)
@@ -191,13 +191,15 @@ function fetch_(url, method, body) {
         method: method,
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
         body: JSON.stringify(body)
-    }).then(r => {
-        if (r.status !== 200 || r.headers.get("Content-Type") !== "application/json") {
-            console.error("fetch error" + url, r);
-            return null;
-        }
-        return r.json();
-    });
+    })
+        .catch((e) => { console.log("Catche fetch exception", e); return {}; })
+        .then(r => {
+            if (r.status !== 200 || r.headers.get("Content-Type") !== "application/json") {
+                console.error("fetch error" + url, r);
+                return null;
+            }
+            return r.json();
+        });
 }
 
 export default TaskManager;

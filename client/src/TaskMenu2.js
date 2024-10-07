@@ -6,7 +6,6 @@ import PlusOneIcon from '@mui/icons-material/PlusOne';
 
 function TaskMenu2({ task, tasks, setTasks }) {
 
-    
     function onNumberCommit({ task, tasks, setTasks }) {
         let amount = parseInt(magicInputRef.current.value);
         TaskManager.commitNumber(task, tasks, setTasks, amount);
@@ -15,7 +14,6 @@ function TaskMenu2({ task, tasks, setTasks }) {
     function onIncrementClick({ task, tasks, setTasks }) {
         TaskManager.increment(task, tasks, setTasks);
     }
-
 
     let inputRef = React.createRef();
     let magicInputRef = React.createRef();

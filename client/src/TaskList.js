@@ -6,7 +6,6 @@ import { Grid2 } from "@mui/material";
 
 function TaskList({ tasks, setTasks }) {
   let table = TaskManager.getTable(tasks);
-  console.log(table);
 
   const rows =
     table.rows
@@ -20,9 +19,10 @@ function TaskList({ tasks, setTasks }) {
       );
 
 
-  return <Grid2 sx={{padding:2}} rowSpacing={10}>
-    {rows}
-  </Grid2> ;
+  return (
+    <Grid2  sx={{ padding: 0, textAlign:'right' }} rowSpacing={20}>
+      {rows}
+    </Grid2>);
 }
 
 export default TaskList;

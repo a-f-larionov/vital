@@ -16,7 +16,7 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
             <Grid2 size={1} sx={{ textAlign: "center", alignContent: 'center' }}>
                 📗
             </Grid2>
-            <Grid2 size={10} sx={{ textAlign: 'center', alignContent: 'center' }}>
+            <Grid2 size={10} sx={{ textAlign: 'center', alignContent: 'center' }} >
                 {task.title}
             </Grid2>
             <Grid2 size={1} sx={{ textAlign: 'center', alignContent: 'center' }}>
@@ -51,19 +51,6 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
 
     );
     // <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-
-    //     <TableCell component="th" scope="row" align="right">{title}</TableCell>
-
-    //     {cells.map((cell) => {
-    //         return (
-    //             <TableCell key={cell.title+(i++)} align="center">{cell.title}</TableCell>
-    //         );
-    //     })}
-
-    //     <TableCell align="center">
-    //         <TaskTools task={task} tasks={tasks} setTasks={setTasks} />
-    //     </TableCell>
-    // </TableRow>);
 }
 
 export default TaskItem;

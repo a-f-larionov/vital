@@ -28,12 +28,15 @@ function App() {
     } else
         return (
             <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                <Grid2 size={13}></Grid2>
+                
+                <Grid2 size={12}>&nbsp;</Grid2>
+                
                 <Grid2 size={2}></Grid2>
                 <Grid2 size={8}>
                     <Title />
                 </Grid2>
-                <Grid2 size={1}>
+                
+                <Grid2 size={2}>
                     <ToolAddTask tasks={tasks} setTasks={setTasks} />
                 </Grid2>
 

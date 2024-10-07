@@ -2,15 +2,16 @@
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import PlusOneIcon from '@mui/icons-material/PlusOne';
-import { Box, Button, Input } from "@mui/material";
+import { Box } from "@mui/material";
 
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
+
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+
+import IconButton from '@mui/material/IconButton';
+import Popper from '@mui/material/Popper';
 import React from "react";
 import TaskDialog from './TaskDialog';
 import TaskManager from "./TaskManager";
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 
 function TaskMenu({ task, tasks, setTasks }) {
@@ -19,7 +20,13 @@ function TaskMenu({ task, tasks, setTasks }) {
     const menuOpen = Boolean(menuAnchorEl);
 
     const menuHandleClick = (event) => {
-        setAnchorEl(event.currentTarget);
+        window.jkl = event.currentTarget;
+        if (menuAnchorEl == null) {
+            setAnchorEl(event.currentTarget);
+        } else {
+            menuHandleClose();
+        }
+        //setAnchorEl(window.document.getElementById('mmm'));
     };
 
     const menuHandleClose = () => {
@@ -31,7 +38,7 @@ function TaskMenu({ task, tasks, setTasks }) {
         menuHandleClose();
     }
 
-    let doOpenDialog = function () { console.error(" must be redefine") };
+    let doOpenDialog = function () { console.error("Must be redefine") };
 
     function onEditClick({ task, tasks, setTasks }) {
         doOpenDialog(true);
@@ -39,42 +46,48 @@ function TaskMenu({ task, tasks, setTasks }) {
     }
 
     return (
-        <Box sx={{ minWidth: 0 }}>
+        <ClickAwayListener onClickAway={ menuHandleClose }>
+            <Box sx={{ minWidth: 0 }}>
 
-            <Button
-                sx={{ minWidth: 0 }}
-                id="basic-button"
-                aria-controls={menuOpen ? 'basic-menu' : undefined}
-                aria-haspopup="true"
-                aria-expanded={menuOpen ? 'true' : undefined}
-                onClick={menuHandleClick}
-            >
-                <MoreVertIcon />
-            </Button>
+                <Box >
+                    <Popper
+                        //anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+                        placement="left"
+                        id="basic-menu"
+                        open={menuOpen}
+                        anchorEl={menuAnchorEl}
+                        onClose={menuHandleClose}
+                        MenuListProps={{
+                            'aria-labelledby': 'basic-button'
+                        }}
+                    >
+                        <IconButton sx={{ backgroundColor: '#ccc', padding: '6px', marginLeft: 1, boxShadow: 6 }}>
+                            <DeleteIcon onClick={() => onArchiveClick({ task, tasks, setTasks })} />
+                        </IconButton>
 
-            <Menu
-                id="basic-menu"
-                anchorEl={menuAnchorEl}
-                open={menuOpen}
-                onClose={menuHandleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
-            >
-                <MenuItem onClick={() => onEditClick({ task, tasks, setTasks })}>
-                    <EditIcon />
-                </MenuItem>
+                        <IconButton sx={{ backgroundColor: '#ccc', padding: '6px', marginLeft: 1, boxShadow: 6 }}>
+                            <EditIcon onClick={() => onEditClick({ task, tasks, setTasks })} color='primary' />
+                        </IconButton >
 
-                <MenuItem onClick={() => onArchiveClick({ task, tasks, setTasks })}>
-                    <DeleteIcon />
-                </MenuItem>
 
-            </Menu>
 
-            <TaskDialog setOpenCallback={(handler) => { doOpenDialog = handler }}
-                task={task} tasks={tasks} setTasks={setTasks} />
+                    </Popper>
 
-        </Box >
+                    <IconButton
+                        id="basic-button"
+                        aria-controls={menuOpen ? 'basic-menu' : undefined}
+                        aria-expanded={menuOpen ? 'true' : undefined}
+                        aria-haspopup="true"
+                        onClick={menuHandleClick}
+                    >
+                        <MoreVertIcon />
+                    </IconButton>
+
+                    <TaskDialog setOpenCallback={(handler) => { doOpenDialog = handler }}
+                        task={task} tasks={tasks} setTasks={setTasks} />
+                </Box>
+            </Box >
+        </ClickAwayListener>
     );
 }
 
