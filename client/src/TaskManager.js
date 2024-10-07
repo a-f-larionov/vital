@@ -15,10 +15,21 @@ TaskManager.getTable = function (tasks) {
     let out = {};
 
     let dates = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0]
-        .map((offset) => { return new Date(new Date().getTime() + (offset * 86400000)) });
+        .map((offset) => {
+            return new Date(
+                new Date().getTime() + (offset * 86400000)
+            )
+        });
 
-    out.cols = dates.map((date) => { return { title: date.getDate() }; });
-    
+    out.cols = dates.map((date) => {
+        return {
+            title2: 't',
+            datetime: date,
+            date: date.getDate(),
+            weekDay: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'][date.getDay()]
+        };
+    });
+
     out.rows = tasks.map((task) => {
         return {
             id: task.id,

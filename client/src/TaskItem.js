@@ -29,7 +29,10 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
                         <TableBody>
                             <TableRow >
                                 {cols.map((c) => {
-                                    return <TableCell sx={{ fontSize: 11 }}>{c.title}</TableCell>
+                                    return <TableCell sx={{ fontSize: 10, lineHeight: 1 }}>
+                                        <i>{c.date}</i>
+                                        <b style={{ fontSize: 7 }}>&nbsp;{c.weekDay} </b>
+                                    </TableCell>
                                 })}
                             </TableRow>
                             <TableRow sx={{ padding: 0 }}>
