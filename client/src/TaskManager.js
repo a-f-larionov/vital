@@ -14,10 +14,11 @@ TaskManager.getTable = function (tasks) {
 
     let out = {};
 
-    let dates = [-5, -4, -3, -2, -1, 0]
+    let dates = [-10, -9, -8, -7, -6, -5, -4, -3, -2, -1, 0]
         .map((offset) => { return new Date(new Date().getTime() + (offset * 86400000)) });
 
     out.cols = dates.map((date) => { return { title: date.getDate() }; });
+    
     out.rows = tasks.map((task) => {
         return {
             id: task.id,
@@ -84,12 +85,12 @@ TaskManager.create = function (task, tasks, setTasks) {
 
 TaskManager.taskUpdate = function (task, tasks, setTasks) {
     task.needUpdate = true;
-    
+
     this.flush(tasks, setTasks);
 }
 
 TaskManager.flush = function (tasks, setTasks) {
-    
+
     let prs = [];
 
     tasks.forEach(task => {

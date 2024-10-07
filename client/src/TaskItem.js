@@ -9,7 +9,7 @@ import TaskMenu2 from './TaskMenu2';
 
 
 function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
-    let i = 0;
+
     return (
         <Grid2 container component={Paper} sx={{ marginBottom: 1 }}>
 
