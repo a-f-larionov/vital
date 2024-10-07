@@ -1,12 +1,11 @@
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import { TableCell, TableRow } from "@mui/material";
-import Button from "@mui/material/Button";
 import Grid2 from "@mui/material/Grid2";
 import Paper from '@mui/material/Paper';
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TaskMenu from './TaskMenu';
+import TaskMenu2 from './TaskMenu2';
 
 
 function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
@@ -24,7 +23,7 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
                 <TaskMenu task={task} tasks={tasks} setTasks={setTasks}></TaskMenu>
             </Grid2>
 
-            <Grid2 size={11}>
+            <Grid2 size={10}>
                 <TableContainer >
                     <Table size="small">
                         <TableBody>
@@ -37,16 +36,13 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
                                 {cells.map((cell) => {
                                     return <TableCell>{cell.title}</TableCell>
                                 })}
-
                             </TableRow>
                         </TableBody>
                     </Table>
                 </TableContainer>
             </Grid2>
-            <Grid2 size={1} sx={{ verticalAlign: "bottom" }}>
-                <Button sx={{ height: '100%' }}>
-                    <AutoFixHighIcon fontSize='small'></AutoFixHighIcon>
-                </Button>
+            <Grid2 size={2} sx={{ verticalAlign: "bottom" }}>
+                <TaskMenu2 task={task} tasks={tasks} setTasks={setTasks}></TaskMenu2>
             </Grid2>
         </Grid2>
 

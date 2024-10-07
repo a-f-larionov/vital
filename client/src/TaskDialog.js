@@ -61,6 +61,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
 
     return (
         <Dialog
+            fullScreen
             open={dialogOpen}
             onClose={dialogHandleClose}
             PaperProps={{
