@@ -10,9 +10,9 @@ public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, S
 
     public void save(TaskEntity entity);
 
-    public List<TaskEntity> findByIsArchivedFalse();
+    public List<TaskEntity> findByUidAndIsArchivedFalse(String uid);
 
-    public TaskEntity findById(String id);
+    public TaskEntity findByUidAndId(String uid, String id);
 
-    public void deleteById(String id);
+    public void deleteByUidAndId(String uid, String id);
 }

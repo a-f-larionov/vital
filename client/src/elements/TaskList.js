@@ -1,8 +1,7 @@
 
-import Box from "@mui/material/Box";
-import TaskItem from "./TaskItem";
-import TaskManager from "./TaskManager";
 import { Grid2 } from "@mui/material";
+import TaskManager from "../managers/TaskManager";
+import TaskItem from "./TaskItem";
 
 function TaskList({ tasks, setTasks }) {
   let table = TaskManager.getTable(tasks);
@@ -20,7 +19,7 @@ function TaskList({ tasks, setTasks }) {
 
 
   return (
-    <Grid2  sx={{ padding: 0, textAlign:'right' }} rowSpacing={20}>
+    <Grid2 sx={{ padding: 0, textAlign: 'right' }} rowSpacing={20}>
       {rows}
     </Grid2>);
 }

@@ -5,9 +5,10 @@ import java.time.Instant;
 import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Email;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -16,19 +17,18 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class MaterialEntity {
+public class UserEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
 
-    @NotBlank
-    private String uid;
+    @Email
+    private String googleEmail;
 
-    @NotBlank
-    private String title;
+    private String picture;
 
     @CreationTimestamp
     private Instant created;
 
-    private Instant finished;
 }

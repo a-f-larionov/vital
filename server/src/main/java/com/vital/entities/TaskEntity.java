@@ -1,9 +1,8 @@
 package com.vital.entities;
 
-import com.vital.dto.TaskDTO;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,6 +16,9 @@ public class TaskEntity {
 
     @Id
     private String id;
+
+    @NotBlank
+    private String uid;
 
     @Size(min = 1)
     private String title;

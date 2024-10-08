@@ -2,6 +2,7 @@ package com.vital.dto;
 
 import java.time.Instant;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -11,6 +12,9 @@ import lombok.Setter;
 @NoArgsConstructor
 public class TikDTO {
 
+    @NotBlank
+    private String uid;
+    
     private String id;
     private String tid;
 

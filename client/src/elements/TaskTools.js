@@ -9,7 +9,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React from "react";
 import TaskDialog from './TaskDialog';
-import TaskManager from "./TaskManager";
+import TaskManager from "../managers/TaskManager";
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 
 

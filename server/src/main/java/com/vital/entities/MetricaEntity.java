@@ -2,7 +2,7 @@ package com.vital.entities;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotBlank;
 
 @Entity
 public class MetricaEntity {
@@ -10,9 +10,9 @@ public class MetricaEntity {
     @Id
     public String id;
 
-    @Size(min = 1)
+    @NotBlank
     public String title;
 
-    @Size(min = 1)
+    @NotBlank
     public String shortTitle;
 }

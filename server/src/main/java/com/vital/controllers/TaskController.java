@@ -6,7 +6,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpEntity;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.vital.dto.ResponseDTO;
 import com.vital.dto.TaskDTO;
 import com.vital.dto.rq.TaskArchiveDTO;
+import com.vital.dto.rq.TaskListRqDTo;
 import com.vital.entities.TaskEntity;
 import com.vital.entities.TikEntity;
 import com.vital.mappers.TaskMapper;
@@ -38,7 +38,7 @@ public class TaskController {
     @PostMapping("/add")
     public ResponseDTO add(@RequestBody @Valid TaskDTO taskDto, HttpEntity<byte[]> requestEntity) {
 
-        var entity =  taskMapper.toEntity(taskDto);
+        var entity = taskMapper.toEntity(taskDto);
 
         taskRepository.save(entity);
 
@@ -47,7 +47,7 @@ public class TaskController {
 
     @PostMapping("/archive")
     public ResponseDTO archive(@RequestBody @Valid TaskArchiveDTO taskDTO) {
-        var entity = taskRepository.findById(taskDTO.getId());
+        var entity = taskRepository.findByUidAndId(taskDTO.getUid(), taskDTO.getId());
         entity.setIsArchived(true);
         taskRepository.save(entity);
         return new ResponseDTO("OK");
@@ -63,12 +63,12 @@ public class TaskController {
         return new ResponseDTO("OK");
     }
 
-    @GetMapping("/list")
-    public List<TaskDTO> list() {
+    @PostMapping("/list")
+    public List<TaskDTO> list(TaskListRqDTo taskListRqDTo) {
 
-        List<TaskEntity> tasks = taskRepository.findByIsArchivedFalse();
+        List<TaskEntity> tasks = taskRepository.findByUidAndIsArchivedFalse(taskListRqDTo.getUid());
 
-        List<TikEntity> tiks = tiksRepository.findAll();
+        List<TikEntity> tiks = tiksRepository.findAllByUid(taskListRqDTo.getUid());
 
         Map<String, List<TikEntity>> groupedTiks = tiks.stream()
                 .collect(Collectors.groupingBy(TikEntity::getTid));

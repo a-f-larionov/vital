@@ -1,3 +1,5 @@
+import UserManager from "./UserManager";
+
 var apiUrl = "/api";
 if (window.location.href.search("localhost") !== -1) {
     let port = (new URLSearchParams(window.location.search)).get('port');
@@ -53,7 +55,7 @@ TaskManager.getTable = function (tasks) {
 }
 
 TaskManager.addTik = function (task, tasks, setTasks, m1, m2, m3, m4) {
-    m1 = m1 != undefined ? m1 : 0;
+    m1 = m1 !== undefined ? m1 : 0;
     m2 = m2 ? m2 : 0;
     m3 = m3 ? m3 : 0;
     m4 = m4 ? m4 : 0;
@@ -155,7 +157,7 @@ TaskManager.archive = function (task, tasks, setTasks) {
 
 TaskManager.load = function (tasks, setTasks) {
 
-    fetch_(apiTasks + '/list')
+    fetch_(apiTasks + '/list', 'post', { uid: UserManager.getUid() })
         .then((r) => {
             if (r == null) {
                 // skip data from server

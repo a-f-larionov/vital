@@ -6,20 +6,12 @@ import { Box } from "@mui/material";
 
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
+import Fab from '@mui/material/Fab';
 import IconButton from '@mui/material/IconButton';
 import Popper from '@mui/material/Popper';
 import React from "react";
+import TaskManager from "../managers/TaskManager";
 import TaskDialog from './TaskDialog';
-import TaskManager from "./TaskManager";
-import Fab from '@mui/material/Fab';
-import { FloatButton } from 'antd';
-import {
-    CommentOutlined,
-    DownOutlined,
-    LeftOutlined,
-    RightOutlined,
-    UpOutlined,
-} from '@ant-design/icons';
 
 
 function TaskMenu({ task, tasks, setTasks }) {
@@ -64,9 +56,6 @@ function TaskMenu({ task, tasks, setTasks }) {
                         open={menuOpen}
                         anchorEl={menuAnchorEl}
                         onClose={menuHandleClose}
-                        // MenuListProps={{
-                        //     'aria-labelledby': 'basic-button'
-                        // }}
                         sx={{ '& > :not(style)': { marginLeft: '8px', backgroundColor: '#fff' } }}
                     >
 

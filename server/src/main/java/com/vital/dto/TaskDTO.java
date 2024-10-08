@@ -5,6 +5,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,9 @@ import lombok.Setter;
 @Setter
 @Getter
 public class TaskDTO {
+
+    @NotBlank
+    private String uid;
 
     private String id;
 

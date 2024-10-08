@@ -1,20 +1,16 @@
-import { Box, Input, Button, Stack } from "@mui/material";
-import React from "react";
-import TaskManager from "./TaskManager";
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import PlusOneIcon from '@mui/icons-material/PlusOne';
-import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { Box, Fab, Stack } from "@mui/material";
 import Popper from "@mui/material/Popper";
-import { IconButton, Fab } from "@mui/material";
 import { Slider } from 'antd';
-import { theme } from "antd";
-import { alpha } from '@mui/material';
+import React from "react";
+import TaskManager from "../managers/TaskManager";
 
 function TaskMenu2({ task, tasks, setTasks }) {
 
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [sVal, setSVal] = React.useState(0);
-    const [sMax, setSMax] = React.useState(60);
+
 
 
     const sliderOnChange = (value) => {
@@ -30,33 +26,23 @@ function TaskMenu2({ task, tasks, setTasks }) {
         }
     }
 
-    function onNumberCommit({ task, tasks, setTasks }) {
-        let amount = parseInt(magicInputRef.current.value);
-        TaskManager.commitNumber(task, tasks, setTasks, amount);
-    }
-
     function onIncrementClick({ task, tasks, setTasks }) {
         TaskManager.increment(task, tasks, setTasks);
     }
 
-    let inputRef = React.createRef();
-    let magicInputRef = React.createRef();
     let afterIconDiv = React.createRef();
+    window.jkl = afterIconDiv;
 
     return <Box sx={{ minWidth: 0 }}>
 
         {!task.mId1 ?
-            // <IconButton variant="contained" color="success" sx={{ minWidth: 0 }}
-            //     onClick={() => onIncrementClick({ task, tasks, setTasks })}
-            // >
+
             <Fab size='small' >
                 <PlusOneIcon
                     fontSize='small'
                     onClick={() => onIncrementClick({ task, tasks, setTasks })}
                 />
             </Fab>
-
-            // </IconButton>
 
             :
 
@@ -65,11 +51,8 @@ function TaskMenu2({ task, tasks, setTasks }) {
 
                 <Popper id="basic-menu"
                     placement="left"
-                    open={true}
-                    anchorEl={(e) => { console.log(e);return afterIconDiv.current; }}
-                // MenuListProps={{
-                //     'aria-labelledby': 'basic-button'
-                // }}>
+                    open={afterIconDiv.current !== null}
+                    anchorEl={(e) => { return afterIconDiv.current; }}
                 >
                     <Stack
                         onMouseDown={(e) => { sliderOnChange(0); }}
@@ -85,11 +68,10 @@ function TaskMenu2({ task, tasks, setTasks }) {
                             tooltip={{ open: menuOpen }}
                             reverse={false}
                             min={0}
-                            max={menuOpen ? sMax : 10}
+                            max={menuOpen ? 60 : 10}
                             size="large"
                             defaultValue={0}
                             value={sVal}
-                            //aria-label="Small"
                             valueLabelDisplay="auto"
                         />
                     </Stack>
