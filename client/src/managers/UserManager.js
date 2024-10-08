@@ -1,3 +1,5 @@
+import { useMediaQuery } from "@mui/material";
+
 var apiUrl = "/api";
 if (window.location.href.search("localhost") !== -1) {
     let port = (new URLSearchParams(window.location.search)).get('port');
@@ -18,17 +20,26 @@ UserManager.register = function (googleEmail, picture, setUserProfile) {
         picture: picture
     }).then((r) => {
         console.log(r);
-        setUserProfile({
+        let data = {
             id: r.id,
             picture: r.picture,
-        });
-
-        UserManager.uid = r.id;
+        };
+        localStorage.setItem('userProfile', JSON.stringify(data));
+        setUserProfile(data);
+        console.log(data);
+        UserManager.data = data;
     });
 }
+UserManager.setUserProfile = function (data) {  
+    UserManager.data = data;
+}
 
-UserManager.getUid = function(){
-    return UserManager.uid;
+UserManager.getUid = function () {
+    return UserManager.data ? UserManager.data.id : undefined;
+}
+UserManager.getPicture = function () {
+    console.log("dddd", UserManager.data);
+    return UserManager.data ? UserManager.data.picture : undefined;
 }
 
 function fetch_(url, method, body) {

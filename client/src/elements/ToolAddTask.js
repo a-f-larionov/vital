@@ -14,7 +14,7 @@ function ToolAddTask({ tasks, setTasks }) {
     return (
         <Box display="flex" justifyContent="center">
             <Button sx={{ minWidth: 0 }} size="small"
-                variant="contained" color="success"
+                variant="contained" color="primarys"
                 onClick={onClickHandler}>
                 <AddIcon />
             </Button>

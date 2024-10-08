@@ -12,12 +12,20 @@ import ToolAddTask from "./elements/ToolAddTask";
 import TaskManager from "./managers/TaskManager";
 import UserManager from './managers/UserManager';
 import { useLocalStorageState } from '@toolpad/core';
+import { Box, AppBar, Toolbar, IconButton, Button, Typography } from '@mui/material';
+import MenuIcon from '@mui/icons-material/Menu';
+import { Avatar } from '@mui/material';
 
 function App() {
     const [tasks, setTasks] = useState(null);
-    const [userProfile, setUserProfile] = useLocalStorageState("userProfile", {});
-    console.log(userProfile);
-    console.log(userProfile);
+    const [userProfile, setUserProfile] = useState(() => {
+        let userProfile = localStorage.getItem('userProfile');
+        return userProfile ? JSON.parse(userProfile) : {};
+    });
+    UserManager.setUserProfile(userProfile);
+
+
+    console.log("UP", userProfile);
     let googleOk = function (d) {
         console.log("GOOGLE OK");
         console.log(d);
@@ -25,8 +33,8 @@ function App() {
         console.log(decoded);
         UserManager.register(decoded.email, decoded.picture, setUserProfile);
     }
-
-    if (userProfile == null) {
+    
+    if (userProfile.id === undefined) {
         return (
             <Stack
                 direction="row"
@@ -62,15 +70,35 @@ function App() {
             return (
                 <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-                    <Grid2 size={12}>&nbsp;</Grid2>
 
-                    <Grid2 size={2}></Grid2>
-                    <Grid2 size={8}>
-                        <Title />
+                    <Grid2 size={12}>
+                        <Box sx={{ flexGrow: 1 }}>
+                            <AppBar position="static">
+                                <Toolbar>
+                                    {/* <IconButton
+                                        size="large"
+                                        edge="start"
+                                        color="inherit"
+                                        aria-label="menu"
+                                        sx={{ mr: 2 }}
+                                    > */}
+                                        {/* <MenuIcon /> */}
+                                         <ToolAddTask tasks={tasks} setTasks={setTasks} />
+                                    {/* </IconButton> */}
+                                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                                        Vital Manager
+                                    </Typography>
+                                    <Button color="inherit">
+                                        <Avatar src={UserManager.getPicture()}></Avatar>
+                                    </Button>
+                                </Toolbar>
+                            </AppBar>
+                        </Box>
                     </Grid2>
-                    <Grid2 size={2}>
-                        <ToolAddTask tasks={tasks} setTasks={setTasks} />
-                    </Grid2>
+
+                    {/* <Grid2 size={2}>
+                       
+                    </Grid2> */}
 
                     <Grid2 size={13}>
 

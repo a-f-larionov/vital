@@ -61,6 +61,7 @@ TaskManager.addTik = function (task, tasks, setTasks, m1, m2, m3, m4) {
     m4 = m4 ? m4 : 0;
 
     task.tiks.push({
+        uid: UserManager.getUid(),
         id: crypto.randomUUID(),
         tid: task.id,
 
@@ -88,6 +89,7 @@ TaskManager.increment = function (task, tasks, setTasks, m1, m2, m3, m4) {
 
 TaskManager.create = function (task, tasks, setTasks) {
     task.id = crypto.randomUUID();
+    task.uid = UserManager.getUid();
     task.tiks = [];
     task.needFlush = true;
 
@@ -169,7 +171,6 @@ TaskManager.load = function (tasks, setTasks) {
             }
         });
 };
-
 
 TaskManager.init = function (setTasks) {
     let tasks = localStorage.tasks === undefined ? [] : JSON.parse(localStorage.tasks)

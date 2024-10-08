@@ -31,7 +31,6 @@ function TaskMenu2({ task, tasks, setTasks }) {
     }
 
     let afterIconDiv = React.createRef();
-    window.jkl = afterIconDiv;
 
     return <Box sx={{ minWidth: 0 }}>
 
@@ -51,7 +50,7 @@ function TaskMenu2({ task, tasks, setTasks }) {
 
                 <Popper id="basic-menu"
                     placement="left"
-                    open={afterIconDiv.current !== null}
+                    open={true}
                     anchorEl={(e) => { return afterIconDiv.current; }}
                 >
                     <Stack

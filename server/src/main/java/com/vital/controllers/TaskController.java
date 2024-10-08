@@ -64,7 +64,7 @@ public class TaskController {
     }
 
     @PostMapping("/list")
-    public List<TaskDTO> list(TaskListRqDTo taskListRqDTo) {
+    public List<TaskDTO> list(@RequestBody @Valid TaskListRqDTo taskListRqDTo) {
 
         List<TaskEntity> tasks = taskRepository.findByUidAndIsArchivedFalse(taskListRqDTo.getUid());
 
