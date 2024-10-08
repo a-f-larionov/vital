@@ -119,7 +119,7 @@ TaskManager.flush = function (tasks, setTasks) {
         }
         if (task.toArchive === true) {
             prs.push(
-                fetch_(apiTasks + '/archive', 'post', { id: task.id })
+                fetch_(apiTasks + '/archive', 'post', { uid: UserManager.getUid(), id: task.id })
                     .then((r) => {
                         if (r == null) return;
                         task.toArchive = false;
