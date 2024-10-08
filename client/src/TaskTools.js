@@ -88,9 +88,9 @@ function TaskTools({ task, tasks, setTasks }) {
                 anchorEl={menuAnchorEl}
                 open={menuOpen}
                 onClose={menuHandleClose}
-                MenuListProps={{
-                    'aria-labelledby': 'basic-button',
-                }}
+                // MenuListProps={{
+                //     'aria-labelledby': 'basic-button',
+                // }}
             >
                 <MenuItem onClick={() => onEditClick({ task, tasks, setTasks })}>
                     <EditIcon />

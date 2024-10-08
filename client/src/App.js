@@ -8,10 +8,25 @@ import TaskList from "./TaskList";
 import TaskManager from "./TaskManager";
 import Title from "./Title";
 import ToolAddTask from "./ToolAddTask";
-
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
 
 function App() {
     const [tasks, setTasks] = useState(null);
+
+    const [user, setUser] = useState([]);
+    const [profile, setProfile] = useState([]);
+
+    let googleOk = function (d) {
+        console.log("GOOGLE OK");
+        console.log(d);
+        let decoded = jwtDecode(d.credential)
+        console.log(decoded);
+        /**
+         * decoded.email;
+         * 
+         */
+    }
 
     if (tasks === null) {
         TaskManager.init(setTasks);
@@ -28,14 +43,15 @@ function App() {
     } else
         return (
             <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
-                
+
+                <GoogleLogin type="icon" onSuccess={googleOk} onError={console.logde}  />
                 <Grid2 size={12}>&nbsp;</Grid2>
-                
+
                 <Grid2 size={2}></Grid2>
                 <Grid2 size={8}>
                     <Title />
                 </Grid2>
-                
+
                 <Grid2 size={2}>
                     <ToolAddTask tasks={tasks} setTasks={setTasks} />
                 </Grid2>

@@ -30,15 +30,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
             setDialogOpen(value);
         }
     });
-
-    console.log(metrica);
-
-    console.log(".");
-    if (dialogOpen === true) {
-
-        console.log("UPDATE!!!!!!!", dialogOpen);
-        //console.error("!");
-    }
+    
     function dialogHandleClose() {
         setDialogOpen(false);
     }
@@ -50,7 +42,6 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         task.vCode1 = vCode1;
         task.vCode2 = vCode2;
 
-        console.log(task);
         if (task.id) {
             TaskManager.taskUpdate(task, tasks, setTasks);
         } else {
@@ -68,7 +59,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                 component: 'form',
                 onSubmit: (event) => {
                     event.preventDefault();
-                    console.log("SUBMIT");
+                    
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
                     const title = formJson.title;
@@ -76,8 +67,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     const mId2 = formJson.typeId2;
                     const vCode1 = formJson.viewCode1;
                     const vCode2 = formJson.viewCode1;
-                    console.log(formData);
-                    console.log(formJson);
+                    
                     dialogSaveHandler(title, mId1, mId2, vCode1, vCode2);
                 },
             }}

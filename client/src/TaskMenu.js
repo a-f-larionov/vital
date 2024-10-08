@@ -4,7 +4,6 @@ import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box } from "@mui/material";
 
-
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 import IconButton from '@mui/material/IconButton';
@@ -12,6 +11,15 @@ import Popper from '@mui/material/Popper';
 import React from "react";
 import TaskDialog from './TaskDialog';
 import TaskManager from "./TaskManager";
+import Fab from '@mui/material/Fab';
+import { FloatButton } from 'antd';
+import {
+    CommentOutlined,
+    DownOutlined,
+    LeftOutlined,
+    RightOutlined,
+    UpOutlined,
+} from '@ant-design/icons';
 
 
 function TaskMenu({ task, tasks, setTasks }) {
@@ -26,7 +34,6 @@ function TaskMenu({ task, tasks, setTasks }) {
         } else {
             menuHandleClose();
         }
-        //setAnchorEl(window.document.getElementById('mmm'));
     };
 
     const menuHandleClose = () => {
@@ -46,30 +53,30 @@ function TaskMenu({ task, tasks, setTasks }) {
     }
 
     return (
-        <ClickAwayListener onClickAway={ menuHandleClose }>
+        <ClickAwayListener onClickAway={menuHandleClose}>
             <Box sx={{ minWidth: 0 }}>
 
                 <Box >
+
                     <Popper
-                        //anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-                        placement="left"
                         id="basic-menu"
+                        placement="left"
                         open={menuOpen}
                         anchorEl={menuAnchorEl}
                         onClose={menuHandleClose}
-                        MenuListProps={{
-                            'aria-labelledby': 'basic-button'
-                        }}
+                        // MenuListProps={{
+                        //     'aria-labelledby': 'basic-button'
+                        // }}
+                        sx={{ '& > :not(style)': { marginLeft: '8px', backgroundColor: '#fff' } }}
                     >
-                        <IconButton sx={{ backgroundColor: '#ccc', padding: '6px', marginLeft: 1, boxShadow: 6 }}>
+
+                        <Fab size='small'>
                             <DeleteIcon onClick={() => onArchiveClick({ task, tasks, setTasks })} />
-                        </IconButton>
+                        </Fab>
 
-                        <IconButton sx={{ backgroundColor: '#ccc', padding: '6px', marginLeft: 1, boxShadow: 6 }}>
+                        <Fab size='small'>
                             <EditIcon onClick={() => onEditClick({ task, tasks, setTasks })} color='primary' />
-                        </IconButton >
-
-
+                        </Fab>
 
                     </Popper>
 

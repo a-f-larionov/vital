@@ -14,7 +14,7 @@ TaskManager.getTable = function (tasks) {
 
     let out = {};
 
-    let dates = [-8, -7, -6, -5, -4, -3, -2, -1, 0]
+    let dates = [-6, -5, -4, -3, -2, -1, 0]
         .map((offset) => {
             return new Date(
                 new Date().getTime() + (offset * 86400000)
@@ -154,16 +154,14 @@ TaskManager.archive = function (task, tasks, setTasks) {
 }
 
 TaskManager.load = function (tasks, setTasks) {
-    console.log("load");
 
     fetch_(apiTasks + '/list')
         .then((r) => {
-            console.log("api/tasks/list result", r);
             if (r == null) {
                 // skip data from server
                 setTasks(tasks);
             } else {
-                console.log(r);
+
                 localStorage.tasks = JSON.stringify(r);
                 setTasks(r);
             }
@@ -192,7 +190,7 @@ function fetch_(url, method, body) {
         headers: { 'Content-type': 'application/json; charset=UTF-8' },
         body: JSON.stringify(body)
     })
-        .catch((e) => { console.log("Catche fetch exception", e); return {}; })
+        .catch((e) => { console.error("Catche fetch exception", e); return {}; })
         .then(r => {
             if (r.status !== 200 || r.headers.get("Content-Type") !== "application/json") {
                 console.error("fetch error" + url, r);
