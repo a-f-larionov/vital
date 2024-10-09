@@ -36,15 +36,15 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
                                     return <TableCell key={task.id + c.date}
                                         sx={{ fontSize: 10, lineHeight: 1, margin: 0, paddingRight: 0 }}>
                                         <i>{c.date}</i>
-                                        <b style={{ fontSize: 7 }}>&nbsp;{c.weekDay} </b>
+                                        <b style={{ fontSize: 8 }}>&nbsp;{c.weekDay} </b>
                                     </TableCell>
                                 })}
                             </TableRow>
-
+                            
                             <TableRow key={2} sx={{ padding: 0, margin: 0 }} >
                                 {cells.map((cell) => {
-                                    return <TableCell key={++i} 
-                                        sx={{ fontSize: 10, lineHeight: 1, margin: 0, paddingRight: 0 }}>
+                                    return <TableCell key={++i}
+                                        sx={{ lineHeight: 1, margin: 0, paddingRight: 0 }}>
                                         {cell.title}
                                     </TableCell>
                                 })}

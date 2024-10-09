@@ -1,4 +1,3 @@
-import { useMediaQuery } from "@mui/material";
 
 var apiUrl = "/api";
 if (window.location.href.search("localhost") !== -1) {

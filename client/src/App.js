@@ -1,20 +1,15 @@
 import './App.css';
 
-import { Grid2 } from "@mui/material";
+import { AppBar, Avatar, Box, Button, Grid2, Toolbar, Typography } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from "@mui/material/Stack";
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 import React, { useState } from "react";
 import TaskList from "./elements/TaskList";
-import Title from "./elements/Title";
 import ToolAddTask from "./elements/ToolAddTask";
 import TaskManager from "./managers/TaskManager";
 import UserManager from './managers/UserManager';
-import { useLocalStorageState } from '@toolpad/core';
-import { Box, AppBar, Toolbar, IconButton, Button, Typography } from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Avatar } from '@mui/material';
 
 function App() {
     const [tasks, setTasks] = useState(null);
