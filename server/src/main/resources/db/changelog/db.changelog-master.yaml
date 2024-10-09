@@ -41,3 +41,11 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: /db/changelog/006-add-uid-field.sql
+  - changeSet:
+      id: "7"
+      author: developer
+      comment: "add tik isArchived field, task created field"
+      changes:
+        - sqlFile:
+            path: /db/changelog/007-add-task-created-tik-archived-fields.sql
+            

@@ -25,6 +25,8 @@ public class TikEntity {
     @NotBlank
     private String uid;
 
+    private Boolean isArchived = false;
+
     @CreationTimestamp
     private Instant datetime;
 

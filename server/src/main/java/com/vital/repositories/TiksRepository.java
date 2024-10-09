@@ -11,4 +11,8 @@ public interface TiksRepository extends PagingAndSortingRepository<TikEntity, St
     public void save(TikEntity entity);
 
     public List<TikEntity> findAllByUid(String uid);
+    
+    public List<TikEntity> findAllByUidAndIsArchivedFalse(String uid);
+
+    public TikEntity findByUidAndId(String uid, String id);
 }

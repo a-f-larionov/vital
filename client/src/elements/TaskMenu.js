@@ -1,18 +1,13 @@
-
+import React from "react";
+import { Box, Fab, IconButton, Popper } from "@mui/material";
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { Box } from "@mui/material";
-
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
-
-import Fab from '@mui/material/Fab';
-import IconButton from '@mui/material/IconButton';
-import Popper from '@mui/material/Popper';
-import React from "react";
-import TaskManager from "../managers/TaskManager";
+import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
 import TaskDialog from './TaskDialog';
-
+import TaskManager from "../managers/TaskManager";
+import PageManager from "../managers/PageManager";
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
 function TaskMenu({ task, tasks, setTasks }) {
 
@@ -20,7 +15,6 @@ function TaskMenu({ task, tasks, setTasks }) {
     const menuOpen = Boolean(menuAnchorEl);
 
     const menuHandleClick = (event) => {
-        window.jkl = event.currentTarget;
         if (menuAnchorEl == null) {
             setAnchorEl(event.currentTarget);
         } else {
@@ -44,6 +38,11 @@ function TaskMenu({ task, tasks, setTasks }) {
         menuHandleClose();
     }
 
+    function onListMenuClick({ task, tasks, setTasks }) {
+    
+        PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task);
+    }
+
     return (
         <ClickAwayListener onClickAway={menuHandleClose}>
             <Box sx={{ minWidth: 0 }}>
@@ -58,9 +57,12 @@ function TaskMenu({ task, tasks, setTasks }) {
                         onClose={menuHandleClose}
                         sx={{ '& > :not(style)': { marginLeft: '8px', backgroundColor: '#fff' } }}
                     >
-
                         <Fab size='small'>
                             <DeleteIcon onClick={() => onArchiveClick({ task, tasks, setTasks })} />
+                        </Fab>
+
+                        <Fab size="small">
+                            <FormatListBulletedIcon onClick={() => onListMenuClick({ task, tasks, setTasks })} />
                         </Fab>
 
                         <Fab size='small'>

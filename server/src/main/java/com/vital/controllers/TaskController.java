@@ -68,7 +68,7 @@ public class TaskController {
 
         List<TaskEntity> tasks = taskRepository.findByUidAndIsArchivedFalse(taskListRqDTo.getUid());
 
-        List<TikEntity> tiks = tiksRepository.findAllByUid(taskListRqDTo.getUid());
+        List<TikEntity> tiks = tiksRepository.findAllByUidAndIsArchivedFalse(taskListRqDTo.getUid());
 
         Map<String, List<TikEntity>> groupedTiks = tiks.stream()
                 .collect(Collectors.groupingBy(TikEntity::getTid));

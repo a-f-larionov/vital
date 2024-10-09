@@ -40,11 +40,11 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
                                     </TableCell>
                                 })}
                             </TableRow>
-                            
+
                             <TableRow key={2} sx={{ padding: 0, margin: 0 }} >
                                 {cells.map((cell) => {
                                     return <TableCell key={++i}
-                                        sx={{ lineHeight: 1, margin: 0, paddingRight: 0 }}>
+                                        sx={{ fontSize: 18, lineHeight: 1, margin: 0, paddingRight: 0 }}>
                                         {cell.title}
                                     </TableCell>
                                 })}

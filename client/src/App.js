@@ -1,15 +1,19 @@
 import './App.css';
 
+import React, { useState } from "react";
 import { AppBar, Avatar, Box, Button, Grid2, Toolbar, Typography } from "@mui/material";
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import AddIcon from "@mui/icons-material/Add";
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from "@mui/material/Stack";
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
-import React, { useState } from "react";
 import TaskList from "./elements/TaskList";
 import ToolAddTask from "./elements/ToolAddTask";
+import ContentPage from "./elements/ContentPage";
 import TaskManager from "./managers/TaskManager";
 import UserManager from './managers/UserManager';
+import PageManager from './managers/PageManager';
 
 function App() {
     const [tasks, setTasks] = useState(null);
@@ -17,18 +21,15 @@ function App() {
         let userProfile = localStorage.getItem('userProfile');
         return userProfile ? JSON.parse(userProfile) : {};
     });
+    const [currentPage, setCurrentPage] = useState(PageManager.PAGE_MAIN);
+    PageManager.init(currentPage, setCurrentPage);
     UserManager.setUserProfile(userProfile);
 
-
-    console.log("UP", userProfile);
     let googleOk = function (d) {
-        console.log("GOOGLE OK");
-        console.log(d);
         let decoded = jwtDecode(d.credential)
-        console.log(decoded);
         UserManager.register(decoded.email, decoded.picture, setUserProfile);
     }
-    
+
     if (userProfile.id === undefined) {
         return (
             <Stack
@@ -62,46 +63,51 @@ function App() {
                 </Stack>
             );
         } else
-            return (
-                <Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
+            return (<Grid2 container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
 
-                    <Grid2 size={12}>
-                        <Box sx={{ flexGrow: 1 }}>
-                            <AppBar position="static">
-                                <Toolbar>
-                                    {/* <IconButton
+                <Grid2 size={12}>
+                    <Box sx={{ flexGrow: 1 }}>
+                        <AppBar position="static">
+                            <Toolbar>
+                                {/* <IconButton
                                         size="large"
                                         edge="start"
                                         color="inherit"
                                         aria-label="menu"
                                         sx={{ mr: 2 }}
                                     > */}
-                                        {/* <MenuIcon /> */}
-                                         <ToolAddTask tasks={tasks} setTasks={setTasks} />
-                                    {/* </IconButton> */}
-                                    <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                                        Vital Manager
-                                    </Typography>
-                                    <Button color="inherit">
-                                        <Avatar src={UserManager.getPicture()}></Avatar>
-                                    </Button>
-                                </Toolbar>
-                            </AppBar>
-                        </Box>
-                    </Grid2>
+                                {/* <MenuIcon /> */}
+                                {PageManager.isMain() ?
+                                    <ToolAddTask tasks={tasks} setTasks={setTasks} />
+                                    :
 
-                    {/* <Grid2 size={2}>
-                       
-                    </Grid2> */}
+                                    <Box display="flex" justifyContent="center">
+                                        <Button sx={{ minWidth: 0 }} size="small"
+                                            variant="contained" color="failed" onClick={() => { PageManager.setPage(PageManager.PAGE_MAIN); }}> 
+                                            <ArrowBackIosIcon />
+                                        </Button>
 
-                    <Grid2 size={13}>
-
-                        <TaskList tasks={tasks} setTasks={setTasks} />
-
-                    </Grid2>
+                                    </Box >
+                                }
+                                {/* </IconButton> */}
+                                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                                    Vital Manager
+                                </Typography>
+                                <Button color="inherit">
+                                    <Avatar src={UserManager.getPicture()}></Avatar>
+                                </Button>
+                            </Toolbar>
+                        </AppBar>
+                    </Box>
                 </Grid2>
-            );
+
+                <Grid2 size={13}>
+
+                    <ContentPage tasks={tasks} setTasks={setTasks} />
+
+                </Grid2>
+            </Grid2 >);
     }
 }
 

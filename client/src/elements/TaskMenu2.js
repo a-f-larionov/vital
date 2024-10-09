@@ -46,12 +46,16 @@ function TaskMenu2({ task, tasks, setTasks }) {
             :
 
             <>
-                <AutoFixHighIcon sx={{ height: 1, opacity: menuOpen ? 0 : 0 }} ref={afterIconDiv} />
+                <AutoFixHighIcon sx={{ height: 1, opacity: menuOpen ? 0 : 0 }}
+                    ref={afterIconDiv} />
 
-                <Popper id="basic-menu"
+                <Popper
                     placement="left"
                     open={true}
-                    anchorEl={(e) => { return afterIconDiv.current; }}
+                    anchorEl={() => {
+                        if (afterIconDiv.current) return afterIconDiv.current;
+                        return document.getElementById('root');
+                    }}
                 >
                     <Stack
                         onMouseDown={(e) => { sliderOnChange(0); }}

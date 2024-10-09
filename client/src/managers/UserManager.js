@@ -37,7 +37,6 @@ UserManager.getUid = function () {
     return UserManager.data ? UserManager.data.id : undefined;
 }
 UserManager.getPicture = function () {
-    console.log("dddd", UserManager.data);
     return UserManager.data ? UserManager.data.picture : undefined;
 }
 

@@ -54,7 +54,7 @@ TaskManager.getTable = function (tasks) {
     return out;
 }
 
-TaskManager.addTik = function (task, tasks, setTasks, m1, m2, m3, m4) {
+TaskManager.tikCreate = function (task, tasks, setTasks, m1, m2, m3, m4) {
     m1 = m1 !== undefined ? m1 : 0;
     m2 = m2 ? m2 : 0;
     m3 = m3 ? m3 : 0;
@@ -78,13 +78,23 @@ TaskManager.addTik = function (task, tasks, setTasks, m1, m2, m3, m4) {
     this.flush(tasks, setTasks);
 }
 
+TaskManager.tikArchive = function (tik, tasks, setTasks) {
+    console.log(tik);
+    tik.needArchive = true;
+    this.flush(tasks, setTasks);
+}
+
+TaskManager.tikUpdate = function (tik, tasks, setTasks) {
+    tik.needUpdate = true;
+    this.flush(tasks, setTasks);
+}
+
 TaskManager.commitNumber = function (task, tasks, setTasks, m1, m2, m3, m4) {
-    TaskManager.addTik(task, tasks, setTasks, m1, m2, m3, m4);
+    TaskManager.tikCreate(task, tasks, setTasks, m1, m2, m3, m4);
 };
 
 TaskManager.increment = function (task, tasks, setTasks, m1, m2, m3, m4) {
-
-    TaskManager.addTik(task, tasks, setTasks, m1, m2, m3, m4);
+    TaskManager.tikCreate(task, tasks, setTasks, m1, m2, m3, m4);
 };
 
 TaskManager.create = function (task, tasks, setTasks) {
@@ -107,7 +117,7 @@ TaskManager.taskUpdate = function (task, tasks, setTasks) {
 TaskManager.flush = function (tasks, setTasks) {
 
     let prs = [];
-
+console.log(tasks);
     tasks.forEach(task => {
         if (task.needFlush === true) {
             prs.push(
@@ -117,12 +127,12 @@ TaskManager.flush = function (tasks, setTasks) {
                         task.needFlush = false;
                     }));
         }
-        if (task.toArchive === true) {
+        if (task.needArchive === true) {
             prs.push(
                 fetch_(apiTasks + '/archive', 'post', { uid: UserManager.getUid(), id: task.id })
                     .then((r) => {
                         if (r == null) return;
-                        task.toArchive = false;
+                        task.needArchive = false;
                         tasks = tasks.filter(t => t.id !== task.id);
                     }));
         }
@@ -143,6 +153,23 @@ TaskManager.flush = function (tasks, setTasks) {
                             tik.needFlush = false;
                         }));
             }
+            if (tik.needArchive === true) {
+                prs.push(
+                    fetch_(apiTiks + '/archive', 'post', tik)
+                        .then((r) => {
+                            if (r == null) return;
+                            tik.needArchive = false;
+                            task.tiks = task.tiks.filter(t => t.id !== tik.id);
+                        }));
+            }
+            if (tik.needUpdate === true) {
+                prs.push(
+                    fetch_(apiTiks + '/update', 'post', tik)
+                        .then((r) => {
+                            if (r == null) return;
+                            task.needUpdate = false;
+                        }));
+            }
         });
     });
 
@@ -152,7 +179,7 @@ TaskManager.flush = function (tasks, setTasks) {
     });
 }
 TaskManager.archive = function (task, tasks, setTasks) {
-    task.toArchive = true;
+    task.needArchive = true;
 
     this.flush(tasks, setTasks);
 }
