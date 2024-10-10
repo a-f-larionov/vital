@@ -65,11 +65,11 @@ function MetricRightMenu({ task, tasks, setTasks }) {
                     </Popper>
 
                     <IconButton
-                        id="basic-button"
                         aria-controls={menuOpen ? 'basic-menu' : undefined}
                         aria-expanded={menuOpen ? 'true' : undefined}
                         aria-haspopup="true"
                         onClick={menuHandleClick}
+                        sx={{padding:0}}
                     >
                         <MoreVertIcon />
                     </IconButton>
