@@ -6,12 +6,10 @@ import { Slider } from 'antd';
 import React from "react";
 import TaskManager from "../managers/TaskManager";
 
-function TaskMenu2({ task, tasks, setTasks }) {
+function TaskMetricMenu({ task, tasks, setTasks }) {
 
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [sVal, setSVal] = React.useState(0);
-
-
 
     const sliderOnChange = (value) => {
         setSVal(value);
@@ -32,6 +30,7 @@ function TaskMenu2({ task, tasks, setTasks }) {
 
     let afterIconDiv = React.createRef();
 
+
     return <Box sx={{ minWidth: 0 }}>
 
         {!task.mId1 ?
@@ -46,7 +45,7 @@ function TaskMenu2({ task, tasks, setTasks }) {
             :
 
             <>
-                <AutoFixHighIcon sx={{ height: 1, opacity: menuOpen ? 0 : 0 }}
+                <AutoFixHighIcon sx={{ height: 1, opacity: 0 }}
                     ref={afterIconDiv} />
 
                 <Popper
@@ -97,4 +96,4 @@ function TaskMenu2({ task, tasks, setTasks }) {
     </Box>
 }
 
-export default TaskMenu2;
+export default TaskMetricMenu;

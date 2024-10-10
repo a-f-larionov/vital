@@ -1,3 +1,4 @@
+
 var apiUrl = "/api";
 if (window.location.href.search("localhost") !== -1) {
     let port = (new URLSearchParams(window.location.search)).get('port');
@@ -10,17 +11,18 @@ var apiMetrica = apiUrl + "/metrica";
 function MetricaManager() {
 
 }
+MetricaManager.metrica = [];
 
-MetricaManager.data = null;
-MetricaManager.load = function (callback) {
+MetricaManager.load = function (metrica, setMetrica) {
 
-    if(MetricaManager.data){
-        callback(MetricaManager.data);
+    if (MetricaManager.metrica.length > 0) {
+        return;
     }
+    MetricaManager.metrica = metrica;
+
     fetch_(apiMetrica + "/list")
-        .then(metricaData => {
-            MetricaManager.data = metricaData;
-            callback(metricaData);
+        .then(metricaData => {            
+            setMetrica(metricaData);
         });
 
 }

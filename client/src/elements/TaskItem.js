@@ -5,25 +5,32 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import TaskMenu from './TaskMenu';
-import TaskMenu2 from './TaskMenu2';
+import TaskMetricMenu from './TaskMetricMenu';
+import MetricaManager from "../managers/MetricaManager";
+import TaskManager from "../managers/TaskManager";
 
 function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
     let i = 0;
+
+    let metrica = MetricaManager.metrica;
+
     return (
         <Grid2 container component={Paper} sx={{ marginBottom: 1, marginLeft: 2, marginRight: 2 }}>
 
             <Grid2 size={1} sx={{ textAlign: "center", alignContent: 'center' }}>
-                📗
+                {task.mId1 ? metrica.filter((m) => { return m.id == task.mId1; })[0].shortTitle  : ''}&nbsp;
+                {task.mId2 ? metrica.filter((m) => { return m.id == task.mId2; })[0].shortTitle  : ''}
             </Grid2>
             <Grid2 size={10} sx={{ textAlign: 'center', alignContent: 'center' }} >
                 {task.title}
             </Grid2>
+
             <Grid2 size={1} sx={{ textAlign: 'center', alignContent: 'center' }}>
                 <TaskMenu task={task} tasks={tasks} setTasks={setTasks}></TaskMenu>
             </Grid2>
 
             <Grid2 size={1} sx={{ verticalAlign: "bottom", paddingRight: 2 }}>
-                <TaskMenu2 task={task} tasks={tasks} setTasks={setTasks}></TaskMenu2>
+                <TaskMetricMenu task={task} tasks={tasks} setTasks={setTasks}></TaskMetricMenu>
             </Grid2>
 
             <Grid2 size={11}>

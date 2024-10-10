@@ -14,23 +14,24 @@ function MetricElement({ mId, vCode, elIndex, metrica, views }) {
     };
 
     return (
-        <Grid2 size={12} container>
-
-            <Grid2 size={3} >Метрика {elIndex}:</Grid2>
+        <>
+            <Grid2 size={3} alignContent={'center'}>
+                Метрика #{elIndex}:
+            </Grid2>
             <Grid2 size={4}>
                 <FormControl fullWidth variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="select-label-type">Тип</InputLabel>
+                    <InputLabel >Тип</InputLabel>
                     <Select
-                        labelId="select-label-type"
-                        id="select-label-type"
+                        required={elIndex == 1}
                         value={mIdState}
-                        label="Тип"
+                        label="Типы"
                         name={"typeId" + elIndex}
                         onChange={handleTypeChange}>
+                        <MenuItem key="" value="">Без типа</MenuItem>
                         {metrica.map((m) => {
                             return (
                                 <MenuItem key={m.id} value={m.id}>
-                                    {m.shortTitle}
+                                    {m.icon}
                                     &nbsp;
                                     {m.title}
                                 </MenuItem>
@@ -42,14 +43,14 @@ function MetricElement({ mId, vCode, elIndex, metrica, views }) {
 
             <Grid2 size={4}>
                 <FormControl fullWidth variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel id="select-label-view">Вид</InputLabel>
+                    <InputLabel >Вид</InputLabel>
                     <Select
-                        labelId="select-label-view"
-                        id="select-label-view"
+                        required={elIndex == 1}
                         value={vCodeState}
                         label="Вид"
                         name={"viewCode" + elIndex}
                         onChange={handleViewChange}   >
+                        <MenuItem key="" value="">Без отображения</MenuItem>
                         {views.map((m) => {
                             return (
                                 <MenuItem key={m.code} value={m.code}>
@@ -63,7 +64,7 @@ function MetricElement({ mId, vCode, elIndex, metrica, views }) {
                 </FormControl>
             </Grid2>
 
-        </Grid2 >
+        </>
     )
 }
 

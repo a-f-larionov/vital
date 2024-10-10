@@ -12,7 +12,6 @@ import TaskManager from '../managers/TaskManager';
 
 function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
 
-    const [metrica, setMetrica] = React.useState([]);
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const views = [
         { code: 'sum', title: 'Сумма', shortTitle: '📈' },
@@ -20,17 +19,12 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         { code: 'list-count', title: 'СписокСумма', shortTitle: '📃📈' },
     ];
 
+    const metrica = MetricaManager.metrica;
+
     setOpenCallback((value) => {
-        if (value === true) {
-            MetricaManager.load((metrica) => {
-                setMetrica(metrica);
-                setDialogOpen(value);
-            })
-        } else {
-            setDialogOpen(value);
-        }
+        setDialogOpen(value);
     });
-    
+
     function dialogHandleClose() {
         setDialogOpen(false);
     }
@@ -59,7 +53,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                 component: 'form',
                 onSubmit: (event) => {
                     event.preventDefault();
-                    
+
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
                     const title = formJson.title;
@@ -67,14 +61,14 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     const mId2 = formJson.typeId2;
                     const vCode1 = formJson.viewCode1;
                     const vCode2 = formJson.viewCode1;
-                    
+
                     dialogSaveHandler(title, mId1, mId2, vCode1, vCode2);
                 },
             }}
         >
             <DialogTitle>Метрики</DialogTitle>
             <DialogContent sx={{ flexGrow: 1 }}>
-                <Grid2 container spacing={3}>
+                <Grid2 container spacing={1}>
 
                     <Grid2 size={3}>Название:</Grid2>
                     <Grid2 size={9}>
@@ -93,7 +87,6 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                         <Input fullWidth></Input>
                     </Grid2>
                 </Grid2>
-
 
             </DialogContent>
 

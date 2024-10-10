@@ -13,10 +13,14 @@ import lombok.Setter;
 public class TikDTO {
 
     @NotBlank
+    private String id;
+
+    @NotBlank
     private String uid;
     
-    private String id;
+    @NotBlank
     private String tid;
+    private String oid;
 
     private Instant datetime;
 

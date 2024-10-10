@@ -24,13 +24,16 @@ public class TikEntity {
 
     @NotBlank
     private String uid;
+    
+    @NotBlank
+    private String tid;
+
+    private String oid;
 
     private Boolean isArchived = false;
 
     @CreationTimestamp
     private Instant datetime;
-
-    private String tid;
 
     private Long m1;
     private Long m2;

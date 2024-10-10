@@ -23,29 +23,14 @@ databaseChangeLog:
   - changeSet:
       id: "4"
       author: developer
-      comment: Metrica base data
-      changes:
-        - sqlFile:
-            path: /db/changelog/004-insert-metrica.sql
-  - changeSet:
-      id: "5"
-      author: developer
       comment: " add user entity"
       changes:
         - sqlFile:
-            path: /db/changelog/005-create-user-entity.sql
+            path: /db/changelog/004-create-user-entity.sql
   - changeSet:
-      id: "6"
+      id: "5"
       author: developer
-      comment: " add uid to task entity, tik entity"
+      comment: Metrica base data
       changes:
         - sqlFile:
-            path: /db/changelog/006-add-uid-field.sql
-  - changeSet:
-      id: "7"
-      author: developer
-      comment: "add tik isArchived field, task created field"
-      changes:
-        - sqlFile:
-            path: /db/changelog/007-add-task-created-tik-archived-fields.sql
-            
+            path: /db/changelog/005-insert-metrica.sql

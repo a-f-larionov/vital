@@ -14,6 +14,7 @@ import ContentPage from "./elements/ContentPage";
 import TaskManager from "./managers/TaskManager";
 import UserManager from './managers/UserManager';
 import PageManager from './managers/PageManager';
+import MetricaManager from './managers/MetricaManager';
 
 function App() {
     const [tasks, setTasks] = useState(null);
@@ -22,8 +23,10 @@ function App() {
         return userProfile ? JSON.parse(userProfile) : {};
     });
     const [currentPage, setCurrentPage] = useState(PageManager.PAGE_MAIN);
+    const [metrica, setMetrica] = useState([]);
     PageManager.init(currentPage, setCurrentPage);
     UserManager.setUserProfile(userProfile);
+    MetricaManager.load(metrica, setMetrica);
 
     let googleOk = function (d) {
         let decoded = jwtDecode(d.credential)
@@ -84,7 +87,7 @@ function App() {
 
                                     <Box display="flex" justifyContent="center">
                                         <Button sx={{ minWidth: 0 }} size="small"
-                                            variant="contained" color="failed" onClick={() => { PageManager.setPage(PageManager.PAGE_MAIN); }}> 
+                                            variant="contained" color="failed" onClick={() => { PageManager.setPage(PageManager.PAGE_MAIN); }}>
                                             <ArrowBackIosIcon />
                                         </Button>
 
