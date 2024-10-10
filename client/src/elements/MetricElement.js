@@ -54,7 +54,7 @@ function MetricElement({ mId, vCode, elIndex, metrica, views }) {
                         {views.map((m) => {
                             return (
                                 <MenuItem key={m.code} value={m.code}>
-                                    {m.shortTitle}
+                                    {m.icon}
                                     &nbsp;
                                     {m.title}
                                 </MenuItem>

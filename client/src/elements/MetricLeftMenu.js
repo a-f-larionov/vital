@@ -6,7 +6,7 @@ import { Slider } from 'antd';
 import React from "react";
 import TaskManager from "../managers/TaskManager";
 
-function TaskMetricMenu({ task, tasks, setTasks }) {
+function MetricLeftMenu({ task, tasks, setTasks }) {
 
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [sVal, setSVal] = React.useState(0);
@@ -96,4 +96,4 @@ function TaskMetricMenu({ task, tasks, setTasks }) {
     </Box>
 }
 
-export default TaskMetricMenu;
+export default MetricLeftMenu;

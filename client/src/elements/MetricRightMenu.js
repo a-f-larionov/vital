@@ -9,7 +9,7 @@ import TaskManager from "../managers/TaskManager";
 import PageManager from "../managers/PageManager";
 import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 
-function TaskMenu({ task, tasks, setTasks }) {
+function MetricRightMenu({ task, tasks, setTasks }) {
 
     const [menuAnchorEl, setAnchorEl] = React.useState(null);
     const menuOpen = Boolean(menuAnchorEl);
@@ -38,6 +38,11 @@ function TaskMenu({ task, tasks, setTasks }) {
         menuHandleClose();
     }
 
+    function onListMenuClick({ task, tasks, setTasks }) {
+    
+        PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task);
+    }
+
     return (
         <ClickAwayListener onClickAway={menuHandleClose}>
             <Box sx={{ minWidth: 0 }}>
@@ -52,12 +57,9 @@ function TaskMenu({ task, tasks, setTasks }) {
                         onClose={menuHandleClose}
                         sx={{ '& > :not(style)': { marginLeft: '8px', backgroundColor: '#fff' } }}
                     >
-                        <Fab size='small'>
-                            <DeleteIcon onClick={() => onArchiveClick({ task, tasks, setTasks })} />
-                        </Fab>
 
                         <Fab size='small'>
-                            <EditIcon onClick={() => onEditClick({ task, tasks, setTasks })} color='primary' />
+                            <EditIcon onClick={() => onListMenuClick({ task, tasks, setTasks })} color='primary' />
                         </Fab>
 
                     </Popper>
@@ -80,4 +82,4 @@ function TaskMenu({ task, tasks, setTasks }) {
     );
 }
 
-export default TaskMenu;
+export default MetricRightMenu;

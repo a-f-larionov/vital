@@ -1,18 +1,16 @@
-import React from "react";
-import { Box, TableContainer } from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
-import SaveIcon from "@mui/icons-material/Save";
 import CancelIcon from "@mui/icons-material/Cancel";
+import DeleteIcon from "@mui/icons-material/Delete";
+import EditIcon from "@mui/icons-material/Edit";
+import SaveIcon from "@mui/icons-material/Save";
+import { Box } from "@mui/material";
+import React from "react";
 import PageManager from "../managers/PageManager";
 import TaskManager from "../managers/TaskManager";
 
 import {
-    GridRowModes,
     DataGrid,
-    GridToolbarContainer,
     GridActionsCellItem,
-    GridRowEditStopReasons,
+    GridRowModes
 } from '@mui/x-data-grid';
 
 
@@ -30,7 +28,6 @@ function TiksLits({ tasks, setTasks }) {
     };
 
     const handleArchiveClick = (id) => () => {
-        console.log(id);
         TaskManager.tikArchive(task.tiks.filter(tik => tik.id === id)[0], tasks, setTasks);
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
@@ -97,7 +94,7 @@ function TiksLits({ tasks, setTasks }) {
     let rows = task.tiks.map((tik) => {
         return {
             id: tik.id,
-            datetime: new Date(tik.datetime),
+            datetime: new Date(tik.datetime * 1000  ),
             m1: tik.m1
         }
     });

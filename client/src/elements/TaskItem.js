@@ -1,39 +1,45 @@
-import { TableCell, TableRow } from "@mui/material";
-import Grid2 from "@mui/material/Grid2";
-import Paper from '@mui/material/Paper';
+import { Grid2, Paper, TableCell, TableRow } from "@mui/material";
+
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
-import TaskMenu from './TaskMenu';
-import TaskMetricMenu from './TaskMetricMenu';
+import MetricRightMenu from "../elements/MetricRightMenu";
 import MetricaManager from "../managers/MetricaManager";
-import TaskManager from "../managers/TaskManager";
+import PageManager from "../managers/PageManager";
+import MetricLeftMenu from './MetricLeftMenu';
+import TaskMenu from './TaskMenu';
 
 function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
     let i = 0;
 
     let metrica = MetricaManager.metrica;
 
+    function onListMenuClick({ task, tasks, setTasks }) {
+
+        PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task);
+    }
+
     return (
         <Grid2 container component={Paper} sx={{ marginBottom: 1, marginLeft: 2, marginRight: 2 }}>
 
             <Grid2 size={1} sx={{ textAlign: "center", alignContent: 'center' }}>
-                {task.mId1 ? metrica.filter((m) => { return m.id == task.mId1; })[0].shortTitle  : ''}&nbsp;
-                {task.mId2 ? metrica.filter((m) => { return m.id == task.mId2; })[0].shortTitle  : ''}
+                {task.mId1 ? metrica.filter((m) => { return m.id == task.mId1; })[0].icon : ''}
+                &nbsp;
+                {task.mId2 ? metrica.filter((m) => { return m.id == task.mId2; })[0].icon : ''}
             </Grid2>
             <Grid2 size={10} sx={{ textAlign: 'center', alignContent: 'center' }} >
                 {task.title}
             </Grid2>
 
             <Grid2 size={1} sx={{ textAlign: 'center', alignContent: 'center' }}>
-                <TaskMenu task={task} tasks={tasks} setTasks={setTasks}></TaskMenu>
+                <TaskMenu task={task} tasks={tasks} setTasks={setTasks} />
             </Grid2>
 
             <Grid2 size={1} sx={{ verticalAlign: "bottom", paddingRight: 2 }}>
-                <TaskMetricMenu task={task} tasks={tasks} setTasks={setTasks}></TaskMetricMenu>
+                <MetricLeftMenu task={task} tasks={tasks} setTasks={setTasks}/>
             </Grid2>
 
-            <Grid2 size={11}>
+            <Grid2 size={10}>
                 <TableContainer >
                     <Table size="small">
                         <TableBody key={task.id + 'body'}>
@@ -60,6 +66,10 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
                         </TableBody>
                     </Table>
                 </TableContainer>
+            </Grid2>
+
+            <Grid2 size={1}>
+                <MetricRightMenu  task={task} tasks={tasks} setTasks={setTasks}/>
             </Grid2>
         </Grid2>
 

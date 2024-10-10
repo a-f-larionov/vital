@@ -14,9 +14,9 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const views = [
-        { code: 'sum', title: 'Сумма', shortTitle: '📈' },
-        { code: 'minmaks', title: 'МинМакс', shortTitle: '📊' },
-        { code: 'list-count', title: 'СписокСумма', shortTitle: '📃📈' },
+        { code: 'sum', title: 'Сумма', icon: '📈' },
+        { code: 'minmaks', title: 'МинМакс', icon: '📊' },
+        { code: 'list-count', title: 'СписокСумма', icon: '📃📈' },
     ];
 
     const metrica = MetricaManager.metrica;
