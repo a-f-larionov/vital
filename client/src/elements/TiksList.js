@@ -42,7 +42,7 @@ function TiksLits({ tasks, setTasks }) {
 
     const columns = [
         { field: 'datetime', headerName: 'Момент', type: 'dateTime', width: 170, align: 'left', headerAlign: 'left', editable: true },
-        { field: 'm1', headerName: 'М1', type: 'number', width: 30, align: 'left', headerAlign: 'left', editable: true },
+        { field: 'm1', headerName: 'М1', type: 'number', width: 120, align: 'left', headerAlign: 'left', editable: true },
         {
             field: 'actions',
             type: 'actions',

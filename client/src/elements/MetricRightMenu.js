@@ -38,9 +38,8 @@ function MetricRightMenu({ task, tasks, setTasks }) {
         menuHandleClose();
     }
 
-    function onListMenuClick({ task, tasks, setTasks }) {
-    
-        PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task);
+    function onEditMenuClick({ task, tasks, setTasks }) {
+        PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task.title, task);
     }
 
     return (
@@ -59,7 +58,7 @@ function MetricRightMenu({ task, tasks, setTasks }) {
                     >
 
                         <Fab size='small'>
-                            <EditIcon onClick={() => onListMenuClick({ task, tasks, setTasks })} color='primary' />
+                            <EditIcon onClick={() => onEditMenuClick({ task, tasks, setTasks })} color='primary' />
                         </Fab>
 
                     </Popper>
@@ -69,7 +68,7 @@ function MetricRightMenu({ task, tasks, setTasks }) {
                         aria-expanded={menuOpen ? 'true' : undefined}
                         aria-haspopup="true"
                         onClick={menuHandleClick}
-                        sx={{padding:0}}
+                        sx={{ padding: 0 }}
                     >
                         <MoreVertIcon />
                     </IconButton>

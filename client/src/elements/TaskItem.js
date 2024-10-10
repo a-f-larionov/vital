@@ -14,10 +14,6 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
 
     let metrica = MetricaManager.metrica;
 
-    function onListMenuClick({ task, tasks, setTasks }) {
-
-        PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task);
-    }
 
     return (
         <Grid2 container component={Paper} sx={{ marginBottom: 1, marginLeft: 2, marginRight: 2 }}>

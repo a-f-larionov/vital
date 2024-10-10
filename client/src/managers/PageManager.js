@@ -8,14 +8,16 @@ PageManager.PAGE_MAIN = 1;
 PageManager.PAGE_EDIT_TIKS = 2;
 PageManager.pageParamA = undefined
 PageManager.currentPage = undefined;
+PageManager.pageTitle = "Vital Manager";
 
 PageManager.init = function (currentPage, setCurrentPage) {
     PageManager.currentPage = currentPage;
     PageManager.setCurrentPage = setCurrentPage;
 }
 
-PageManager.setPage = function (pageId, pageParamA) {
+PageManager.setPage = function (pageId, title, pageParamA) {
     PageManager.setCurrentPage(pageId);
+    PageManager.pageTitle = title;
     PageManager.pageParamA = pageParamA;
 };
 

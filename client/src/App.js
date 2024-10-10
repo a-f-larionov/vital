@@ -87,7 +87,8 @@ function App() {
 
                                     <Box display="flex" justifyContent="center">
                                         <Button sx={{ minWidth: 0 }} size="small"
-                                            variant="contained" color="failed" onClick={() => { PageManager.setPage(PageManager.PAGE_MAIN); }}>
+                                            variant="contained" color="failed"
+                                             onClick={() => { PageManager.setPage(PageManager.PAGE_MAIN, 'Vital Manager'); }}>
                                             <ArrowBackIosIcon />
                                         </Button>
 
@@ -95,7 +96,7 @@ function App() {
                                 }
                                 {/* </IconButton> */}
                                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                                    Vital Manager
+                                    {PageManager.pageTitle}
                                 </Typography>
                                 <Button color="inherit">
                                     <Avatar src={UserManager.getPicture()}></Avatar>
