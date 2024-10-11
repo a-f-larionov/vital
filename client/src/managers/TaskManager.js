@@ -39,14 +39,20 @@ TaskManager.getTable = function (tasks) {
             title: task.title,
             cells: dates.map((date) => {
 
-                return {
-                    title: task.tiks
-                        .filter((tik) => {
-                            return new Date(tik.datetime * 1000).getDate() ===
-                                date.getDate();
-                        })
-                        .reduce((r, tik) => { return r + (task.vCode1 ? tik.m1 : 1); }, 0)
-                };
+                var title = task.tiks
+                    .filter((tik) => {
+                        return new Date(tik.datetime * 1000).getDate() ===
+                            date.getDate();
+                    })
+                    .reduce((r, tik) => { return r + (task.vCode1 ? tik.m1 : 1); }, 0);
+
+                
+                if (title && task.m1.typeCode == "timestamp") {
+                    title =  s2hms(title);
+                }
+
+                if(!title)title = '';
+                return { title: title };
             })
         }
     })
@@ -55,6 +61,7 @@ TaskManager.getTable = function (tasks) {
 }
 
 TaskManager.tikCreate = function (task, tasks, setTasks, m1, m2, m3, m4) {
+    console.log('ttttt', arguments);
     m1 = m1 !== undefined ? m1 : 0;
     m2 = m2 ? m2 : 0;
     m3 = m3 ? m3 : 0;
@@ -114,10 +121,16 @@ TaskManager.taskUpdate = function (task, tasks, setTasks) {
     this.flush(tasks, setTasks);
 }
 
+TaskManager.flushInProgress = false;
+TaskManager.needFlush = false;
 TaskManager.flush = function (tasks, setTasks) {
-
+    console.log('flushing');
+    if (TaskManager.flushInProgress) {
+        TaskManager.needFlush = true;
+        return;
+    }
+    TaskManager.flushInProgress = true;
     let prs = [];
-console.log(tasks);
     tasks.forEach(task => {
         if (task.needFlush === true) {
             prs.push(
@@ -176,6 +189,11 @@ console.log(tasks);
     Promise.all(prs).then((a) => {
         localStorage.tasks = JSON.stringify(tasks);
         setTasks([...tasks]);
+        TaskManager.flushInProgress = false;
+        if (TaskManager.needFlush) {
+            TaskManager.needFlush = false;
+            TaskManager.flush(tasks, setTasks);
+        }
     });
 }
 TaskManager.archive = function (task, tasks, setTasks) {
@@ -229,5 +247,33 @@ function fetch_(url, method, body) {
             return r.json();
         });
 }
+
+function s2hms(s) {
+
+    var time = [
+        Math.floor(s / 3600), // hours
+        Math.floor(s / 60) % 60, // minutes
+        Math.floor(s % 60) // seconds
+    ];
+
+    if (time[2] < 10) {
+
+        time[2] = "0" + time[2];
+    }
+
+    if (time[0] === 0) {
+
+        time.shift();
+    } else {
+
+        if (time[1] < 10) {
+
+            time[1] = "0" + time[1];
+        }
+    }
+
+    return time.join(":");
+}
+
 
 export default TaskManager;

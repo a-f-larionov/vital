@@ -41,10 +41,16 @@ public class TaskController {
     public ResponseDTO add(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
         var entity = taskMapper.toEntity(taskRqDto);
-        entity.setM1(taskRqDto.getMId1().length() > 0
-                ? metricaRepository.findById(taskRqDto.getMId1())
-                : null);
 
+        taskRepository.save(entity);
+
+        return new ResponseDTO("OK");
+    }
+    @PostMapping("/update")
+    public ResponseDTO update(@RequestBody @Valid TaskRqDTO taskRqDto) {
+
+        var entity = taskMapper.toEntity(taskRqDto);
+      
         taskRepository.save(entity);
 
         return new ResponseDTO("OK");
@@ -55,16 +61,6 @@ public class TaskController {
         var entity = taskRepository.findByUidAndId(taskDTO.getUid(), taskDTO.getId());
         entity.setIsArchived(true);
         taskRepository.save(entity);
-        return new ResponseDTO("OK");
-    }
-
-    @PostMapping("/update")
-    public ResponseDTO update(@RequestBody @Valid TaskRqDTO taskDto) {
-
-        var entity = taskMapper.toEntity(taskDto);
-
-        taskRepository.save(entity);
-
         return new ResponseDTO("OK");
     }
 

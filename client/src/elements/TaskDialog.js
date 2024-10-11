@@ -31,11 +31,11 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
 
     function dialogSaveHandler(title, mId1, mId2, vCode1, vCode2) {
         task.title = title;
-        task.mId1 = mId1;
-        task.mId2 = mId2;
+        task.m1 = metrica.filter(m => { return m.id === mId1 })[0];
+        task.m2 = metrica.filter(m => { return m.id === mId2 })[0];
         task.vCode1 = vCode1;
         task.vCode2 = vCode2;
-        console.log(mId1);
+        console.log(task, mId1, mId2);
 
         if (task.id) {
             TaskManager.taskUpdate(task, tasks, setTasks);
@@ -78,8 +78,8 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                             name="title" defaultValue={task.title} />
                     </Grid2>
 
-                    <MetricElement elIndex={1} mId={task.mId1} vCode={task.vCode1} metrica={metrica} views={views} />
-                    <MetricElement elIndex={2} mId={task.mId2} vCode={task.vCode2} metrica={metrica} views={views} />
+                    <MetricElement elIndex={1} mId={task.m1 ? task.m1.id : null} vCode={task.vCode1} metrica={metrica} views={views} />
+                    <MetricElement elIndex={2} mId={task.m2 ? task.m2.id : null} vCode={task.vCode2} metrica={metrica} views={views} />
 
                     <Grid2 size={3} >Материалы:</Grid2>
                     <Grid2 size={6}>

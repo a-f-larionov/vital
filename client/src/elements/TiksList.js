@@ -43,6 +43,7 @@ function TiksLits({ tasks, setTasks }) {
     const columns = [
         { field: 'datetime', headerName: 'Момент', type: 'dateTime', width: 170, align: 'left', headerAlign: 'left', editable: true },
         { field: 'm1', headerName: 'М1', type: 'number', width: 120, align: 'left', headerAlign: 'left', editable: true },
+        { field: 'm2', headerName: 'М2', type: 'number', width: 120, align: 'left', headerAlign: 'left', editable: true },
         {
             field: 'actions',
             type: 'actions',
@@ -94,11 +95,38 @@ function TiksLits({ tasks, setTasks }) {
     let rows = task.tiks.map((tik) => {
         return {
             id: tik.id,
-            datetime: new Date(tik.datetime * 1000  ),
-            m1: tik.m1
+            datetime: new Date(tik.datetime * 1000),
+            m1: task.m1.typeCode == 'timestamp' ? s2hms(tik.m1) : task.m1,
+            m2: tik.m2
         }
     });
 
+    function s2hms(s) {
+
+        var time = [
+            Math.floor(s / 3600), // hours
+            Math.floor(s / 60) % 60, // minutes
+            Math.floor(s % 60) // seconds
+        ];
+
+        if (time[2] < 10) {
+
+            time[2] = "0" + time[2];
+        }
+
+        if (time[0] === 0) {
+
+            time.shift();
+        } else {
+
+            if (time[1] < 10) {
+
+                time[1] = "0" + time[1];
+            }
+        }
+
+        return time.join(":");
+    }
 
     return (
         <Box>

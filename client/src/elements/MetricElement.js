@@ -27,7 +27,7 @@ function MetricElement({ mId, vCode, elIndex, metrica, views }) {
                         label="Типы"
                         name={"typeId" + elIndex}
                         onChange={handleTypeChange}>
-                        <MenuItem key="">Без типа</MenuItem>
+                        <MenuItem key="" value="">Без типа</MenuItem>
                         {metrica.map((m) => {
                             return (
                                 <MenuItem key={m.id} value={m.id}>
