@@ -5,20 +5,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.springframework.http.HttpEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vital.dto.ResponseDTO;
-import com.vital.dto.TaskDTO;
 import com.vital.dto.rq.TaskArchiveDTO;
 import com.vital.dto.rq.TaskListRqDTo;
+import com.vital.dto.rq.TaskRqDTO;
+import com.vital.dto.rs.TaskRsDTO;
 import com.vital.entities.TaskEntity;
 import com.vital.entities.TikEntity;
 import com.vital.mappers.TaskMapper;
 import com.vital.mappers.TikMapper;
+import com.vital.repositories.MetricaRepository;
 import com.vital.repositories.TaskRepository;
 import com.vital.repositories.TiksRepository;
 
@@ -32,13 +33,17 @@ public class TaskController {
 
     final TaskRepository taskRepository;
     final TiksRepository tiksRepository;
+    final MetricaRepository metricaRepository;
     final TaskMapper taskMapper;
     final TikMapper tikMapper;
 
     @PostMapping("/add")
-    public ResponseDTO add(@RequestBody @Valid TaskDTO taskDto, HttpEntity<byte[]> requestEntity) {
+    public ResponseDTO add(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
-        var entity = taskMapper.toEntity(taskDto);
+        var entity = taskMapper.toEntity(taskRqDto);
+        entity.setM1(taskRqDto.getMId1().length() > 0
+                ? metricaRepository.findById(taskRqDto.getMId1())
+                : null);
 
         taskRepository.save(entity);
 
@@ -54,7 +59,7 @@ public class TaskController {
     }
 
     @PostMapping("/update")
-    public ResponseDTO update(@RequestBody @Valid TaskDTO taskDto) {
+    public ResponseDTO update(@RequestBody @Valid TaskRqDTO taskDto) {
 
         var entity = taskMapper.toEntity(taskDto);
 
@@ -64,7 +69,7 @@ public class TaskController {
     }
 
     @PostMapping("/list")
-    public List<TaskDTO> list(@RequestBody @Valid TaskListRqDTo taskListRqDTo) {
+    public List<TaskRsDTO> list(@RequestBody @Valid TaskListRqDTo taskListRqDTo) {
 
         List<TaskEntity> tasks = taskRepository.findByUidAndIsArchivedFalse(taskListRqDTo.getUid());
 

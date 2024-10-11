@@ -6,6 +6,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -32,9 +33,12 @@ public class TaskEntity {
     @Size(min = 1)
     private String title;
 
-    private String mId1 = "";
-    private String mId2 = "";
+    @ManyToOne
+    private MetricaEntity m1;
+    
+    @ManyToOne
+    private MetricaEntity m2;
+
     private String vCode1 = "";
     private String vCode2 = "";
-    // https://habr.com/ru/articles/460377/
 }

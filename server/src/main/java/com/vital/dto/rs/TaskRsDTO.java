@@ -1,9 +1,11 @@
-package com.vital.dto;
+package com.vital.dto.rs;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.vital.dto.MetricaDTO;
+import com.vital.dto.TikDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -14,7 +16,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class TaskDTO {
+public class TaskRsDTO {
 
     @NotBlank
     private String uid;
@@ -24,10 +26,12 @@ public class TaskDTO {
     @Size(min = 1)
     private String title = "";
 
-    @JsonProperty("mId1")
-    private String mId1 = "";
-    @JsonProperty("mId2")
-    private String mId2 = "";
+    @JsonProperty("m1")
+    private MetricaDTO m1;
+    
+    @JsonProperty("m2")
+    private MetricaDTO m2;
+
     @JsonProperty("vCode1")
     private String vCode1 = "";
     @JsonProperty("vCode2")

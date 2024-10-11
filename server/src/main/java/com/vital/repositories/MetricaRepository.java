@@ -9,4 +9,6 @@ import com.vital.entities.MetricaEntity;
 public interface MetricaRepository extends PagingAndSortingRepository<MetricaEntity, String> {
 
     public List<MetricaEntity> findAll();
+
+    public MetricaEntity findById(String id);
 }

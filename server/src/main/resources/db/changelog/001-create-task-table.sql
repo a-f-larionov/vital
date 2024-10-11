@@ -6,10 +6,10 @@ CREATE TABLE task_entity(
     created TIMESTAMP without time zone,
     is_archived boolean, title varchar(127),
 
-    m_id1 varchar(36),
+    m1_id varchar(36),
     v_code1 varchar(36),
     
-    m_id2 varchar(36),
+    m2_id varchar(36),
     v_code2 varchar(36),
     
     PRIMARY KEY(id)

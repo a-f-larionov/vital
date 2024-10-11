@@ -3,13 +3,12 @@ import { Grid2, Paper, TableCell, TableRow } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
-import MetricRightMenu from "../elements/MetricRightMenu";
 import MetricaManager from "../managers/MetricaManager";
-import PageManager from "../managers/PageManager";
 import MetricLeftMenu from './MetricLeftMenu';
+import MetricRightMenu from "./MetricRightMenu";
 import TaskMenu from './TaskMenu';
 
-function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
+function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
     let i = 0;
 
     let metrica = MetricaManager.metrica;
@@ -19,9 +18,9 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
         <Grid2 container component={Paper} sx={{ marginBottom: 1, marginLeft: 2, marginRight: 2 }}>
 
             <Grid2 size={1} sx={{ textAlign: "center", alignContent: 'center' }}>
-                {task.mId1 ? metrica.filter((m) => { return m.id == task.mId1; })[0].icon : ''}
+                {task.m1 ? task.m1.icon : ''}
                 &nbsp;
-                {task.mId2 ? metrica.filter((m) => { return m.id == task.mId2; })[0].icon : ''}
+                {task.m2 ? task.m2.icon : ''}
             </Grid2>
             <Grid2 size={10} sx={{ textAlign: 'center', alignContent: 'center' }} >
                 {task.title}
@@ -30,6 +29,8 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
             <Grid2 size={1} sx={{ textAlign: 'center', alignContent: 'center' }}>
                 <TaskMenu task={task} tasks={tasks} setTasks={setTasks} />
             </Grid2>
+
+
 
             <Grid2 size={1} sx={{ verticalAlign: "bottom", paddingRight: 2 }}>
                 <MetricLeftMenu task={task} tasks={tasks} setTasks={setTasks} />
@@ -89,7 +90,6 @@ function TaskItem({ title, cells, cols, task, tasks, setTasks }) {
         </Grid2>
 
     );
-    // <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
 }
 
-export default TaskItem;
+export default TaskRowShort;

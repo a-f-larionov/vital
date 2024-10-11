@@ -35,6 +35,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         task.mId2 = mId2;
         task.vCode1 = vCode1;
         task.vCode2 = vCode2;
+        console.log(mId1);
 
         if (task.id) {
             TaskManager.taskUpdate(task, tasks, setTasks);
@@ -57,8 +58,8 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
                     const title = formJson.title;
-                    const mId1 = formJson.typeId1;
-                    const mId2 = formJson.typeId2;
+                    const mId1 = formJson.typeId1.length ? formJson.typeId1 : null;
+                    const mId2 = formJson.typeId2.length ? formJson.typeId2 : null;
                     const vCode1 = formJson.viewCode1;
                     const vCode2 = formJson.viewCode1;
 

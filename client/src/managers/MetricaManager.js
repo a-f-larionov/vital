@@ -13,6 +13,7 @@ function MetricaManager() {
 }
 MetricaManager.metrica = [];
 
+MetricaManager.inProcess = false;
 MetricaManager.load = function (metrica, setMetrica) {
 
     if (MetricaManager.metrica.length > 0) {
@@ -20,8 +21,10 @@ MetricaManager.load = function (metrica, setMetrica) {
     }
     MetricaManager.metrica = metrica;
 
+    if (MetricaManager.inProcess) return;
+    MetricaManager.inProcess = true;
     fetch_(apiMetrica + "/list")
-        .then(metricaData => {            
+        .then(metricaData => {
             setMetrica(metricaData);
         });
 
