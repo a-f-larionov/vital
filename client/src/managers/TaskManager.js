@@ -124,7 +124,7 @@ TaskManager.taskUpdate = function (task, tasks, setTasks) {
 TaskManager.flushInProgress = false;
 TaskManager.needFlush = false;
 TaskManager.flush = function (tasks, setTasks) {
-    console.log('flushing');
+    
     if (TaskManager.flushInProgress) {
         TaskManager.needFlush = true;
         return;

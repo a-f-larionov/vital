@@ -1,23 +1,24 @@
 import './App.css';
 
-import React, { useState } from "react";
-import { AppBar, Avatar, Box, Button, Grid2, Toolbar, Typography } from "@mui/material";
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import AddIcon from "@mui/icons-material/Add";
+import { AppBar, Avatar, Box, Button, Grid2, Popper, Snackbar, Toolbar, Typography } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
 import Stack from "@mui/material/Stack";
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
-import TaskList from "./elements/TaskList";
-import ToolAddTask from "./elements/ToolAddTask";
+import React, { useState } from "react";
 import ContentPage from "./elements/ContentPage";
+import ToolAddTask from "./elements/ToolAddTask";
+import MetricaManager from './managers/MetricaManager';
+import PageManager from './managers/PageManager';
 import TaskManager from "./managers/TaskManager";
 import UserManager from './managers/UserManager';
-import PageManager from './managers/PageManager';
-import MetricaManager from './managers/MetricaManager';
+import CommentManager from './managers/CommentsManager';
+import CommitedSnakbar from './elements/CommitedSnackbar';
 
 function App() {
     const [tasks, setTasks] = useState(null);
+    const [comments, setComments] = useState(null);
     const [userProfile, setUserProfile] = useState(() => {
         let userProfile = localStorage.getItem('userProfile');
         return userProfile ? JSON.parse(userProfile) : {};
@@ -41,7 +42,6 @@ function App() {
                 alignItems="center"
                 sx={{ width: 1, height: "100vh" }}>
                 <Grid2 container>
-
                     <Grid2 size={4}></Grid2>
                     <Grid2 size={1} sx={{ alignContent: 'center' }}>
                         <GoogleLogin type="icon" onSuccess={googleOk} onError={console.log} />
@@ -54,8 +54,10 @@ function App() {
         );
     } else {
 
-        if (tasks === null) {
+        console.log(tasks, comments);
+        if (tasks === null || comments === null) {
             TaskManager.init(setTasks);
+            CommentManager.init(setComments);
             return (
                 <Stack
                     direction="row"
@@ -88,7 +90,7 @@ function App() {
                                     <Box display="flex" justifyContent="center">
                                         <Button sx={{ minWidth: 0 }} size="small"
                                             variant="contained" color="failed"
-                                             onClick={() => { PageManager.setPage(PageManager.PAGE_MAIN, 'Vital Manager'); }}>
+                                            onClick={() => { PageManager.setPage(PageManager.PAGE_MAIN, 'Vital Manager'); }}>
                                             <ArrowBackIosIcon />
                                         </Button>
 
@@ -111,6 +113,7 @@ function App() {
                     <ContentPage tasks={tasks} setTasks={setTasks} />
 
                 </Grid2>
+                <CommitedSnakbar />
             </Grid2 >);
     }
 }
