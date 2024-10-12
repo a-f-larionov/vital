@@ -1,5 +1,7 @@
 package com.vital.repositories;
 
+import java.util.Optional;
+
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.vital.entities.UserEntity;
@@ -8,7 +10,7 @@ public interface UserRepository extends PagingAndSortingRepository<UserEntity, S
 
     UserEntity getById(String id);
 
-    UserEntity getByGoogleEmail(String googleEmail);
+    Optional<UserEntity> getByGoogleEmail(String googleEmail);
 
-    void save(UserEntity userEntity);
+    UserEntity save(UserEntity userEntity);
 }

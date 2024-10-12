@@ -24,15 +24,12 @@ public class UserController {
     @PostMapping("/register")
     public UserRsDto register(@RequestBody UserRqDto userRqDto) {
 
-        UserEntity userEntity;
-
-        userEntity = userRepository.getByGoogleEmail(userRqDto.getGoogleEmail());
-
-        if (userEntity == null) {
-            userEntity = userMapper.toEntity(userRqDto);
-            userRepository.save(userEntity);
-        }
-
-        return userMapper.toDto(userEntity);
+        return userMapper.toDto(
+                userRepository
+                        .getByGoogleEmail(userRqDto.getGoogleEmail())
+                        .orElseGet(() -> {
+                            return userRepository.save(
+                                    userMapper.toEntity(userRqDto));
+                        }));
     }
 }
