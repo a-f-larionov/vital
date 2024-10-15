@@ -10,12 +10,14 @@ import { TimePicker } from '@mui/x-date-pickers/TimePicker';
 import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 import dayjs from 'dayjs';
 
 import {
     DataGrid,
     GridActionsCellItem,
-    GridRowModes
+    GridRowModes,
+    useGridApiContext
 } from '@mui/x-data-grid';
 
 
@@ -30,16 +32,10 @@ function TiksLits({ tasks, setTasks }) {
 
     const handleSaveClick = (id, a, b, c) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
-        let tik = task.tiks.filter(tik => tik.id == id)[0];
-        TaskManager.tikUpdate(tik, tasks, setTasks);
-        console.log(tik, rows, a, b, c);
-        /**
-         * 
-         */
     };
 
     const handleArchiveClick = (id) => () => {
-        TaskManager.tikArchive(task.tiks.filter(tik => tik.id === id)[0], tasks, setTasks);
+        TaskManager.tikArchive(task.tiks.find(tik => tik.id === id), tasks, setTasks);
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
 
@@ -51,63 +47,87 @@ function TiksLits({ tasks, setTasks }) {
         setRowModesModel(newRowModesModel);
     };
 
-    const columns = [];
-
-    columns.push({ field: 'datetime', headerName: 'Когда', type: 'dateTime', width: 170, align: 'left', headerAlign: 'left', editable: true });
-
-    // const sparklineColumnType = {
-    //     ...GRID_STRING_COL_DEF,
-    //     type: 'custom',
-    //     display: 'flex',
-    //     renderCell: (params) => <GridSparklineCell {...params} />,
-    // };
-    function GridSparklineCell(props) {
-        if (props.value == null) {
-            return null;
-        }
-        return s2hms(props.value);
-    }
-    function GridSparklineCellEdit(props) {
-        if (props.value == null) {
-            return null;
-        }
-
-        return (
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-                <DemoContainer components={['TimePicker']} >
-                    <TimePicker defaultValue={ dayjs(new Date("2020-01-01 00:00").getTime()+9960000)} label="Basic time picker" />
-                </DemoContainer>
-            </LocalizationProvider>
-        );
+    let rows = task.tiks;
+    function RenderTikDateTimeEditCell({ id, field, value, colDef }) {
+        const apiRef = useGridApiContext();
+        return <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker sx={{ '*': { padding: 0.5 } }}
+                ampm={false}
+                format={'MM/DD HH:mm'}
+                defaultValue={dayjs(value)}
+                onChange={(dayjsTime) => {
+                    apiRef.current.setEditCellValue({ id, field, value: new Date(dayjsTime) });
+                }}
+            />
+        </LocalizationProvider>;
     }
 
-    let rows = task.tiks.map((tik) => {
-        return {
-            id: tik.id,
-            datetime: new Date(tik.datetime * 1000),
-            m1: tik.m1,
-            m2: tik.m2
-        }
-    });
+    function RenderMetricDateTimeEditCell({ id, field, value, colDef, row }) {
+        const apiRef = useGridApiContext();
+        console.log('---------');
+        console.log(id, field, value, colDef, row);
+        console.log(arguments);
+        //let startTime = dayjs(new Date(row.datetime * 1000).getTime() + value * 1000);
+        return <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DateTimePicker sx={{ '*': { padding: 0.5 } }}
+                ampm={false}
+                format={'MM/DD HH:mm'}
+                defaultValue={dayjs(value)}
+                onChange={(dayjsTime) => {
+                    apiRef.current.setEditCellValue({ id, field, value: new Date(dayjsTime) });
+                }}
+            />
+        </LocalizationProvider>;
+    }
 
+    function RenderCellMetricTime(params) {
+        return <div>
+            {dayjs(params.value).format('HH:mm')}
+            <i style={{ fontSize: 10 }}> / {s2hms(params.row[params.field])}m</i>
+        </div>;
+    }
 
     function columnsPushM(columns, fieldName, m) {
         columns.push({
             field: fieldName,
             headerName: m.icon,
             type: 'custom',
-            renderCell: (params) => <GridSparklineCell {...params} />,
-            renderEditCell: (params) => <GridSparklineCellEdit {...params} />,
+            valueGetter: (v, row) => {
+                console.log('getter', v, row.datetime);
+                let startTime = new Date(((new Date(row.datetime * 1000).getTime() - v * 1000)));
+                return startTime;
+            },
+            valueSetter: (newValue, row, colDef) => {
+                console.log('setter', newValue);
+                //let seconds = row.datetime - newValue.getTime() / 1000;
+                let seconds = row.datetime - newValue.getTime() / 1000;
+                row[colDef.field] = seconds;
+                console.log(seconds);
+                return row;
+            },
+            renderCell: (params) => <RenderCellMetricTime  {...params} />,
+            renderEditCell: (params) => <RenderMetricDateTimeEditCell {...params} />,
             width: 120, align: 'left', headerAlign: 'left', editable: true
         });
     }
+
+    const columns = [];
 
     if (task.m1) {
         columnsPushM(columns, 'm1', task.m1);
     }
     if (task.m2) {
-        columnsPushM(columns, 'm2', task.m2);
+        //   columnsPushM(columns, 'm2', task.m2);
     }
+    columns.push({
+        field: 'datetime',
+        headerName: 'Фикстайм',
+        valueGetter: (v) => { return new Date(v * 1000); },
+        valueSetter: (newValue, row) => { row.datetime = newValue.getTime() / 1000; return row; },
+        renderCell: (params) => <div>{dayjs(params.value).format("HH:mm")}</div>,
+        renderEditCell: (params) => <RenderTikDateTimeEditCell {...params} />,
+        type: 'dateTime', width: 170, align: 'left', headerAlign: 'left', editable: true
+    });
 
     columns.push({
         field: 'actions',
@@ -123,9 +143,7 @@ function TiksLits({ tasks, setTasks }) {
                     <GridActionsCellItem
                         icon={<SaveIcon />}
                         label="Save"
-                        sx={{
-                            color: 'primary.main',
-                        }}
+                        sx={{ color: 'primary.main' }}
                         onClick={handleSaveClick(id)}
                     />,
                     <GridActionsCellItem
@@ -169,6 +187,7 @@ function TiksLits({ tasks, setTasks }) {
             time[2] = "0" + time[2];
         }
 
+        time.pop(); //remove seconds
         if (time[0] === 0) {
 
             time.shift();
@@ -194,7 +213,16 @@ function TiksLits({ tasks, setTasks }) {
                 bordered
                 //onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={(a, b, c) => { console.log('onroweditstip', a, b, c); }}
-                processRowUpdate={(after, before) => { console.log('process', after, before); }}
+                processRowUpdate={(after, before) => {
+                    let tik = task.tiks.find(tik => tik.id == after.id);
+                    tik.datetime = after.datetime;
+                    tik.m1 = after.m1;
+                    tik.m2 = after.m2;
+                    TaskManager.tikUpdate(tik, tasks, setTasks);
+                    console.log('processrowupdate', before, after);
+                    return after;
+                }}
+                onProcessRowUpdateError={console.log}
             // slots={{
             //     toolbar: EditToolbar,
             //   }}

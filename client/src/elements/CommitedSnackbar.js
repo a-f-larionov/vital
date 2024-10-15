@@ -53,7 +53,7 @@ function CommitedSnakbar() {
 
     return <Snackbar
         open={open}
-        autoHideDuration={60000}
+        autoHideDuration={600}
         message="Metric Commited"
         onClose={handleClose}
         action={action}

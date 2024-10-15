@@ -31,8 +31,8 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
 
     function dialogSaveHandler(title, mId1, mId2, vCode1, vCode2) {
         task.title = title;
-        task.m1 = metrica.filter(m => { return m.id === mId1 })[0];
-        task.m2 = metrica.filter(m => { return m.id === mId2 })[0];
+        task.m1 = metrica.find(m => { return m.id === mId1 });
+        task.m2 = metrica.find(m => { return m.id === mId2 });
         task.vCode1 = vCode1;
         task.vCode2 = vCode2;
         console.log(task, mId1, mId2);

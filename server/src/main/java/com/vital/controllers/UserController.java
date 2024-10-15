@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.vital.dto.rq.UserRqDto;
 import com.vital.dto.rs.UserRsDto;
-import com.vital.entities.UserEntity;
 import com.vital.mappers.UserMapper;
 import com.vital.repositories.UserRepository;
 

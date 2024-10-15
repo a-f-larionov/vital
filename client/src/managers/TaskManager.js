@@ -11,12 +11,27 @@ var apiTiks = apiUrl + "/tiks";
 
 function TaskManager() {
 }
+TaskManager.c = 0;
+console.log("!!!TASK MANAGER!!!", TaskManager.c++);
+
+TaskManager.lastOne = null;
+TaskManager.rememberTheLastOne = function (task, tik) {
+    TaskManager.lastOne = { task, tik };
+}
+TaskManager.getLastOne = function () {
+    return TaskManager.lastOne;
+}
+
+TaskManager.snackBarOpenCallback = null;
+TaskManager.setSnackBarOpenCallback = function (setcallback) {
+    TaskManager.snackBarOpenCallback = setcallback;
+}
 
 TaskManager.getTable = function (tasks) {
 
     let out = {};
 
-    let dates = [-6, -5, -4, -3, -2, -1, 0]
+    let dates = Array.from({ length: 21 }, (v, i) => { return -2d1 + 1 + i; })
         .map((offset) => {
             return new Date(
                 new Date().getTime() + (offset * 86400000)
@@ -28,7 +43,7 @@ TaskManager.getTable = function (tasks) {
             title2: 't',
             datetime: date,
             date: date.getDate(),
-            weekDay: ['пн', 'вт', 'ср', 'чт', 'пт', 'сб', 'вс'][date.getDay()]
+            weekDay: ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'][date.getDay()]
         };
     });
 
@@ -38,20 +53,31 @@ TaskManager.getTable = function (tasks) {
             task: task,
             title: task.title,
             cells: dates.map((date) => {
-
-                var title = task.tiks
+                let title = '';
+                let thisDay = task.tiks
                     .filter((tik) => {
                         return new Date(tik.datetime * 1000).getDate() ===
                             date.getDate();
-                    })
+                    });
+
+                let sum = thisDay
                     .reduce((r, tik) => { return r + (task.vCode1 ? tik.m1 : 1); }, 0);
+                let cnt = thisDay.length;
 
-                
-                if (title && task.m1.typeCode == "timestamp") {
-                    title =  s2hms(title);
+                title = sum + " " + cnt;
+                if (task.vCode1 == 'checker') {
+                    if (sum == 0) {
+                        title = cnt > 0 ? "✅" : "";
+                    } else {
+                        title = sum;
+                    }
+                } else {
+                    title = sum;
+                    if (title && task.m1.typeCode == "timestamp") {
+                        title = s2hms(title) + '';
+                    }
                 }
-
-                if(!title)title = '';
+                if (!title) title = '';
                 return { title: title };
             })
         }
@@ -61,18 +87,20 @@ TaskManager.getTable = function (tasks) {
 }
 
 TaskManager.tikCreate = function (task, tasks, setTasks, m1, m2, m3, m4) {
-    console.log('ttttt', arguments);
+
     m1 = m1 !== undefined ? m1 : 0;
     m2 = m2 ? m2 : 0;
     m3 = m3 ? m3 : 0;
     m4 = m4 ? m4 : 0;
 
-    task.tiks.push({
-        uid: UserManager.getUid(),
+    let newDateTime = new Date().getTime() / 1000;
+
+    let newTik = {
         id: crypto.randomUUID(),
+        uid: UserManager.getUid(),
         tid: task.id,
 
-        datetime: new Date().getTime() / 1000, // remove Z
+        datetime: newDateTime,
 
         m1: m1,
         m2: m2,
@@ -80,13 +108,28 @@ TaskManager.tikCreate = function (task, tasks, setTasks, m1, m2, m3, m4) {
         m4: m4,
 
         needFlush: true
-    });
+    };
+    let lastOne = TaskManager.getLastOne();
 
+    if (lastOne && lastOne.tik.tid == newTik.tid && lastOne.tik.datetime + 10 > newDateTime) {
+
+        lastOne.tik.m1 += newTik.m1;
+        lastOne.tik.m2 += newTik.m2;
+        lastOne.tik.m3 += newTik.m3;
+        lastOne.tik.m4 += newTik.m4;
+        lastOne.tik.needUpdate = true;
+    } else {
+
+        task.tiks.push(newTik);
+        TaskManager.rememberTheLastOne(task, newTik);
+    }
+
+    TaskManager.snackBarOpenCallback(true);
     this.flush(tasks, setTasks);
 }
 
 TaskManager.tikArchive = function (tik, tasks, setTasks) {
-    console.log(tik);
+
     tik.needArchive = true;
     this.flush(tasks, setTasks);
 }
@@ -104,7 +147,17 @@ TaskManager.increment = function (task, tasks, setTasks, m1, m2, m3, m4) {
     TaskManager.tikCreate(task, tasks, setTasks, m1, m2, m3, m4);
 };
 
-TaskManager.create = function (task, tasks, setTasks) {
+TaskManager.resetMetric = function (task, tasks, setTasks, mIndex) {
+    fetch_(apiTasks + '/metric/reset', 'post', {
+        uid: UserManager.getUid(),
+        taskId: task.id,
+        mIndex: mIndex
+    });
+
+    TaskManager.load(tasks, setTasks);
+}
+
+TaskManager.add = function (task, tasks, setTasks) {
     task.id = crypto.randomUUID();
     task.uid = UserManager.getUid();
     task.tiks = [];
@@ -124,11 +177,12 @@ TaskManager.taskUpdate = function (task, tasks, setTasks) {
 TaskManager.flushInProgress = false;
 TaskManager.needFlush = false;
 TaskManager.flush = function (tasks, setTasks) {
-    
+
     if (TaskManager.flushInProgress) {
         TaskManager.needFlush = true;
         return;
     }
+
     TaskManager.flushInProgress = true;
     let prs = [];
     tasks.forEach(task => {
@@ -189,11 +243,15 @@ TaskManager.flush = function (tasks, setTasks) {
     Promise.all(prs).then((a) => {
         localStorage.tasks = JSON.stringify(tasks);
         setTasks([...tasks]);
-        TaskManager.flushInProgress = false;
-        if (TaskManager.needFlush) {
-            TaskManager.needFlush = false;
-            TaskManager.flush(tasks, setTasks);
-        }
+
+
+        setTimeout(() => {
+            TaskManager.flushInProgress = false;
+            if (TaskManager.needFlush) {
+                TaskManager.needFlush = false;
+                TaskManager.flush(tasks, setTasks);
+            }
+        }, 1000);
     });
 }
 TaskManager.archive = function (task, tasks, setTasks) {
@@ -220,6 +278,7 @@ TaskManager.load = function (tasks, setTasks) {
 TaskManager.init = function (setTasks) {
     let tasks = localStorage.tasks === undefined ? [] : JSON.parse(localStorage.tasks)
     this.flush(tasks, (ts) => {
+
         tasks = ts;
         this.load(tasks, (ts) => {
             tasks = ts;
@@ -261,6 +320,7 @@ function s2hms(s) {
         time[2] = "0" + time[2];
     }
 
+    time.pop();
     if (time[0] === 0) {
 
         time.shift();

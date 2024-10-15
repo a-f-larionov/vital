@@ -15,21 +15,19 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
 
 
     return (
-        <Grid2 container component={Paper} sx={{ marginBottom: 1, marginLeft: 2, marginRight: 2 }}>
+        <Grid2 container component={Paper} sx={{ paddingTop: 1, marginBottom: 1, marginLeft: 2, marginRight: 2 }}>
 
-            <Grid2 size={1} sx={{ textAlign: "center", alignContent: 'center' }}>
+            <Grid2 size={1}  >
                 {task.m1 ? task.m1.icon : ''}
                 &nbsp;
                 {task.m2 ? task.m2.icon : ''}
             </Grid2>
-            <Grid2 size={10} sx={{ textAlign: 'center', alignContent: 'center' }} >
-                {task.title}
+            <Grid2 size={10} textAlign="left">
+                &nbsp;&nbsp;&nbsp;{task.title}
             </Grid2>
-
-            <Grid2 size={1} sx={{ textAlign: 'center', alignContent: 'center' }}>
+            <Grid2 size={1}>
                 <TaskMenu task={task} tasks={tasks} setTasks={setTasks} />
             </Grid2>
-
 
 
             <Grid2 size={1} sx={{ verticalAlign: "bottom", paddingRight: 2 }}>
@@ -37,14 +35,28 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
             </Grid2>
 
             <Grid2 size={10}>
-                <TableContainer >
+                <TableContainer sx={{
+                    'overflow': 'auto',
+                    display: 'flex',
+                    flexDirection: 'row-reverse',
+                    '::-webkit-scrollbar ': {
+                        display: 'none'
+                    }
+                }}>
                     <Table size="small">
                         <TableBody key={task.id + 'body'}>
 
                             <TableRow key={1}>
                                 {cols.map((c) => {
                                     return <TableCell key={task.id + c.date}
-                                        sx={{ fontSize: 10, lineHeight: 1, margin: 0,paddingLeft:0, paddingRight: 0 }}>
+                                        sx={{
+                                            width: 100,
+                                            minWidth: 50,
+                                            overflow: 'hidden',
+                                            textAlign: 'right',
+                                            fontSize: 10,
+                                            lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0
+                                        }}>
                                         <i>{c.date}</i>
                                         <b style={{ fontSize: 8 }}>&nbsp;{c.weekDay} </b>
                                     </TableCell>
@@ -53,8 +65,13 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
 
                             <TableRow key={2} sx={{ padding: 0, margin: 0 }} >
                                 {cells.map((cell) => {
-                                    return <TableCell key={++i}
-                                        sx={{ fontSize: 18, lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0 }}>
+                                    return <TableCell
+                                        key={++i}
+                                        sx={{
+                                            textAlign: 'right',
+                                            fontSize: 21, fontFamily: 'Digital-7',
+                                            lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0
+                                        }}>
                                         {cell.title}
                                     </TableCell>
                                 })}
@@ -66,7 +83,7 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
             </Grid2>
 
             <Grid2 size={1}>
-                <TableContainer >
+                <TableContainer sx={{ overflow: 'hidden' }}>
                     <Table size="small">
                         <TableBody key={task.id + 'body'}>
 
