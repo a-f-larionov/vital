@@ -28,12 +28,10 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         setDialogOpen(false);
     }
 
-    function dialogSaveHandler(title, mId1, mId2, vCode1, vCode2) {
+    function dialogSaveHandler(title, mId1, vCode1) {
         task.title = title;
         task.m1 = metrica.find(m => { return m.id === mId1 });
-        task.m2 = metrica.find(m => { return m.id === mId2 });
         task.vCode1 = vCode1;
-        task.vCode2 = vCode2;
 
         if (task.id) {
             TaskManager.taskUpdate(task, tasks, setTasks);
@@ -57,11 +55,9 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     const formJson = Object.fromEntries(formData.entries());
                     const title = formJson.title;
                     const mId1 = formJson.typeId1.length ? formJson.typeId1 : null;
-                    const mId2 = formJson.typeId2.length ? formJson.typeId2 : null;
                     const vCode1 = formJson.viewCode1;
-                    const vCode2 = formJson.viewCode1;
 
-                    dialogSaveHandler(title, mId1, mId2, vCode1, vCode2);
+                    dialogSaveHandler(title, mId1, vCode1);
                 },
             }}
         >
@@ -77,7 +73,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     </Grid2>
 
                     <MetricElement elIndex={1} mId={task.m1 ? task.m1.id : null} vCode={task.vCode1} metrica={metrica} views={views} />
-                    <MetricElement elIndex={2} mId={task.m2 ? task.m2.id : null} vCode={task.vCode2} metrica={metrica} views={views} />
+
 
                     {/* <Grid2 size={3} >Материалы:</Grid2>
                     <Grid2 size={6}>

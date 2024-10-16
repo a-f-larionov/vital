@@ -86,13 +86,10 @@ TaskManager.getTable = function (tasks) {
     return out;
 }
 
-TaskManager.tikCreate = function (task, tasks, setTasks, m1, m2, m3, m4) {
+TaskManager.tikCreate = function (task, tasks, setTasks, m1) {
 
     m1 = m1 !== undefined ? m1 : 0;
-    m2 = m2 ? m2 : 0;
-    m3 = m3 ? m3 : 0;
-    m4 = m4 ? m4 : 0;
-
+    
     let newDateTime = new Date().getTime() / 1000;
 
     let newTik = {
@@ -103,9 +100,6 @@ TaskManager.tikCreate = function (task, tasks, setTasks, m1, m2, m3, m4) {
         datetime: newDateTime,
 
         m1: m1,
-        m2: m2,
-        m3: m3,
-        m4: m4,
 
         needFlush: true
     };
@@ -114,9 +108,7 @@ TaskManager.tikCreate = function (task, tasks, setTasks, m1, m2, m3, m4) {
     if (lastOne && lastOne.tik.tid === newTik.tid && lastOne.tik.datetime + 10 > newDateTime) {
 
         lastOne.tik.m1 += newTik.m1;
-        lastOne.tik.m2 += newTik.m2;
-        lastOne.tik.m3 += newTik.m3;
-        lastOne.tik.m4 += newTik.m4;
+        
         lastOne.tik.needUpdate = true;
     } else {
 
@@ -139,12 +131,12 @@ TaskManager.tikUpdate = function (tik, tasks, setTasks) {
     this.flush(tasks, setTasks);
 }
 
-TaskManager.commitNumber = function (task, tasks, setTasks, m1, m2, m3, m4) {
-    TaskManager.tikCreate(task, tasks, setTasks, m1, m2, m3, m4);
+TaskManager.commitNumber = function (task, tasks, setTasks, m1) {
+    TaskManager.tikCreate(task, tasks, setTasks, m1);
 };
 
-TaskManager.increment = function (task, tasks, setTasks, m1, m2, m3, m4) {
-    TaskManager.tikCreate(task, tasks, setTasks, m1, m2, m3, m4);
+TaskManager.increment = function (task, tasks, setTasks, m1) {
+    TaskManager.tikCreate(task, tasks, setTasks, m1);
 };
 
 TaskManager.resetMetric = function (task, tasks, setTasks, mIndex) {

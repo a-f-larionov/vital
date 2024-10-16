@@ -3,17 +3,10 @@ import { Button } from "antd";
 import TaskManager from '../managers/TaskManager';
 
 function InputChecker({ mIndex, task, tasks, setTasks }) {
-    let m;
-    switch (mIndex) {
-        case 1: m = task.m1; break;
-        case 2: m = task.m2; break;
-    }
+    let m = task.m1;
 
     function onIncrementClick() {
-        switch (mIndex) {
-            case 1: TaskManager.increment(task, tasks, setTasks, 1, 0, 0, 0);
-            case 2: TaskManager.increment(task, tasks, setTasks, 0, 1, 0, 0);
-        }
+        TaskManager.increment(task, tasks, setTasks, 1, 0, 0, 0);
     }
 
     function onCheckedClick() {
@@ -24,10 +17,7 @@ function InputChecker({ mIndex, task, tasks, setTasks }) {
             //     return;
             // }
         }
-        switch (mIndex) {
-            case 1: TaskManager.resetMetric(task, tasks, setTasks, mIndex);
-            case 2: TaskManager.resetMetric(task, tasks, setTasks, mIndex);
-        }
+        TaskManager.resetMetric(task, tasks, setTasks, mIndex);
     }
 
     //✅

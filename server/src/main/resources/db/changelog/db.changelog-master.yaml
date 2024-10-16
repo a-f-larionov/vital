@@ -50,3 +50,11 @@ databaseChangeLog:
       changes:
        - sqlFile:
            path: /db/changelog/007-metrica-insert-checker.sql
+
+  - changeSet:
+      id: "8"
+      author: developer
+      comment: Metrica remove m2,m3,m4
+      changes:
+       - sqlFile:
+           path: /db/changelog/008-metrica-remove-m234.sql

@@ -6,12 +6,7 @@ import InputStopWatch from './InputStopWatch';
 
 function InputMetric({ mIndex, task, tasks, setTasks }) {
 
-    let m;
-    switch (mIndex) {
-        case 1: m = task.m1; break;
-        case 2: m = task.m2; break;
-        default: m = undefined;
-    }
+    let m = task.m1;
 
     if (m) {
         switch (m.inputCode) {

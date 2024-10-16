@@ -15,8 +15,6 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
 
             <Grid2 size={1}  >
                 {task.m1 ? task.m1.icon : ''}
-                &nbsp;
-                {task.m2 ? task.m2.icon : ''}
             </Grid2>
             <Grid2 size={10} textAlign="left">
                 &nbsp;&nbsp;&nbsp;{task.title}

@@ -36,7 +36,4 @@ public class TikEntity {
     private Instant datetime;
 
     private Long m1;
-    private Long m2;
-    private Long m3;    
-    private Long m4;
 }

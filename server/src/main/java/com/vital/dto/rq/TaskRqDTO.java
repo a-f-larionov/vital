@@ -28,14 +28,9 @@ public class TaskRqDTO {
 
     @JsonProperty("m1")
     private MetricaDTO m1;
-    
-    @JsonProperty("m2")
-    private MetricaDTO m2;
 
     @JsonProperty("vCode1")
     private String vCode1 = "";
-    @JsonProperty("vCode2")
-    private String vCode2 = "";
 
     private List<TikDTO> tiks = new ArrayList<>();
 }

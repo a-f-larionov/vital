@@ -6,12 +6,7 @@ import React from 'react';
 import TaskManager from '../managers/TaskManager';
 
 function InputStopWatch({ mIndex, task, tasks, setTasks }) {
-    let m;
-    switch (mIndex) {
-        case 1: m = task.m1; break;
-        case 2: m = task.m2; break;
-
-    }
+    let m = task.m1;
     let sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
     console.log(m);
     let swId = task.id + m.id + mIndex;
@@ -23,14 +18,10 @@ function InputStopWatch({ mIndex, task, tasks, setTasks }) {
     }
 
     function onStopHandler() {
-        let m1, m2, m3, m4;
-        m1 = m2 = m3 = m4 = 0;
+        let m1;
         let timer = Math.round((new Date() - sw[swId].stopWatchStart) / 1000);
-        switch (mIndex) {
-            case 1: m1 = timer; break;
-            case 2: m2 = timer; break;
-        }
-        TaskManager.commitNumber(task, tasks, setTasks, m1, m2, m3, m4);
+        m1 = timer;
+        TaskManager.commitNumber(task, tasks, setTasks, m1, 0, 0, 0);
         sw[swId] = null;
         localStorage.stopWatches = JSON.stringify(sw);
         TaskManager.flush(tasks, setTasks); // for redraw
@@ -41,6 +32,7 @@ function InputStopWatch({ mIndex, task, tasks, setTasks }) {
     function timeoutHandler() {
         setTimeout(timeoutHandler, 1000 / 40);
         if (sw[swId] === null) return;
+        if (sw[swId] === undefined) return;
         if (timerRef.current === null) return;
         let timer = (new Date() - sw[swId].stopWatchStart) / 1000;
         timerRef.current.innerHTML = s2hms(timer);
@@ -72,8 +64,8 @@ function InputStopWatch({ mIndex, task, tasks, setTasks }) {
 
         return time.join(":");
     }
-
-    if (sw[swId] === null) {
+    console.log(swId, sw[swId]);
+    if (!sw[swId]) {
         return (
             <Button size='default' icon={<PlayCircleIcon onClick={onPlayHandler} />} />
         );

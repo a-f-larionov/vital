@@ -5,11 +5,8 @@ import React from 'react';
 import TaskManager from '../managers/TaskManager';
 
 function InputSlider({ mIndex, task, tasks, setTasks }) {
-    let m;
-    switch (mIndex) {
-        case 1: m = task.m1; break;
-        case 2: m = task.m2; break;
-    }
+    let m = task.m1;
+    
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [sVal, setSVal] = React.useState(0);
 

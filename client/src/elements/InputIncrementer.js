@@ -5,18 +5,11 @@ import TaskManager from '../managers/TaskManager';
 
 function InputIncrementer({ mIndex, task, tasks, setTasks }) {
 
-    let m;
-    switch (mIndex) {
-        case 1: m = task.m1; break;
-        case 2: m = task.m2; break;
-    }
+    let m = task.m1;
 
     function onIncrementClick({ task, tasks, setTasks }) {
-
-        switch (mIndex) {
-            case 1: TaskManager.increment(task, tasks, setTasks, 1, 0, 0, 0);
-            case 2: TaskManager.increment(task, tasks, setTasks, 0, 1, 0, 0);
-        }
+        
+         TaskManager.increment(task, tasks, setTasks, 1, 0, 0, 0);
     }
     return (
         <Button size="default" shape="circle" icon={<PlusOneIcon fontSize="small"/>}

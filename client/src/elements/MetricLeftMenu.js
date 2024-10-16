@@ -7,7 +7,6 @@ function MetricLeftMenu({ task, tasks, setTasks }) {
         <Box>
             <br></br>
             <InputMetric mIndex={1}  task={task} tasks={tasks} setTasks={setTasks} />
-            <InputMetric mIndex={2}  task={task} tasks={tasks} setTasks={setTasks} />
         </Box>
     );
 }

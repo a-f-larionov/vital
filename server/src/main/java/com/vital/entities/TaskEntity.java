@@ -36,9 +36,6 @@ public class TaskEntity {
     @ManyToOne
     private MetricaEntity m1;
     
-    @ManyToOne
-    private MetricaEntity m2;
-
     private String vCode1 = "";
-    private String vCode2 = "";
+    
 }
