@@ -1,4 +1,3 @@
-import './App.css';
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { AppBar, Avatar, Box, Button, Grid2, Popper, Snackbar, Toolbar, Typography } from "@mui/material";
@@ -54,7 +53,7 @@ function App() {
         );
     } else {
 
-        console.log(tasks, comments);
+        console.log(tasks);
         if (tasks === null || comments === null) {
             TaskManager.init(setTasks);
             CommentManager.init(setComments);

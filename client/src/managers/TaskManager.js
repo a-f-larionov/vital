@@ -31,7 +31,7 @@ TaskManager.getTable = function (tasks) {
 
     let out = {};
 
-    let dates = Array.from({ length: 21 }, (v, i) => { return -2d1 + 1 + i; })
+    let dates = Array.from({ length: 21 }, (v, i) => { return -21 + 1 + i; })
         .map((offset) => {
             return new Date(
                 new Date().getTime() + (offset * 86400000)

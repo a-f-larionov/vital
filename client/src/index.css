@@ -15,3 +15,8 @@ code {
 input {
   background-color: blue;
 }
+
+@font-face {
+  font-family: 'Digital-7';
+  src: local('Digital-7'), url('./digital-7.ttf') format('truetype');
+}

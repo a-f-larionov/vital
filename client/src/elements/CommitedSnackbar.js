@@ -1,18 +1,28 @@
-import React, { useState } from "react";
-import { IconButton, AppBar, Avatar, Box, Button, Grid2, Popper, Snackbar, Toolbar, Typography } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import SendIcon from '@mui/icons-material/Send';
-import TextArea from "antd/es/input/TextArea";
+import { Button, Grid2, IconButton, Snackbar } from "@mui/material";
 import { Input } from "antd";
+import React from "react";
+import TaskManager from "../managers/TaskManager";
+import CommentManager from "../managers/CommentsManager";
 
 function CommitedSnakbar() {
 
-    const [open, setOpen] = React.useState(true);
+    const [open, setOpen] = React.useState(false);
+    const commentRef = React.createRef();
 
+    TaskManager.setSnackBarOpenCallback(setOpen);
 
-    const handleClick = () => {
+    const openHandler = () => {
         setOpen(true);
     };
+
+    function sendHandler() {
+        setOpen(false);
+        let comment = commentRef.current.input.value;
+        let lastOne = TaskManager.getLastOne();
+        CommentManager.add(comment, lastOne.task.id, lastOne.tik.id);
+    }
 
     const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -24,19 +34,13 @@ function CommitedSnakbar() {
 
     const action = (
 
-        <Grid2 container sx={{ paddingRight: '16px' }}>
-            <Grid2 size={11}>
-                <Input size={'small'}    ></Input>
+        <Grid2 container sx={{ paddingRight: 0, margin: 0 }} >
 
+            <Grid2 size={8}>
+                Message
             </Grid2>
-            <Grid2 size={1}>
-                <SendIcon />
-            </Grid2>
-            <Grid2 size={8}/>
-            <Grid2 size={4}>
-                <Button color="secondary" size="small"
-                    onClick={handleClose}
-                > UNDO</Button>
+            <Grid2 size={4} align="right" >
+                <Button color="secondary" size="small" onClick={handleClose}> UNDO</Button>
 
                 <IconButton
                     size="small"
@@ -47,14 +51,22 @@ function CommitedSnakbar() {
                     <CloseIcon fontSize="small" />
                 </IconButton>
             </Grid2>
+
+            <Grid2 size={11}>
+                <Input size={'small'} ref={commentRef}></Input>
+            </Grid2>
+            <Grid2 size={1} align="right">
+                <SendIcon onClick={sendHandler} />
+            </Grid2>
+
         </Grid2>
 
     );
 
     return <Snackbar
+        sx={{ "& div.MuiSnackbarContent-action ": { margin: 0, padding: '1px' } }}
         open={open}
-        autoHideDuration={600}
-        message="Metric Commited"
+        autoHideDuration={60000}
         onClose={handleClose}
         action={action}
     />

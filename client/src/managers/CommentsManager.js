@@ -12,22 +12,44 @@ function CommentManager() {
 
 }
 
-CommentManager.init = function ( setComments ) {
+CommentManager.comments = [];
+CommentManager.setComments = null;
+
+CommentManager.add = function (comment, taskId, tikId, objId) {
+
+    CommentManager.comments.push({
+        id: crypto.randomUUID(),
+        uid: UserManager.getUid(),
+        taskId: taskId,
+        tikId: tikId,
+        objId: objId,
+        text: comment,
+        needFlush: true
+    });
+
+    CommentManager.flush();
+}
+
+CommentManager.init = function (setComments) {
+    CommentManager.setComments = function (comments) {
+        CommentManager.comments = comments;
+        localStorage.comments = JSON.stringify(comments);
+        setComments(comments);
+    };
     let comments = localStorage.comments === undefined ? [] : JSON.parse(localStorage.comments)
     this.flush(comments, (comment) => {
         comments = comment;
         this.load(comments, (cmnts) => {
             comments = cmnts;
-            localStorage.comments = JSON.stringify(comments);
-            setComments(comments);
+            CommentManager.setComments(comments);
         })
     });
 }
 
 CommentManager.flushInProgress = false;
 CommentManager.needFlush = false;
-CommentManager.flush = function (comments, setComments) {
-
+CommentManager.flush = function () {
+    let comments = CommentManager.comments;
     if (CommentManager.flushInProgress) {
         CommentManager.needFlush = true;
         return;
@@ -63,12 +85,11 @@ CommentManager.flush = function (comments, setComments) {
     });
 
     Promise.all(prs).then((a) => {
-        localStorage.comments = JSON.stringify(comments);
-        setComments([...comments]);
+        CommentManager.setComments([...comments]);
         CommentManager.flushInProgress = false;
         if (CommentManager.needFlush) {
             CommentManager.needFlush = false;
-            CommentManager.flush(comments, setComments);
+            CommentManager.flush();
         }
     });
 }
@@ -79,11 +100,9 @@ CommentManager.load = function (comments, setComments) {
         .then((r) => {
             if (r == null) {
                 // skip data from server
-                setComments(comments);
+                CommentManager.setComments(comments);
             } else {
-
-                localStorage.comments = JSON.stringify(r);
-                setComments(r);
+                CommentManager.setComments(r);
             }
         });
 };

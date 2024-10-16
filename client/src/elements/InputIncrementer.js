@@ -1,8 +1,9 @@
+import { Button } from "antd";
 import PlusOneIcon from '@mui/icons-material/PlusOne';
-import { Fab } from "@mui/material";
+//import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
 import TaskManager from '../managers/TaskManager';
 
-function InputIncrementer({mIndex, task, tasks, setTasks }) {
+function InputIncrementer({ mIndex, task, tasks, setTasks }) {
 
     let m;
     switch (mIndex) {
@@ -11,15 +12,15 @@ function InputIncrementer({mIndex, task, tasks, setTasks }) {
     }
 
     function onIncrementClick({ task, tasks, setTasks }) {
-        TaskManager.increment(task, tasks, setTasks);
+
+        switch (mIndex) {
+            case 1: TaskManager.increment(task, tasks, setTasks, 1, 0, 0, 0);
+            case 2: TaskManager.increment(task, tasks, setTasks, 0, 1, 0, 0);
+        }
     }
     return (
-        <Fab size='small' >
-            <PlusOneIcon
-                fontSize='small'
-                onClick={() => onIncrementClick({ task, tasks, setTasks })}
-            />
-        </Fab>
+        <Button size="default" shape="circle" icon={<PlusOneIcon fontSize="small"/>}
+            onClick={() => onIncrementClick({ task, tasks, setTasks })} />
     );
 }
 

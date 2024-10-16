@@ -25,6 +25,17 @@ MetricaManager.load = function (metrica, setMetrica) {
     MetricaManager.inProcess = true;
     fetch_(apiMetrica + "/list")
         .then(metricaData => {
+            metricaData = metricaData.filter((m) => {
+                var s ={ 
+                    'stopwatch': true,
+                    'incrementer': true,
+                    //'Страницы': true,
+                    //  'Такты': true,
+                    'checker': true,
+
+                };
+                return s[m.inputCode];
+            });
             setMetrica(metricaData);
         });
 

@@ -1,11 +1,10 @@
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import { Stack } from "@mui/material";
-import Popper from "@mui/material/Popper";
-import { Slider } from 'antd';
 import React from 'react';
+import { Stack,Popper } from "@mui/material";
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import { Slider } from 'antd';
 import TaskManager from '../managers/TaskManager';
 
-function InputSlider({mIndex, task, tasks, setTasks }) {
+function InputSlider({ mIndex, task, tasks, setTasks }) {
     let m;
     switch (mIndex) {
         case 1: m = task.m1; break;

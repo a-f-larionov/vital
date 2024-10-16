@@ -17,7 +17,6 @@ function TaskList({ tasks, setTasks }) {
           task={row.task} tasks={tasks} setTasks={setTasks} />
       );
 
-
   return (
     <Grid2 sx={{ padding: 0, textAlign: 'right' }} rowSpacing={20}>
       {rows}

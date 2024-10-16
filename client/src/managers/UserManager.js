@@ -9,12 +9,12 @@ var apiUsers = apiUrl + "/users";
 
 function UserManager() {
 
-
 }
 
+//@todo onInit - fetchUserProfile and update profile data
 UserManager.register = function (googleEmail, picture, setUserProfile) {
 
-    fetch_(apiUsers + "/register", "post", {
+    fetch_(apiUsers + "/register/google", "post", {
         googleEmail: googleEmail,
         picture: picture
     }).then((r) => {

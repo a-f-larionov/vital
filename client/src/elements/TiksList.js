@@ -3,15 +3,13 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import { Box } from "@mui/material";
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import dayjs from 'dayjs';
 import React from "react";
 import PageManager from "../managers/PageManager";
 import TaskManager from "../managers/TaskManager";
-import { TimePicker } from '@mui/x-date-pickers/TimePicker';
-import { DemoContainer } from '@mui/x-date-pickers/internals/demo';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import dayjs from 'dayjs';
 
 import {
     DataGrid,
@@ -64,10 +62,6 @@ function TiksLits({ tasks, setTasks }) {
 
     function RenderMetricDateTimeEditCell({ id, field, value, colDef, row }) {
         const apiRef = useGridApiContext();
-        console.log('---------');
-        console.log(id, field, value, colDef, row);
-        console.log(arguments);
-        //let startTime = dayjs(new Date(row.datetime * 1000).getTime() + value * 1000);
         return <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DateTimePicker sx={{ '*': { padding: 0.5 } }}
                 ampm={false}
@@ -88,27 +82,36 @@ function TiksLits({ tasks, setTasks }) {
     }
 
     function columnsPushM(columns, fieldName, m) {
-        columns.push({
+        let column = {
             field: fieldName,
             headerName: m.icon,
-            type: 'custom',
-            valueGetter: (v, row) => {
-                console.log('getter', v, row.datetime);
-                let startTime = new Date(((new Date(row.datetime * 1000).getTime() - v * 1000)));
-                return startTime;
-            },
-            valueSetter: (newValue, row, colDef) => {
-                console.log('setter', newValue);
-                //let seconds = row.datetime - newValue.getTime() / 1000;
-                let seconds = row.datetime - newValue.getTime() / 1000;
-                row[colDef.field] = seconds;
-                console.log(seconds);
-                return row;
-            },
-            renderCell: (params) => <RenderCellMetricTime  {...params} />,
-            renderEditCell: (params) => <RenderMetricDateTimeEditCell {...params} />,
             width: 120, align: 'left', headerAlign: 'left', editable: true
-        });
+        };
+        switch (m.inputCode) {
+            case 'stopwatch':
+                column = {
+                    ...column,
+                    type: 'custom',
+                    valueGetter: (v, row) => {
+                        let startTime = new Date(((new Date(row.datetime * 1000).getTime() - v * 1000)));
+                        return startTime;
+                    },
+                    valueSetter: (newValue, row, colDef) => {
+                        let seconds = row.datetime - newValue.getTime() / 1000;
+                        row[colDef.field] = seconds;
+                        return row;
+                    },
+                    renderCell: (params) => <RenderCellMetricTime  {...params} />,
+                    renderEditCell: (params) => <RenderMetricDateTimeEditCell {...params} />,
+                };
+                break;
+            default:
+                column.type = 'number';
+                break;
+        }
+
+        console.log(column);
+        columns.push(column);
     }
 
     const columns = [];
@@ -117,8 +120,9 @@ function TiksLits({ tasks, setTasks }) {
         columnsPushM(columns, 'm1', task.m1);
     }
     if (task.m2) {
-        //   columnsPushM(columns, 'm2', task.m2);
+        columnsPushM(columns, 'm2', task.m2);
     }
+
     columns.push({
         field: 'datetime',
         headerName: 'Фикстайм',
@@ -204,14 +208,12 @@ function TiksLits({ tasks, setTasks }) {
 
     return (
         <Box>
-
             <DataGrid
                 rows={rows}
                 columns={columns}
                 editMode="row"
                 rowModesModel={rowModesModel}
                 bordered
-                //onRowModesModelChange={handleRowModesModelChange}
                 onRowEditStop={(a, b, c) => { console.log('onroweditstip', a, b, c); }}
                 processRowUpdate={(after, before) => {
                     let tik = task.tiks.find(tik => tik.id == after.id);
@@ -219,13 +221,9 @@ function TiksLits({ tasks, setTasks }) {
                     tik.m1 = after.m1;
                     tik.m2 = after.m2;
                     TaskManager.tikUpdate(tik, tasks, setTasks);
-                    console.log('processrowupdate', before, after);
                     return after;
                 }}
                 onProcessRowUpdateError={console.log}
-            // slots={{
-            //     toolbar: EditToolbar,
-            //   }}
             />
         </Box>
     );

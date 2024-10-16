@@ -20,8 +20,10 @@ public class UserController {
     final UserRepository userRepository;
     final UserMapper userMapper;
 
-    @PostMapping("/register")
-    public UserRsDto register(@RequestBody UserRqDto userRqDto) {
+    @PostMapping("/register/google")
+    public UserRsDto registerGoogle(@RequestBody UserRqDto userRqDto) {
+        // prevent bug where email case different: john@gmail.com and John@gmail.com
+        userRqDto.setGoogleEmail(userRqDto.getGoogleEmail().toLowerCase());
 
         return userMapper.toDto(
                 userRepository

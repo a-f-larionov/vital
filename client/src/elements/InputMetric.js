@@ -2,6 +2,7 @@ import React from 'react';
 import InputIncrementer from './InputIncrementer';
 import InputSlider from './InputSlider';
 import InputStopWatch from './InputStopWatch';
+import InputChecker from './InputChecker';
 
 function InputMetric({ mIndex, task, tasks, setTasks }) {
 
@@ -17,14 +18,17 @@ function InputMetric({ mIndex, task, tasks, setTasks }) {
                 return <InputStopWatch mIndex={mIndex} task={task} tasks={tasks} setTasks={setTasks} />;
                 break;
             case 'incrementer':
-                return <InputIncrementer mIndex={mIndex} task={task} tasks={tasks} setTasks={setTasks}/>;
+                return <InputIncrementer mIndex={mIndex} task={task} tasks={tasks} setTasks={setTasks} />;
                 break;
             case 'slider':
-                return <InputSlider mIndex={mIndex} task={task} tasks={tasks} setTasks={setTasks}/>;
+                return <InputSlider mIndex={mIndex} task={task} tasks={tasks} setTasks={setTasks} />;
+                break;
+            case 'checker':
+                return <InputChecker mIndex={mIndex} task={task} tasks={tasks} setTasks={setTasks} />;
                 break;
         }
     }
-    return '-';
+    return '';
 }
 
 export default InputMetric;

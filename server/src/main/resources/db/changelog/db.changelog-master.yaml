@@ -34,3 +34,19 @@ databaseChangeLog:
       changes:
         - sqlFile:
             path: /db/changelog/005-insert-metrica.sql
+
+  - changeSet:
+      id: "6"
+      author: developer
+      comment: Comments table
+      changes:
+        - sqlFile:
+            path: /db/changelog/006-create-comment-entity.sql
+
+  - changeSet:
+      id: "7"
+      author: developer
+      comment: Metrica checker
+      changes:
+       - sqlFile:
+           path: /db/changelog/007-metrica-insert-checker.sql

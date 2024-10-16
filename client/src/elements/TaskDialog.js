@@ -14,9 +14,8 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const views = [
-        { code: 'sum', title: 'Сумма', icon: '📈' },
-        { code: 'minmaks', title: 'МинМакс', icon: '📊' },
-        { code: 'list-count', title: 'СписокСумма', icon: '📃📈' },
+        { code: 'sum', title: 'Дневной календарь', icon: '🗓' },
+        { code: 'checker', title: 'Чекер', icon: '✅' },
     ];
 
     const metrica = MetricaManager.metrica;
@@ -35,12 +34,11 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         task.m2 = metrica.find(m => { return m.id === mId2 });
         task.vCode1 = vCode1;
         task.vCode2 = vCode2;
-        console.log(task, mId1, mId2);
 
         if (task.id) {
             TaskManager.taskUpdate(task, tasks, setTasks);
         } else {
-            TaskManager.create(task, tasks, setTasks);
+            TaskManager.add(task, tasks, setTasks);
         }
         dialogHandleClose();
     }
@@ -81,12 +79,12 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     <MetricElement elIndex={1} mId={task.m1 ? task.m1.id : null} vCode={task.vCode1} metrica={metrica} views={views} />
                     <MetricElement elIndex={2} mId={task.m2 ? task.m2.id : null} vCode={task.vCode2} metrica={metrica} views={views} />
 
-                    <Grid2 size={3} >Материалы:</Grid2>
+                    {/* <Grid2 size={3} >Материалы:</Grid2>
                     <Grid2 size={6}>
                         <Input fullWidth></Input>
                         <Input fullWidth></Input>
                         <Input fullWidth></Input>
-                    </Grid2>
+                    </Grid2> */}
                 </Grid2>
 
             </DialogContent>

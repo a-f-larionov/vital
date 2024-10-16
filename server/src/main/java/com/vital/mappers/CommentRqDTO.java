@@ -1,39 +1,34 @@
-package com.vital.entities;
+package com.vital.mappers;
 
 import java.time.Instant;
 
 import org.hibernate.annotations.CreationTimestamp;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class CommentEntity {
+public class CommentRqDTO {
 
-    @Id
+    @NotBlank
     private String id;
     
     @NotBlank
     private String uid;
 
     @NotBlank
-    private String tikId;
+    private String taskId;
 
     @NotBlank
-    private String taskId;
+    private String tikId;
 
     @CreationTimestamp
     private Instant created;
     
-    private Boolean isArchived = false;
-
     @NotBlank
     private String text;
 }

@@ -1,5 +1,7 @@
 package com.vital.controllers;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.vital.dto.ResponseDTO;
+import com.vital.dto.rq.MetricResetRqDto;
 import com.vital.dto.rq.TaskArchiveDTO;
 import com.vital.dto.rq.TaskListRqDTo;
 import com.vital.dto.rq.TaskRqDTO;
@@ -26,8 +29,8 @@ import com.vital.repositories.TiksRepository;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
-@RestController
 @AllArgsConstructor
+@RestController
 @RequestMapping("/api/tasks")
 public class TaskController {
 
@@ -46,11 +49,12 @@ public class TaskController {
 
         return new ResponseDTO("OK");
     }
+
     @PostMapping("/update")
     public ResponseDTO update(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
         var entity = taskMapper.toEntity(taskRqDto);
-      
+
         taskRepository.save(entity);
 
         return new ResponseDTO("OK");
@@ -82,4 +86,25 @@ public class TaskController {
                 .toList();
     }
 
+    @PostMapping("/metric/reset")
+    public ResponseDTO metricReset(@RequestBody @Valid MetricResetRqDto rqDto) {
+
+        var tikList = tiksRepository.findAllByUidAndTidAndDatetimeAfterAndIsArchivedFalse(
+                rqDto.getUid(),
+                rqDto.getTaskId(),
+                Instant.now().truncatedTo(ChronoUnit.DAYS));
+
+        tikList.forEach(tik -> {
+            switch (rqDto.getMIndex()) {
+                case 1 -> tik.setM1(0L);
+                case 2 -> tik.setM2(0L);
+            }
+        });
+
+        tikList.forEach((tik) -> {
+            tiksRepository.save(tik);
+        });
+
+        return new ResponseDTO("OK");
+    }
 }

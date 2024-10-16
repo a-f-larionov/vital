@@ -13,7 +13,6 @@ import com.vital.entities.TikEntity;
 
 @Mapper(componentModel = "spring")
 public interface TaskMapper {
-
     
     @Mapping(target = "isArchived", ignore = true)
     @Mapping(target = "created", ignore = true)

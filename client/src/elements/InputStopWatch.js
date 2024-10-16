@@ -1,8 +1,9 @@
 import React from 'react';
-import { Box, Fab } from '@mui/material';
+import { Box } from '@mui/material';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import StopCircleIcon from '@mui/icons-material/StopCircle';
 import TaskManager from '../managers/TaskManager';
+import { Button } from 'antd';
 
 function InputStopWatch({ mIndex, task, tasks, setTasks }) {
     let m;
@@ -74,17 +75,14 @@ function InputStopWatch({ mIndex, task, tasks, setTasks }) {
 
     if (sw[swId] == null) {
         return (
-            <Fab size='small' >
-                <PlayCircleIcon onClick={onPlayHandler} />
-            </Fab>
+            <Button size='default' icon={<PlayCircleIcon onClick={onPlayHandler} />}/>
         );
     } else {
         timeoutHandler();
         return (
-            <Fab size='small' >
-                <StopCircleIcon onClick={onStopHandler} />
+            <Button size='default' icon={<StopCircleIcon onClick={onStopHandler} />}>
                 <Box ref={timerRef}></Box>
-            </Fab>
+            </Button>
         );
 
     }
