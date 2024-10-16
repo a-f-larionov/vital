@@ -28,9 +28,9 @@ public class UserController {
         return userMapper.toDto(
                 userRepository
                         .getByGoogleEmail(userRqDto.getGoogleEmail())
-                        .orElseGet(() -> {
-                            return userRepository.save(
-                                    userMapper.toEntity(userRqDto));
-                        }));
+                        .orElseGet(() -> 
+                             userRepository.save(
+                                    userMapper.toEntity(userRqDto))
+                        ));
     }
 }

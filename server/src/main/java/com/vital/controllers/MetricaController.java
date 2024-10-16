@@ -17,8 +17,8 @@ import lombok.AllArgsConstructor;
 @RequestMapping("/api/metrica")
 public class MetricaController {
     
-    final private MetricaRepository metricaRepository; 
-    final private MetricaMapper metricaMapper;
+    private final MetricaRepository metricaRepository; 
+    private final MetricaMapper metricaMapper;
 
     @GetMapping("/list")
     public List<MetricaDTO> list(){

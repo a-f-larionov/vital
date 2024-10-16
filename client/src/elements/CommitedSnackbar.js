@@ -12,11 +12,7 @@ function CommitedSnakbar() {
     const commentRef = React.createRef();
 
     TaskManager.setSnackBarOpenCallback(setOpen);
-
-    const openHandler = () => {
-        setOpen(true);
-    };
-
+    
     function sendHandler() {
         setOpen(false);
         let comment = commentRef.current.input.value;

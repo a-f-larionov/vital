@@ -6,7 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.vital.entities.CommentEntity;
 
-public interface CommentRepository extends PagingAndSortingRepository<CommentEntity, Long> {
+public interface CommentRepository extends PagingAndSortingRepository<CommentEntity, String> {
 
     public void save(CommentEntity entity);
 

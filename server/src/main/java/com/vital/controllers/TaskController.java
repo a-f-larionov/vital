@@ -43,18 +43,21 @@ public class TaskController {
     @PostMapping("/add")
     public ResponseDTO add(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
-        var entity = taskMapper.toEntity(taskRqDto);
-
-        taskRepository.save(entity);
-
-        return new ResponseDTO("OK");
+        return updateOrAdd(taskRqDto);
     }
 
     @PostMapping("/update")
     public ResponseDTO update(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
-        var entity = taskMapper.toEntity(taskRqDto);
+        if (taskRqDto.getId() == null) {
+            throw new RuntimeException("Id required");
+        }
 
+        return updateOrAdd(taskRqDto);
+    }
+
+    private ResponseDTO updateOrAdd(@Valid TaskRqDTO taskRqDto) {
+        var entity = taskMapper.toEntity(taskRqDto);
         taskRepository.save(entity);
 
         return new ResponseDTO("OK");
@@ -98,6 +101,7 @@ public class TaskController {
             switch (rqDto.getMIndex()) {
                 case 1 -> tik.setM1(0L);
                 case 2 -> tik.setM2(0L);
+                default -> tik.setM1(tik.getM1());
             }
         });
 
