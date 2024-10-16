@@ -25,7 +25,6 @@ public class MetricaEntity {
 
     @NotBlank
     private String icon;
-
     @NotBlank
     private String typeCode;
 
