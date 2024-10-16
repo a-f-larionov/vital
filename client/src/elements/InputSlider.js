@@ -1,7 +1,7 @@
-import React from 'react';
-import { Stack,Popper } from "@mui/material";
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import { Popper, Stack } from "@mui/material";
 import { Slider } from 'antd';
+import React from 'react';
 import TaskManager from '../managers/TaskManager';
 
 function InputSlider({ mIndex, task, tasks, setTasks }) {

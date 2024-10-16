@@ -1,13 +1,11 @@
-import React from "react";
-import { Box, Fab, IconButton, Popper } from "@mui/material";
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import TaskDialog from './TaskDialog';
+import { Box, Fab, IconButton, Popper } from "@mui/material";
+import React from "react";
 import TaskManager from "../managers/TaskManager";
-import PageManager from "../managers/PageManager";
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import TaskDialog from './TaskDialog';
 
 function TaskMenu({ task, tasks, setTasks }) {
 
@@ -15,7 +13,7 @@ function TaskMenu({ task, tasks, setTasks }) {
     const menuOpen = Boolean(menuAnchorEl);
 
     const menuHandleClick = (event) => {
-        if (menuAnchorEl == null) {
+        if (menuAnchorEl === null) {
             setAnchorEl(event.currentTarget);
         } else {
             menuHandleClose();

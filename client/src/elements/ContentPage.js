@@ -1,7 +1,6 @@
-import { ConfigProvider } from "antd";
+import PageManager from "../managers/PageManager";
 import TaskList from "./TaskList";
 import TiksLits from "./TiksList";
-import PageManager from "../managers/PageManager";
 
 function ContentPage({ tasks, setTasks }) {
 

@@ -3,16 +3,12 @@ import { Grid2, Paper, TableCell, TableRow } from "@mui/material";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
-import MetricaManager from "../managers/MetricaManager";
 import MetricLeftMenu from './MetricLeftMenu';
 import MetricRightMenu from "./MetricRightMenu";
 import TaskMenu from './TaskMenu';
 
 function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
     let i = 0;
-
-    let metrica = MetricaManager.metrica;
-
 
     return (
         <Grid2 container component={Paper} sx={{ paddingTop: 1, marginBottom: 1, marginLeft: 2, marginRight: 2 }}>

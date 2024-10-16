@@ -22,7 +22,7 @@ function MetricElement({ mId, vCode, elIndex, metrica, views }) {
                 <FormControl fullWidth variant="standard" sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel >Тип</InputLabel>
                     <Select
-                        required={elIndex == 1}
+                        required={elIndex === 1}
                         value={mIdState}
                         label="Типы"
                         name={"typeId" + elIndex}
@@ -45,7 +45,7 @@ function MetricElement({ mId, vCode, elIndex, metrica, views }) {
                 <FormControl fullWidth variant="standard" sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel >Вид</InputLabel>
                     <Select
-                        required={elIndex == 1}
+                        required={elIndex === 1}
                         value={vCodeState}
                         label="Вид"
                         name={"viewCode" + elIndex}

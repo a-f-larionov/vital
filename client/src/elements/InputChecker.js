@@ -1,6 +1,5 @@
-import { Button } from "antd";
 import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
-import CheckBoxIcon from '@mui/icons-material/CheckBox';
+import { Button } from "antd";
 import TaskManager from '../managers/TaskManager';
 
 function InputChecker({ mIndex, task, tasks, setTasks }) {

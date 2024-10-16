@@ -1,13 +1,10 @@
-import React from "react";
-import { Box, Fab, IconButton, Popper } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
+import { ClickAwayListener } from '@mui/base/ClickAwayListener';
 import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import FormatListBulletedIcon from '@mui/icons-material/FormatListBulleted';
-import TaskDialog from './TaskDialog';
-import TaskManager from "../managers/TaskManager";
+import { Box, Fab, IconButton, Popper } from "@mui/material";
+import React from "react";
 import PageManager from "../managers/PageManager";
-import { ClickAwayListener } from '@mui/base/ClickAwayListener';
+import TaskDialog from './TaskDialog';
 
 function MetricRightMenu({ task, tasks, setTasks }) {
 
@@ -15,7 +12,7 @@ function MetricRightMenu({ task, tasks, setTasks }) {
     const menuOpen = Boolean(menuAnchorEl);
 
     const menuHandleClick = (event) => {
-        if (menuAnchorEl == null) {
+        if (menuAnchorEl === null) {
             setAnchorEl(event.currentTarget);
         } else {
             menuHandleClose();
@@ -26,17 +23,7 @@ function MetricRightMenu({ task, tasks, setTasks }) {
         setAnchorEl(null);
     };
 
-    function onArchiveClick({ task, tasks, setTasks }) {
-        TaskManager.archive(task, tasks, setTasks);
-        menuHandleClose();
-    }
-
-    let doOpenDialog = function () { console.error("Must be redefine") };
-
-    function onEditClick({ task, tasks, setTasks }) {
-        doOpenDialog(true);
-        menuHandleClose();
-    }
+    //let doOpenDialog ;
 
     function onEditMenuClick({ task, tasks, setTasks }) {
         PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task.title, task);
@@ -73,7 +60,8 @@ function MetricRightMenu({ task, tasks, setTasks }) {
                         <MoreVertIcon />
                     </IconButton>
 
-                    <TaskDialog setOpenCallback={(handler) => { doOpenDialog = handler }}
+                    <TaskDialog
+                        setOpenCallback={(handler) => { }}
                         task={task} tasks={tasks} setTasks={setTasks} />
                 </Box>
             </Box >

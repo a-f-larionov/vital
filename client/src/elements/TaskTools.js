@@ -5,12 +5,12 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import PlusOneIcon from '@mui/icons-material/PlusOne';
 import { Box, Button, Input } from "@mui/material";
 
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import React from "react";
-import TaskDialog from './TaskDialog';
 import TaskManager from "../managers/TaskManager";
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import TaskDialog from './TaskDialog';
 
 
 function TaskTools({ task, tasks, setTasks }) {

@@ -41,10 +41,6 @@ function TiksLits({ tasks, setTasks }) {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true } });
     };
 
-    const handleRowModesModelChange = (newRowModesModel) => {
-        setRowModesModel(newRowModesModel);
-    };
-
     let rows = task.tiks;
     function RenderTikDateTimeEditCell({ id, field, value, colDef }) {
         const apiRef = useGridApiContext();
@@ -216,7 +212,7 @@ function TiksLits({ tasks, setTasks }) {
                 bordered
                 onRowEditStop={(a, b, c) => { console.log('onroweditstip', a, b, c); }}
                 processRowUpdate={(after, before) => {
-                    let tik = task.tiks.find(tik => tik.id == after.id);
+                    let tik = task.tiks.find(tik => tik.id === after.id);
                     tik.datetime = after.datetime;
                     tik.m1 = after.m1;
                     tik.m2 = after.m2;

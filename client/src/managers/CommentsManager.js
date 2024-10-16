@@ -61,7 +61,7 @@ CommentManager.flush = function () {
             prs.push(
                 fetch_(apiComments + '/add', 'post', comment)
                     .then((r) => {
-                        if (r == null) return;
+                        if (r === null) return;
                         comment.needFlush = false;
                     }));
         }
@@ -69,7 +69,7 @@ CommentManager.flush = function () {
             prs.push(
                 fetch_(apiComments + '/archive', 'post', { uid: UserManager.getUid(), id: comment.id })
                     .then((r) => {
-                        if (r == null) return;
+                        if (r === null) return;
                         comment.needArchive = false;
                         comments = comments.filter(c => c.id !== comment.id);
                     }));
@@ -78,7 +78,7 @@ CommentManager.flush = function () {
             prs.push(
                 fetch_(apiComments + '/update', 'post', comment)
                     .then((r) => {
-                        if (r == null) return;
+                        if (r === null) return;
                         comment.needUpdate = false;
                     }));
         }
@@ -98,7 +98,7 @@ CommentManager.load = function (comments, setComments) {
 
     fetch_(apiComments + '/list', 'post', { uid: UserManager.getUid() })
         .then((r) => {
-            if (r == null) {
+            if (r === null) {
                 // skip data from server
                 CommentManager.setComments(comments);
             } else {

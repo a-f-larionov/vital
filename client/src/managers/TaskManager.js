@@ -65,15 +65,15 @@ TaskManager.getTable = function (tasks) {
                 let cnt = thisDay.length;
 
                 title = sum + " " + cnt;
-                if (task.vCode1 == 'checker') {
-                    if (sum == 0) {
+                if (task.vCode1 === 'checker') {
+                    if (sum === 0) {
                         title = cnt > 0 ? "✅" : "";
                     } else {
                         title = sum;
                     }
                 } else {
                     title = sum;
-                    if (title && task.m1.typeCode == "timestamp") {
+                    if (title && task.m1.typeCode === "timestamp") {
                         title = s2hms(title) + '';
                     }
                 }
@@ -111,7 +111,7 @@ TaskManager.tikCreate = function (task, tasks, setTasks, m1, m2, m3, m4) {
     };
     let lastOne = TaskManager.getLastOne();
 
-    if (lastOne && lastOne.tik.tid == newTik.tid && lastOne.tik.datetime + 10 > newDateTime) {
+    if (lastOne && lastOne.tik.tid === newTik.tid && lastOne.tik.datetime + 10 > newDateTime) {
 
         lastOne.tik.m1 += newTik.m1;
         lastOne.tik.m2 += newTik.m2;
@@ -190,7 +190,7 @@ TaskManager.flush = function (tasks, setTasks) {
             prs.push(
                 fetch_(apiTasks + '/add', 'post', task)
                     .then((r) => {
-                        if (r == null) return;
+                        if (r === null) return;
                         task.needFlush = false;
                     }));
         }
@@ -198,7 +198,7 @@ TaskManager.flush = function (tasks, setTasks) {
             prs.push(
                 fetch_(apiTasks + '/archive', 'post', { uid: UserManager.getUid(), id: task.id })
                     .then((r) => {
-                        if (r == null) return;
+                        if (r === null) return;
                         task.needArchive = false;
                         tasks = tasks.filter(t => t.id !== task.id);
                     }));
@@ -207,7 +207,7 @@ TaskManager.flush = function (tasks, setTasks) {
             prs.push(
                 fetch_(apiTasks + '/update', 'post', task)
                     .then((r) => {
-                        if (r == null) return;
+                        if (r === null) return;
                         task.needUpdate = false;
                     }));
         }
@@ -216,7 +216,7 @@ TaskManager.flush = function (tasks, setTasks) {
                 prs.push(
                     fetch_(apiTiks + "/add", 'post', tik)
                         .then((r) => {
-                            if (r == null) return;
+                            if (r === null) return;
                             tik.needFlush = false;
                         }));
             }
@@ -224,7 +224,7 @@ TaskManager.flush = function (tasks, setTasks) {
                 prs.push(
                     fetch_(apiTiks + '/archive', 'post', tik)
                         .then((r) => {
-                            if (r == null) return;
+                            if (r === null) return;
                             tik.needArchive = false;
                             task.tiks = task.tiks.filter(t => t.id !== tik.id);
                         }));
@@ -233,7 +233,7 @@ TaskManager.flush = function (tasks, setTasks) {
                 prs.push(
                     fetch_(apiTiks + '/update', 'post', tik)
                         .then((r) => {
-                            if (r == null) return;
+                            if (r === null) return;
                             task.needUpdate = false;
                         }));
             }
@@ -264,7 +264,7 @@ TaskManager.load = function (tasks, setTasks) {
 
     fetch_(apiTasks + '/list', 'post', { uid: UserManager.getUid() })
         .then((r) => {
-            if (r == null) {
+            if (r === null) {
                 // skip data from server
                 setTasks(tasks);
             } else {

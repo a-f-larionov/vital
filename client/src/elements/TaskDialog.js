@@ -7,8 +7,8 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
 import MetricaManager from '../managers/MetricaManager';
-import MetricElement from './MetricElement';
 import TaskManager from '../managers/TaskManager';
+import MetricElement from './MetricElement';
 
 function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
 
