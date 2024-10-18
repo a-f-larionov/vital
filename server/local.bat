@@ -12,6 +12,6 @@ call npm run build
 
 cd ..
 cd server
-call mvn clean install -DskipTests
+call mvn clean package -DskipTests
 
 docker compose up -d --build

@@ -18,7 +18,6 @@ public interface TaskMapper {
     @Mapping(target = "created", ignore = true)
     TaskEntity toEntity(TaskRqDTO taskRqDTO);
 
-    @Mapping(target = "m1.id", source = "taskEntity.m1.id")
     TaskRsDTO toDTO(TaskEntity taskEntity, List<TikEntity> tiks);
 
     TikDTO toDTO(TikEntity tikEntity);

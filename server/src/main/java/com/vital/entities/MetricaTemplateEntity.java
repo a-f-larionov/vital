@@ -1,8 +1,10 @@
-package com.vital.dto;
+package com.vital.entities;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.validation.constraints.NotBlank;
@@ -10,38 +12,34 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
-public class MetricaDto {
+public class MetricaTemplateEntity {
 
+    @Id
     private String id;
 
     @NotNull
     private Long sort;
 
-    private String taskId;
-
     @NotBlank
     private String title;
 
-    @NotBlank
     private String shortTitle;
 
     @NotBlank
     private String icon;
-
     @NotBlank
     private String typeCode;
 
     @NotBlank
     private String inputCode;
 
-    @NotBlank
     private String viewCode;
 
-    @NotBlank
-    private String templateId;
-
-    private List <TikDTO> tiks = new ArrayList<>();
-    
+    @OneToMany
+    @JoinColumn(name = "mid")
+    private List<TikEntity> tiks = new ArrayList<>();
+    // private List<TikEntity> tiks = new ArrayList();
 }

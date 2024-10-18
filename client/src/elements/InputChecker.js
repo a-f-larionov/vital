@@ -3,7 +3,7 @@ import { Button } from "antd";
 import TaskManager from '../managers/TaskManager';
 
 function InputChecker({ mIndex, task, tasks, setTasks }) {
-    let m = task.m1;
+    let m = task.metrics[0];
 
     function onIncrementClick() {
         TaskManager.increment(task, tasks, setTasks, 1, 0, 0, 0);

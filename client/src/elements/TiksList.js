@@ -112,16 +112,16 @@ function TiksLits({ tasks, setTasks }) {
 
     const columns = [];
 
-    if (task.m1) {
-        columnsPushM(columns, 'm1', task.m1);
+    if (task.metrics[0]) {
+        columnsPushM(columns, 'm1', task.metrics[0]);
     }
 
     columns.push({
         field: 'datetime',
-        headerName: 'Фикстайм',
+        headerName: 'КоммитТайм',
         valueGetter: (v) => { return new Date(v * 1000); },
         valueSetter: (newValue, row) => { row.datetime = newValue.getTime() / 1000; return row; },
-        renderCell: (params) => <div>{dayjs(params.value).format("HH:mm")}</div>,
+        renderCell: (params) => <div>{dayjs(params.value).format("D HH:mm")}</div>,
         renderEditCell: (params) => <RenderTikDateTimeEditCell {...params} />,
         type: 'dateTime', width: 170, align: 'left', headerAlign: 'left', editable: true
     });

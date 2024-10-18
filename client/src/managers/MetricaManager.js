@@ -11,19 +11,19 @@ var apiMetrica = apiUrl + "/metrica";
 function MetricaManager() {
 
 }
-MetricaManager.metrica = [];
+MetricaManager.metricTemplates = [];
 
 MetricaManager.inProcess = false;
 MetricaManager.load = function (metrica, setMetrica) {
 
-    if (MetricaManager.metrica.length > 0) {
+    if (MetricaManager.metricTemplates.length > 0) {
         return;
     }
-    MetricaManager.metrica = metrica;
+    MetricaManager.metricTemplates = metrica;
 
     if (MetricaManager.inProcess) return;
     MetricaManager.inProcess = true;
-    fetch_(apiMetrica + "/list")
+    fetch_(apiMetrica + "/list-templates")
         .then(metricaData => {
             metricaData = metricaData.filter((m) => {
                 var s ={ 

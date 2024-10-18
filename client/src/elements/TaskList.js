@@ -10,9 +10,9 @@ function TaskList({ tasks, setTasks }) {
     table.rows
       .map(row =>
         <TaskRowShort
-          key={row.id}
+          key={row.task.id}
           cols={table.cols}
-          title={row.title}
+          title={row.task.title}
           cells={row.cells}
           task={row.task} tasks={tasks} setTasks={setTasks} />
       );

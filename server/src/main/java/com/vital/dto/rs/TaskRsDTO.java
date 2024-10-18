@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vital.dto.MetricaDTO;
+import com.vital.dto.MetricaDto;
 import com.vital.dto.TikDTO;
 
 import jakarta.validation.constraints.NotBlank;
@@ -26,11 +26,7 @@ public class TaskRsDTO {
     @Size(min = 1)
     private String title = "";
 
-    @JsonProperty("m1")
-    private MetricaDTO m1;
-
-    @JsonProperty("vCode1")
-    private String vCode1 = "";
+    private List<MetricaDto> metrics;
 
     private List<TikDTO> tiks = new ArrayList<>();
 }

@@ -21,10 +21,12 @@ public class TikEntity {
 
     @Id
     private String id;
-
+    
+    private String mid;
+    
     @NotBlank
     private String uid;
-    
+
     @NotBlank
     private String tid;
 

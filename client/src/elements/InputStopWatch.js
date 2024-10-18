@@ -6,7 +6,7 @@ import React from 'react';
 import TaskManager from '../managers/TaskManager';
 
 function InputStopWatch({ mIndex, task, tasks, setTasks }) {
-    let m = task.m1;
+    let m  = task.metrics[0];
     let sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
     console.log(m);
     let swId = task.id + m.id + mIndex;
@@ -18,10 +18,8 @@ function InputStopWatch({ mIndex, task, tasks, setTasks }) {
     }
 
     function onStopHandler() {
-        let m1;
         let timer = Math.round((new Date() - sw[swId].stopWatchStart) / 1000);
-        m1 = timer;
-        TaskManager.commitNumber(task, tasks, setTasks, m1, 0, 0, 0);
+        TaskManager.commitNumber(task, tasks, setTasks, timer);
         sw[swId] = null;
         localStorage.stopWatches = JSON.stringify(sw);
         TaskManager.flush(tasks, setTasks); // for redraw

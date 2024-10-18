@@ -39,19 +39,12 @@ TaskManager.getTable = function (tasks) {
         });
 
     out.cols = dates.map((date) => {
-        return {
-            title2: 't',
-            datetime: date,
-            date: date.getDate(),
-            weekDay: ['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'][date.getDay()]
-        };
+        return { datetime: date };
     });
 
     out.rows = tasks.map((task) => {
         return {
-            id: task.id,
             task: task,
-            title: task.title,
             cells: dates.map((date) => {
                 let title = '';
                 let thisDay = task.tiks
@@ -61,11 +54,11 @@ TaskManager.getTable = function (tasks) {
                     });
 
                 let sum = thisDay
-                    .reduce((r, tik) => { return r + (task.vCode1 ? tik.m1 : 1); }, 0);
+                    .reduce((r, tik) => { return r + (task.metrics[0] ? tik.m1 : 1); }, 0);
                 let cnt = thisDay.length;
 
                 title = sum + " " + cnt;
-                if (task.vCode1 === 'checker') {
+                if (task.metrics[0] && task.metrics[0].viewCode === 'checker') {
                     if (sum === 0) {
                         title = cnt > 0 ? "✅" : "";
                     } else {
@@ -73,7 +66,7 @@ TaskManager.getTable = function (tasks) {
                     }
                 } else {
                     title = sum;
-                    if (title && task.m1.typeCode === "timestamp") {
+                    if (title && task.metrics[0] && task.metrics[0].typeCode === "timestamp") {
                         title = s2hms(title) + '';
                     }
                 }
@@ -89,13 +82,14 @@ TaskManager.getTable = function (tasks) {
 TaskManager.tikCreate = function (task, tasks, setTasks, m1) {
 
     m1 = m1 !== undefined ? m1 : 0;
-    
+
     let newDateTime = new Date().getTime() / 1000;
 
     let newTik = {
         id: crypto.randomUUID(),
         uid: UserManager.getUid(),
         tid: task.id,
+        mid: task.metrics[0].id,
 
         datetime: newDateTime,
 
@@ -108,7 +102,7 @@ TaskManager.tikCreate = function (task, tasks, setTasks, m1) {
     if (lastOne && lastOne.tik.tid === newTik.tid && lastOne.tik.datetime + 10 > newDateTime) {
 
         lastOne.tik.m1 += newTik.m1;
-        
+
         lastOne.tik.needUpdate = true;
     } else {
 
@@ -131,12 +125,12 @@ TaskManager.tikUpdate = function (tik, tasks, setTasks) {
     this.flush(tasks, setTasks);
 }
 
-TaskManager.commitNumber = function (task, tasks, setTasks, m1) {
-    TaskManager.tikCreate(task, tasks, setTasks, m1);
+TaskManager.commitNumber = function (task, tasks, setTasks, value) {
+    TaskManager.tikCreate(task, tasks, setTasks, value);
 };
 
-TaskManager.increment = function (task, tasks, setTasks, m1) {
-    TaskManager.tikCreate(task, tasks, setTasks, m1);
+TaskManager.increment = function (task, tasks, setTasks, value) {
+    TaskManager.tikCreate(task, tasks, setTasks, value);
 };
 
 TaskManager.resetMetric = function (task, tasks, setTasks, mIndex) {
@@ -152,7 +146,8 @@ TaskManager.resetMetric = function (task, tasks, setTasks, mIndex) {
 TaskManager.add = function (task, tasks, setTasks) {
     task.id = crypto.randomUUID();
     task.uid = UserManager.getUid();
-    task.tiks = [];
+    if (!task.tiks) task.tiks = [];
+    if (!task.metrics) task.metrics = [];
     task.needFlush = true;
 
     tasks.push(task);
@@ -235,6 +230,7 @@ TaskManager.flush = function (tasks, setTasks) {
     Promise.all(prs).then((a) => {
         localStorage.tasks = JSON.stringify(tasks);
         setTasks([...tasks]);
+        console.log(tasks);
 
 
         setTimeout(() => {

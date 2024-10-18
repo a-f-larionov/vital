@@ -17,6 +17,9 @@ public class TikDTO {
 
     @NotBlank
     private String uid;
+
+    @NotBlank
+    private String mid;
     
     @NotBlank
     private String tid;

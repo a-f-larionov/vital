@@ -1,4 +1,4 @@
-package com.vital.mappers;
+package com.vital.dto.rq;
 
 import java.time.Instant;
 

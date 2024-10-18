@@ -14,7 +14,7 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
         <Grid2 container component={Paper} sx={{ paddingTop: 1, marginBottom: 1, marginLeft: 2, marginRight: 2 }}>
 
             <Grid2 size={1}  >
-                {task.m1 ? task.m1.icon : ''}
+                {task.metrics[0] ? task.metrics[0].icon : ''}
             </Grid2>
             <Grid2 size={10} textAlign="left">
                 &nbsp;&nbsp;&nbsp;{task.title}
@@ -42,7 +42,7 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
 
                             <TableRow key={1}>
                                 {cols.map((c) => {
-                                    return <TableCell key={task.id + c.date}
+                                    return <TableCell key={task.id + c.datetime.getDate()}
                                         sx={{
                                             width: 100,
                                             minWidth: 50,
@@ -51,8 +51,10 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
                                             fontSize: 10,
                                             lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0
                                         }}>
-                                        <i>{c.date}</i>
-                                        <b style={{ fontSize: 8 }}>&nbsp;{c.weekDay} </b>
+                                        <i>{c.datetime.getDate()}</i>
+                                        <b style={{ fontSize: 8 }}>
+                                            &nbsp;{['вс', 'пн', 'вт', 'ср', 'чт', 'пт', 'сб'][c.datetime.getDay()]}
+                                        </b>
                                     </TableCell>
                                 })}
                             </TableRow>

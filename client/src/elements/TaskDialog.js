@@ -11,14 +11,17 @@ import TaskManager from '../managers/TaskManager';
 import MetricElement from './MetricElement';
 
 function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
-
+    if(!task.metrics) task.metrics = [];
+    if(!task.tiks) task.tiks = [];
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const views = [
         { code: 'sum', title: 'Дневной календарь', icon: '🗓' },
         { code: 'checker', title: 'Чекер', icon: '✅' },
     ];
 
-    const metrica = MetricaManager.metrica;
+    const metricTemplates = MetricaManager.metricTemplates;
+
+    let isNew = task.id ? false : true;
 
     setOpenCallback((value) => {
         setDialogOpen(value);
@@ -28,16 +31,33 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         setDialogOpen(false);
     }
 
-    function dialogSaveHandler(title, mId1, vCode1) {
-        task.title = title;
-        task.m1 = metrica.find(m => { return m.id === mId1 });
-        task.vCode1 = vCode1;
-
-        if (task.id) {
-            TaskManager.taskUpdate(task, tasks, setTasks);
-        } else {
-            TaskManager.add(task, tasks, setTasks);
+    function dialogSaveHandler(title, metricaTemplateId, viewCode) {
+        if (isNew) {
+            task.metrics = [];
+            task.tiks = [];
         }
+        console.log(title, metricaTemplateId, viewCode, task, isNew);
+        task.title = title;
+
+        let metricaTemplate = metricTemplates.find(m => { return m.id === metricaTemplateId });
+        task.metrics[0] = {
+            id: isNew ? crypto.randomUUID() : task.metrics[0].id,
+            title: metricaTemplate.title,
+            shortTitle: metricaTemplate.shortTitle,
+            sort: 1000,
+            icon: metricaTemplate.icon,
+            typeCode: metricaTemplate.typeCode,
+            inputCode: metricaTemplate.inputCode,
+            viewCode: viewCode,
+            templateId: metricaTemplateId
+        };
+
+        if (isNew) {
+            TaskManager.add(task, tasks, setTasks);
+        } else {
+            TaskManager.taskUpdate(task, tasks, setTasks);
+        }
+
         dialogHandleClose();
     }
 
@@ -54,10 +74,10 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
                     const title = formJson.title;
-                    const mId1 = formJson.typeId1.length ? formJson.typeId1 : null;
-                    const vCode1 = formJson.viewCode1;
+                    const metricaTemplateId = formJson.typeId1.length ? formJson.typeId1 : null;;
+                    const viewCode = formJson.viewCode1;
 
-                    dialogSaveHandler(title, mId1, vCode1);
+                    dialogSaveHandler(title, metricaTemplateId, viewCode);
                 },
             }}
         >
@@ -72,7 +92,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                             name="title" defaultValue={task.title} />
                     </Grid2>
 
-                    <MetricElement elIndex={1} mId={task.m1 ? task.m1.id : null} vCode={task.vCode1} metrica={metrica} views={views} />
+                    <MetricElement elIndex={1} metrica={task.metrics[0]} metricTemplates={metricTemplates} views={views} />
 
 
                     {/* <Grid2 size={3} >Материалы:</Grid2>

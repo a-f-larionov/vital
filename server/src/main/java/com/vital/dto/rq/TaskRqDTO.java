@@ -3,9 +3,7 @@ package com.vital.dto.rq;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import com.vital.dto.MetricaDTO;
-import com.vital.dto.TikDTO;
+import com.vital.dto.MetricaDto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -26,11 +24,5 @@ public class TaskRqDTO {
     @Size(min = 1)
     private String title = "";
 
-    @JsonProperty("m1")
-    private MetricaDTO m1;
-
-    @JsonProperty("vCode1")
-    private String vCode1 = "";
-
-    private List<TikDTO> tiks = new ArrayList<>();
+    private List<MetricaDto> metrics = new ArrayList<>();
 }

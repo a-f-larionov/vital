@@ -4,8 +4,7 @@ import { Button } from "antd";
 import TaskManager from '../managers/TaskManager';
 
 function InputIncrementer({ mIndex, task, tasks, setTasks }) {
-
-    let m = task.m1;
+    let m = task.metrics[0];
 
     function onIncrementClick({ task, tasks, setTasks }) {
         

@@ -54,10 +54,10 @@ function TaskTools({ task, tasks, setTasks }) {
     return (
         <Box sx={{ minWidth: 0 }}>
 
-            {task.mId1 ?
+            {task.metrics[0] ?
                 <Input inputRef={magicInputRef} name='name' defaultValue={10} sx={{ minWidth: 0, width: 30 }} /> : ''
             }
-            {task.mId1
+            {task.metrics[0]
                 ?
                 <Button variant="contained" color="success" sx={{ minWidth: 0 }}
                     onClick={() => onNumberCommit({ task, tasks, setTasks })}
