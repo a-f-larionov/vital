@@ -24,7 +24,7 @@ scp -pr ./.prod.env root@prod-server-2.ru:/var/job/vp/server/.env
 ssh root@prod-server-2.ru "mkdir /var/job/vp/server/nginx"
 ssh root@prod-server-2.ru "mkdir /var/job/vp/server/nginx/prod/"
 rem ssh root@prod-server-2.ru "mkdir /var/job/vp/server/nginx/prod/conf.d/"
-scp -pr ./nginx/prod/conf.d/ root@prod-server-2.ru:/var/job/vp/server/nginx/
+scp -pr ./nginx/prod/conf.d/ root@prod-server-2.ru:/var/job/vp/server/nginx/prod/
 
 scp -pr ./target/vp-0.0.1-SNAPSHOT.jar root@prod-server-2.ru:/var/job/vp/server/target/vp-0.0.1-SNAPSHOT.jar
 

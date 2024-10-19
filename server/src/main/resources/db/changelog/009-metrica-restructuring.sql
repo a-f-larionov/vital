@@ -6,7 +6,7 @@ ALTER TABLE metrica_template_entity ADD COLUMN view_code VARCHAR(36);
 CREATE TABLE metrica_entity (
     id varchar(36) NOT NULL UNIQUE,
     task_id VARCHAR(36) NOT NULL,
-    templateId VARCHAR(36),
+    template_id VARCHAR(36),
     sort INT not null default 1,
     title varchar(36) NOT NULL,
     short_title VARCHAR(36),
