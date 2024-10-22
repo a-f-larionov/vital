@@ -105,8 +105,8 @@ public class TaskController {
 
         tikList.forEach(tik -> {
             switch (rqDto.getMIndex()) {
-                case 1 -> tik.setM1(0L);
-                default -> tik.setM1(tik.getM1());
+                case 1 -> tik.setValue(0L);
+                default -> tik.setValue(tik.getValue());
             }
         });
 

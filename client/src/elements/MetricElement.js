@@ -20,12 +20,12 @@ function MetricElement({ metrica, elIndex, metricTemplates, views }) {
             </Grid2>
             <Grid2 size={4}>
                 <FormControl fullWidth variant="standard" sx={{ m: 1, minWidth: 120 }}>
-                    <InputLabel >Тип</InputLabel>
+                    <InputLabel >Шаблон</InputLabel>
                     <Select
                         required={elIndex === 1}
                         value={mIdState}
                         label="Типы"
-                        name={"typeId" + elIndex}
+                        name={"templateId_" + elIndex}
                         onChange={handleTypeChange}>
                         <MenuItem key="" value="">Без типа</MenuItem>
                         {metricTemplates.map((m) => {
@@ -48,7 +48,7 @@ function MetricElement({ metrica, elIndex, metricTemplates, views }) {
                         required={elIndex === 1}
                         value={viewCodeState}
                         label="Вид"
-                        name={"viewCode" + elIndex}
+                        name={"viewCode_" + elIndex}
                         onChange={handleViewChange}   >
                         <MenuItem key="" value="">Без отображения</MenuItem>
                         {views.map((m) => {

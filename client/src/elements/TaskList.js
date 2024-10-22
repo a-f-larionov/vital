@@ -14,7 +14,8 @@ function TaskList({ tasks, setTasks }) {
           cols={table.cols}
           title={row.task.title}
           cells={row.cells}
-          task={row.task} tasks={tasks} setTasks={setTasks} />
+          task={row.task}
+          tasks={tasks} setTasks={setTasks} />
       );
 
   return (

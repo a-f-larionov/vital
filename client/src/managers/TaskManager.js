@@ -31,6 +31,7 @@ TaskManager.getTable = function (tasks) {
 
     let out = {};
 
+    //  dates
     let dates = Array.from({ length: 21 }, (v, i) => { return -21 + 1 + i; })
         .map((offset) => {
             return new Date(
@@ -38,40 +39,49 @@ TaskManager.getTable = function (tasks) {
             )
         });
 
+    // column headerds
     out.cols = dates.map((date) => {
         return { datetime: date };
     });
 
+
+    // one row = one task
     out.rows = tasks.map((task) => {
         return {
             task: task,
-            cells: dates.map((date) => {
-                let title = '';
-                let thisDay = task.tiks
-                    .filter((tik) => {
-                        return new Date(tik.datetime * 1000).getDate() ===
-                            date.getDate();
-                    });
+            cells: task.metrics.map((metric) => {
+                let shortRows = [];
 
-                let sum = thisDay
-                    .reduce((r, tik) => { return r + (task.metrics[0] ? tik.m1 : 1); }, 0);
-                let cnt = thisDay.length;
+                shortRows = dates.map((date) => {
+                    let title = '';
+                    let thisDay = task.tiks
+                        .filter((tik) => {
+                            return new Date(tik.datetime * 1000).getDate() ===
+                                date.getDate();
+                        });
 
-                title = sum + " " + cnt;
-                if (task.metrics[0] && task.metrics[0].viewCode === 'checker') {
-                    if (sum === 0) {
-                        title = cnt > 0 ? "✅" : "";
+                    let sum = thisDay
+                        .reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
+                    let cnt = thisDay.length;
+
+                    title = sum + " " + cnt;
+                    if (metric && metric.viewCode === 'checker') {
+                        if (sum === 0) {
+                            title = cnt > 0 ? "✅" : "";
+                        } else {
+                            title = sum;
+                        }
                     } else {
                         title = sum;
+                        if (title && metric && metric.typeCode === "timestamp") {
+                            title = s2hms(title) + '';
+                        }
                     }
-                } else {
-                    title = sum;
-                    if (title && task.metrics[0] && task.metrics[0].typeCode === "timestamp") {
-                        title = s2hms(title) + '';
-                    }
-                }
-                if (!title) title = '';
-                return { title: title };
+                    if (!title) title = '';
+                    return { title: title };
+                });
+
+                return shortRows;
             })
         }
     })
@@ -79,9 +89,9 @@ TaskManager.getTable = function (tasks) {
     return out;
 }
 
-TaskManager.tikCreate = function (task, tasks, setTasks, m1) {
+TaskManager.tikCreate = function (task, tasks, setTasks, value) {
 
-    m1 = m1 !== undefined ? m1 : 0;
+    value = value !== undefined ? value : 0;
 
     let newDateTime = new Date().getTime() / 1000;
 
@@ -93,7 +103,7 @@ TaskManager.tikCreate = function (task, tasks, setTasks, m1) {
 
         datetime: newDateTime,
 
-        m1: m1,
+        value: value,
 
         needFlush: true
     };
@@ -101,7 +111,7 @@ TaskManager.tikCreate = function (task, tasks, setTasks, m1) {
 
     if (lastOne && lastOne.tik.tid === newTik.tid && lastOne.tik.datetime + 10 > newDateTime) {
 
-        lastOne.tik.m1 += newTik.m1;
+        lastOne.tik.value += newTik.value;
 
         lastOne.tik.needUpdate = true;
     } else {

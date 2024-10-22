@@ -66,3 +66,11 @@ databaseChangeLog:
           changes:
               - sqlFile:
                     path: /db/changelog/009-metrica-restructuring.sql
+      
+    - changeSet:
+          id: "10"
+          author: developer
+          comment: resturction metrics 2
+          changes:
+              - sqlFile:
+                    path: /db/changelog/010-metrica-restructuring-2.sql

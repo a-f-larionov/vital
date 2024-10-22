@@ -37,5 +37,5 @@ public class TikEntity {
     @CreationTimestamp
     private Instant datetime;
 
-    private Long m1;
+    private Long value;
 }

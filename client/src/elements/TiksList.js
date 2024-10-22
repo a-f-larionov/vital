@@ -113,7 +113,7 @@ function TiksLits({ tasks, setTasks }) {
     const columns = [];
 
     if (task.metrics[0]) {
-        columnsPushM(columns, 'm1', task.metrics[0]);
+        columnsPushM(columns, 'value', task.metrics[0]);
     }
 
     columns.push({
@@ -211,7 +211,7 @@ function TiksLits({ tasks, setTasks }) {
                 processRowUpdate={(after, before) => {
                     let tik = task.tiks.find(tik => tik.id === after.id);
                     tik.datetime = after.datetime;
-                    tik.m1 = after.m1;
+                    tik.value = after.value;
                     TaskManager.tikUpdate(tik, tasks, setTasks);
                     return after;
                 }}
