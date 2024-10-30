@@ -7,7 +7,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MetricaTemplateRsDto {
+public class MetricaTemplateRsDTO {
 
 
     private String id;
