@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vital.dto.rq.UserRqDto;
+import com.vital.dto.rq.UserRqDTO;
 import com.vital.dto.rs.UserRsDto;
 import com.vital.mappers.UserMapper;
 import com.vital.repositories.UserRepository;
@@ -21,7 +21,7 @@ public class UserController {
     final UserMapper userMapper;
 
     @PostMapping("/register/google")
-    public UserRsDto registerGoogle(@RequestBody UserRqDto userRqDto) {
+    public UserRsDto registerGoogle(@RequestBody UserRqDTO userRqDto) {
         // prevent bug where email case different: john@gmail.com and John@gmail.com
         userRqDto.setGoogleEmail(userRqDto.getGoogleEmail().toLowerCase());
 

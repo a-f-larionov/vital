@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class TaskListRqDTo {
+public class TaskListRqDTO {
 
     private String uid;
 

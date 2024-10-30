@@ -10,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MetricResetRqDto {
+public class MetricResetRqDTO {
 
     @NotBlank
     private String uid;

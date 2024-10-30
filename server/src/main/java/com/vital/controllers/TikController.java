@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vital.dto.ResponseDto;
+import com.vital.dto.ResponseDTO;
 import com.vital.dto.TikDTO;
 import com.vital.entities.TikEntity;
 import com.vital.mappers.TikMapper;
@@ -23,31 +23,31 @@ public class TikController {
     final TikMapper tikMapper;
 
     @PostMapping("/add")
-    public ResponseDto tikAdd(@RequestBody @Valid TikDTO tikDto) {
+    public ResponseDTO tikAdd(@RequestBody @Valid TikDTO tikDto) {
 
         TikEntity entity = tikMapper.toEntity(tikDto);
 
         tiksRepository.save(entity);
 
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 
     @PostMapping("/archive")
-    public ResponseDto archive(@RequestBody @Valid TikDTO tikDto) {
+    public ResponseDTO archive(@RequestBody @Valid TikDTO tikDto) {
         var entity = tiksRepository.findByUidAndId(tikDto.getUid(), tikDto.getId());
         entity.setIsArchived(true);
         tiksRepository.save(entity);
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 
     @PostMapping("/update")
-    public ResponseDto update(@RequestBody @Valid TikDTO taskDto) {
+    public ResponseDTO update(@RequestBody @Valid TikDTO taskDto) {
 
         var entity = tikMapper.toEntity(taskDto);
 
         tiksRepository.save(entity);
 
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 
 }

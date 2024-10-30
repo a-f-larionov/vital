@@ -3,7 +3,7 @@ package com.vital.dto.rq;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.vital.dto.MetricaDto;
+import com.vital.dto.MetricaDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
@@ -24,5 +24,5 @@ public class TaskRqDTO {
     @Size(min = 1)
     private String title = "";
 
-    private List<MetricaDto> metrics = new ArrayList<>();
+    private List<MetricaDTO> metrics = new ArrayList<>();
 }

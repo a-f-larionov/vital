@@ -3,7 +3,7 @@ package com.vital.mappers;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.vital.dto.rq.UserRqDto;
+import com.vital.dto.rq.UserRqDTO;
 import com.vital.dto.rs.UserRsDto;
 import com.vital.entities.UserEntity;
 
@@ -11,7 +11,7 @@ import com.vital.entities.UserEntity;
 public interface UserMapper {
 
     @Mapping(target = "created", ignore = true)
-    UserEntity toEntity(UserRqDto userRqDto);
+    UserEntity toEntity(UserRqDTO userRqDto);
 
     UserRsDto toDto(UserEntity userEntity);
 }

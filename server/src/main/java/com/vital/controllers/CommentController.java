@@ -5,7 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vital.dto.ResponseDto;
+import com.vital.dto.ResponseDTO;
 import com.vital.dto.rq.CommentRqDTO;
 import com.vital.entities.CommentEntity;
 import com.vital.mappers.CommentMapper;
@@ -23,31 +23,31 @@ public class CommentController {
     final CommentMapper commentMapper;
 
     @PostMapping("/add")
-    public ResponseDto tikAdd(@RequestBody @Valid CommentRqDTO tikDto) {
+    public ResponseDTO tikAdd(@RequestBody @Valid CommentRqDTO tikDTO){
 
-        CommentEntity entity = commentMapper.toEntity(tikDto);
+        CommentEntity entity = commentMapper.toEntity(tikDTO);
 
         commentRepository.save(entity);
 
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 
     @PostMapping("/archive")
-    public ResponseDto archive(@RequestBody @Valid CommentRqDTO tikDto) {
-        var entity = commentRepository.findByUidAndId(tikDto.getUid(), tikDto.getId());
+    public ResponseDTO archive(@RequestBody @Valid CommentRqDTO tikDTO) {
+        var entity = commentRepository.findByUidAndId(tikDTO.getUid(), tikDTO.getId());
         entity.setIsArchived(true);
         commentRepository.save(entity);
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 
     @PostMapping("/update")
-    public ResponseDto update(@RequestBody @Valid CommentRqDTO taskDto) {
+    public ResponseDTO update(@RequestBody @Valid CommentRqDTO taskDTO) {
 
-        var entity = commentMapper.toEntity(taskDto);
+        var entity = commentMapper.toEntity(taskDTO);
 
         commentRepository.save(entity);
 
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 
 }

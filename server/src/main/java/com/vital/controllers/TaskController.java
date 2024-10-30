@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vital.dto.ResponseDto;
-import com.vital.dto.rq.MetricResetRqDto;
+import com.vital.dto.ResponseDTO;
+import com.vital.dto.rq.MetricResetRqDTO;
 import com.vital.dto.rq.TaskArchiveDTO;
-import com.vital.dto.rq.TaskListRqDTo;
+import com.vital.dto.rq.TaskListRqDTO;
 import com.vital.dto.rq.TaskRqDTO;
 import com.vital.dto.rs.TaskRsDTO;
 import com.vital.entities.TaskEntity;
@@ -41,13 +41,13 @@ public class TaskController {
     final TikMapper tikMapper;
 
     @PostMapping("/add")
-    public ResponseDto add(@RequestBody @Valid TaskRqDTO taskRqDto) {
+    public ResponseDTO add(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
         return updateOrAdd(taskRqDto);
     }
 
     @PostMapping("/update")
-    public ResponseDto update(@RequestBody @Valid TaskRqDTO taskRqDto) {
+    public ResponseDTO update(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
         if (taskRqDto.getId() == null) {
             throw new RuntimeException("Id required");
@@ -56,7 +56,7 @@ public class TaskController {
         return updateOrAdd(taskRqDto);
     }
 
-    private ResponseDto updateOrAdd(@Valid TaskRqDTO taskRqDto) {
+    private ResponseDTO updateOrAdd(@Valid TaskRqDTO taskRqDto) {
         var entity = taskMapper.toEntity(taskRqDto);
 
         // @todo move it to mapper
@@ -66,19 +66,19 @@ public class TaskController {
 
         taskRepository.save(entity);
 
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 
     @PostMapping("/archive")
-    public ResponseDto archive(@RequestBody @Valid TaskArchiveDTO taskDTO) {
+    public ResponseDTO archive(@RequestBody @Valid TaskArchiveDTO taskDTO) {
         var entity = taskRepository.findByUidAndId(taskDTO.getUid(), taskDTO.getId());
         entity.setIsArchived(true);
         taskRepository.save(entity);
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 
     @PostMapping("/list")
-    public List<TaskRsDTO> list(@RequestBody @Valid TaskListRqDTo taskListRqDTo) {
+    public List<TaskRsDTO> list(@RequestBody @Valid TaskListRqDTO taskListRqDTo) {
 
         List<TaskEntity> tasks = taskRepository.findByUidAndIsArchivedFalse(taskListRqDTo.getUid());
 
@@ -96,7 +96,7 @@ public class TaskController {
     }
 
     @PostMapping("/metric/reset")
-    public ResponseDto metricReset(@RequestBody @Valid MetricResetRqDto rqDto) {
+    public ResponseDTO metricReset(@RequestBody @Valid MetricResetRqDTO rqDto) {
 
         var tikList = tiksRepository.findAllByUidAndTidAndDatetimeAfterAndIsArchivedFalse(
                 rqDto.getUid(),
@@ -114,6 +114,6 @@ public class TaskController {
             tiksRepository.save(tik);
         });
 
-        return new ResponseDto("OK");
+        return new ResponseDTO("OK");
     }
 }

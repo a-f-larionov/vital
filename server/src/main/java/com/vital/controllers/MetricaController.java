@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vital.dto.rs.MetricaTemplateRsDto;
+import com.vital.dto.rs.MetricaTemplateRsDTO;
 import com.vital.mappers.MetricaTemplateMapper;
 import com.vital.repositories.MetricaTemplateRepository;
 
@@ -21,11 +21,11 @@ public class MetricaController {
     private final MetricaTemplateMapper metricaTemplateMapper;
 
     @GetMapping("/list-templates")
-    public List<MetricaTemplateRsDto> listTemplates(){
+    public List<MetricaTemplateRsDTO> listTemplates(){
 
         var list = metricaTemplateRepository.findAll();
 
-        return metricaTemplateMapper.toDto(list);
+        return metricaTemplateMapper.toDTO(list);
     }
 
 }

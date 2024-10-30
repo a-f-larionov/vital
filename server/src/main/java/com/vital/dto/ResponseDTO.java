@@ -1,15 +1,13 @@
 package com.vital.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 @Setter
 @Getter
-public class ResponseDto {
+@AllArgsConstructor
+public class ResponseDTO {
 
-    private String status;
-
-    public ResponseDto(String status) {
-        this.status = status;
-    }
+    private String status;    
 }
