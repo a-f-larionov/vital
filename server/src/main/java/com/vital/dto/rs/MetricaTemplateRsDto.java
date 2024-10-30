@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 public class MetricaTemplateRsDTO {
 
+
     private String id;
 
     @NotNull
