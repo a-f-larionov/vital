@@ -12,7 +12,7 @@ import MetricElement from './MetricElement';
 
 function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
     if (!task.metrics) task.metrics = [];
-    if (!task.tiks) task.tiks = [];
+
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [showMetrics, setShowMetrics] = React.useState(task.metrics.length == 0 ? 1 : task.metrics.length);
     const views = [
@@ -32,31 +32,37 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         setDialogOpen(false);
     }
 
-    function dialogSaveHandler(title, metricsData) {
+    function dialogSaveHandler(formTitle, formMetrics) {
         if (isNew) {
             task.metrics = [];
-            task.tiks = [];
+            task.id = crypto.randomUUID();
         }
 
-        task.title = title;
+        task.title = formTitle;
 
-        metricsData.forEach((data, index) => {
-            let metricaTemplate = metricTemplates.find(m => { return m.id === data.templateId });
+        formMetrics.forEach((formMetric, index) => {
+            let metricTemplate = metricTemplates.find(m => { return m.id === formMetric.templateId });
 
-            task.metrics[index] = {
-                id: !task.metrics[index] ? crypto.randomUUID() : task.metrics[index].id,
-                sort: index,
-                title: metricaTemplate.title,
-                viewCode: data.viewCode,
-                templateId: data.templateId,
-                shortTitle: metricaTemplate.shortTitle,
-                icon: metricaTemplate.icon,
-                typeCode: metricaTemplate.typeCode,
-                inputCode: metricaTemplate.inputCode,
-            };
+            if (!task.metrics[index]) {
+                task.metrics[index] = {};
+            }
+
+            task.metrics[index].id = task.metrics[index].id ? task.metrics[index].id : crypto.randomUUID();
+            task.metrics[index].tiks = task.metrics[index].tiks ? task.metrics[index].tiks : [];
+            task.metrics[index].taskId = task.id;
+            task.metrics[index].sort = index;
+
+            task.metrics[index].templateId = formMetric.templateId;
+            task.metrics[index].viewCode = formMetric.viewCode;
+            task.metrics[index].typeCode = metricTemplate.typeCode;
+            task.metrics[index].inputCode = metricTemplate.inputCode;
+            task.metrics[index].title = metricTemplate.title;
+            task.metrics[index].shortTitle = metricTemplate.shortTitle;
+            task.metrics[index].icon = metricTemplate.icon;
         });
+        task.metrics = task.metrics.filter((metric, index) => { return index < formMetrics.length });
 
-        console.log(task);
+
         if (isNew) {
             TaskManager.add(task, tasks, setTasks);
         } else {
@@ -79,17 +85,17 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     const formData = new FormData(event.currentTarget);
                     const formJson = Object.fromEntries(formData.entries());
 
-                    const title = formJson.title;
-                    var metricsData = [];
+                    const formTitle = formJson.title;
+                    var formMetrics = [];
                     for (var i = 0; i < showMetrics; i++) {
                         if (formJson['templateId_' + i]) {
-                            metricsData[i] = {
+                            formMetrics[i] = {
                                 templateId: formJson['templateId_' + i],
                                 viewCode: formJson['viewCode_' + i]
                             };
                         }
                     }
-                    dialogSaveHandler(title, metricsData);
+                    dialogSaveHandler(formTitle, formMetrics);
                 },
             }}
         >
@@ -108,11 +114,11 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                         /** elIndex == metrica.sort
                          * sort == index
                         */
-                        return <MetricElement elIndex={i} metrica={task.metrics[i]} metricTemplates={metricTemplates} views={views} />;
+                        return <MetricElement key={i} elIndex={i} metrica={task.metrics[i]} metricTemplates={metricTemplates} views={views} />;
                     })}
 
                     <Button onClick={() => { setShowMetrics(showMetrics + 1); }}>+ Add</Button>
-                    <Button onClick={() => { setShowMetrics(Math.max(showMetrics - 1, 1)); }}>+ Remove</Button>
+                    <Button onClick={() => { setShowMetrics(Math.max(showMetrics - 1, 1)); }}>- Remove</Button>
 
 
                     {/* <Grid2 size={3} >Материалы:</Grid2>

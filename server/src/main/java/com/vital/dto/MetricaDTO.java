@@ -5,11 +5,13 @@ import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
 @Getter
 @Setter
+@Builder
 public class MetricaDTO {
 
     private String id;
@@ -17,6 +19,7 @@ public class MetricaDTO {
     @NotNull
     private Long sort;
 
+    @NotNull
     private String taskId;
 
     @NotBlank

@@ -6,6 +6,47 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Main",
+            "request": "launch",
+            "mainClass": "com.vital.Main",
+            "projectName": "vp"
+        },
+        {
+            "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "com.vital.controllers.Test",
+            "projectName": "vp"
+        },
+        {
+            "type": "java",
+            "name": "Scratch",
+            "request": "launch",
+            "mainClass": "com.example.demo.Scratch",
+            "projectName": "vp"
+        },
+        {
+            "type": "java",
+            "name": "J",
+            "request": "launch",
+            "mainClass": "com.vital.J",
+            "projectName": "vp"
+        },
+        {
+            "type": "java",
+            "name": "Java",
+            "request": "launch",
+            "mainClass": "com.vital.Java",
+            "projectName": "vp"
+        },
+        {
+            "type": "java",
+            "name": "Java",
+            "request": "launch",
+            "mainClass": "Java"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

@@ -7,19 +7,22 @@ import com.vital.dto.MetricaDTO;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
 @Setter
 @Getter
+@Builder
+@AllArgsConstructor
 public class TaskRqDTO {
 
     @NotBlank
-    private String uid;
-
     private String id;
+
+    @NotBlank
+    private String uid;
 
     @Size(min = 1)
     private String title = "";

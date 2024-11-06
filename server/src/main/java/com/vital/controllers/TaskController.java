@@ -2,10 +2,8 @@ package com.vital.controllers;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
+import java.util.UUID;
 
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -43,29 +41,25 @@ public class TaskController {
     @PostMapping("/add")
     public ResponseDTO add(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
-        return updateOrAdd(taskRqDto);
+        /**
+         * Сохранение всех полей task.id,uid,title, (created is auto field), isArhive = false
+         * Сохранние вложенных метрик всех полей
+         * Тикс не трогаем
+         */
+        var entity = taskMapper.toEntity(taskRqDto);
+
+        taskRepository.save(entity);
+
+        return new ResponseDTO("OK");
     }
 
     @PostMapping("/update")
     public ResponseDTO update(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
-        if (taskRqDto.getId() == null) {
-            throw new RuntimeException("Id required");
-        }
+        var taskEntity = taskRepository.findByUidAndId(taskRqDto.getUid(), taskRqDto.getId());
+        taskMapper.toUpdate(taskEntity, taskRqDto);
 
-        return updateOrAdd(taskRqDto);
-    }
-
-    private ResponseDTO updateOrAdd(@Valid TaskRqDTO taskRqDto) {
-        var entity = taskMapper.toEntity(taskRqDto);
-
-        // @todo move it to mapper
-        entity.getMetrics().forEach(m -> {
-            m.setTaskId(taskRqDto.getId());
-        });
-
-        taskRepository.save(entity);
-
+        taskRepository.save(taskEntity);
         return new ResponseDTO("OK");
     }
 
@@ -82,37 +76,36 @@ public class TaskController {
 
         List<TaskEntity> tasks = taskRepository.findByUidAndIsArchivedFalse(taskListRqDTo.getUid());
 
-        List<TikEntity> tiks = tiksRepository.findAllByUidAndIsArchivedFalse(taskListRqDTo.getUid());
-
-        Map<String, List<TikEntity>> groupedTiks = tiks.stream()
-                .collect(Collectors.groupingBy(TikEntity::getTid));
-
         return tasks.stream()
-                .map(task -> {
-                    List<TikEntity> tiks2 = groupedTiks.getOrDefault(task.getId(), new ArrayList<>());
-                    return taskMapper.toDTO(task, tiks2);
-                })
+                .map(taskMapper::toDTO)
                 .toList();
     }
 
     @PostMapping("/metric/reset")
     public ResponseDTO metricReset(@RequestBody @Valid MetricResetRqDTO rqDto) {
 
-        var tikList = tiksRepository.findAllByUidAndTidAndDatetimeAfterAndIsArchivedFalse(
+        var tikList = tiksRepository.findAllByUidAndTidAndMidAndDatetimeAfterAndIsArchivedFalse(
                 rqDto.getUid(),
                 rqDto.getTaskId(),
-                Instant.now().truncatedTo(ChronoUnit.DAYS));
+                rqDto.getMetricaId(),
+                rqDto.getDatetimeFrom());
 
         tikList.forEach(tik -> {
-            switch (rqDto.getMIndex()) {
-                case 1 -> tik.setValue(0L);
-                default -> tik.setValue(tik.getValue());
-            }
-        });
-
-        tikList.forEach((tik) -> {
+            tik.setValue(0L);
             tiksRepository.save(tik);
         });
+
+        if (tikList.isEmpty()) {
+            tiksRepository.save(new TikEntity(
+                    UUID.randomUUID().toString(),
+                    rqDto.getMetricaId(),
+                    rqDto.getUid(),
+                    rqDto.getTaskId(),
+                    null,
+                    false,
+                    Instant.now(),
+                    0L));
+        }
 
         return new ResponseDTO("OK");
     }

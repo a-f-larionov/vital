@@ -18,14 +18,12 @@ UserManager.register = function (googleEmail, picture, setUserProfile) {
         googleEmail: googleEmail,
         picture: picture
     }).then((r) => {
-        console.log(r);
         let data = {
             id: r.id,
             picture: r.picture,
         };
         localStorage.setItem('userProfile', JSON.stringify(data));
         setUserProfile(data);
-        console.log(data);
         UserManager.data = data;
     });
 }

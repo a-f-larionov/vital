@@ -15,9 +15,10 @@ public interface TiksRepository extends PagingAndSortingRepository<TikEntity, St
 
     public List<TikEntity> findAllByUidAndIsArchivedFalse(String uid);
 
-    public List<TikEntity> findAllByUidAndTidAndDatetimeAfterAndIsArchivedFalse(
+    public List<TikEntity> findAllByUidAndTidAndMidAndDatetimeAfterAndIsArchivedFalse(
             String uid,
             String tid,
+            String mid,
             Instant datetime);
 
     public TikEntity findByUidAndId(String uid, String id);

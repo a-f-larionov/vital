@@ -3,7 +3,6 @@ package com.vital.dto.rs;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.vital.dto.MetricaDTO;
 import com.vital.dto.TikDTO;
 
@@ -27,6 +26,4 @@ public class TaskRsDTO {
     private String title = "";
 
     private List<MetricaDTO> metrics;
-
-    private List<TikDTO> tiks = new ArrayList<>();
 }

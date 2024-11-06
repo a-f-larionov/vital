@@ -40,7 +40,7 @@ function TaskMenu({ task, tasks, setTasks }) {
         <ClickAwayListener onClickAway={menuHandleClose}>
             <Box sx={{ minWidth: 0 }}>
 
-                <Box >
+                <Box>
 
                     <Popper
                         id="basic-menu"
@@ -60,14 +60,15 @@ function TaskMenu({ task, tasks, setTasks }) {
 
                     </Popper>
 
-                    <IconButton
+                    <IconButton sx={{padding:0}}
                         id="basic-button"
                         aria-controls={menuOpen ? 'basic-menu' : undefined}
                         aria-expanded={menuOpen ? 'true' : undefined}
                         aria-haspopup="true"
+                        size="small"
                         onClick={menuHandleClick}
                     >
-                        <MoreVertIcon />
+                        <MoreVertIcon size="small"/>
                     </IconButton>
 
                     <TaskDialog setOpenCallback={(handler) => { doOpenDialog = handler }}

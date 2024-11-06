@@ -38,4 +38,4 @@ select
         tmplt.type_code, tmplt.input_code, task.v_code1
 FROM task_entity  task inner join metrica_template_entity tmplt on task.m1_id  = tmplt.id;
 
-update tik_entity set mid = (select id from metrica_entity where tik_entity.tid = metrica_entity.task_id);
+    update tik_entity set mid = (select id from metrica_entity where tik_entity.tid = metrica_entity.task_id);

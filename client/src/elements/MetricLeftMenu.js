@@ -5,8 +5,15 @@ import InputMetric from './InputMetric';
 function MetricLeftMenu({ task, tasks, setTasks }) {
     return (
         <Box>
-            <br></br>
-            <InputMetric mIndex={1}  task={task} tasks={tasks} setTasks={setTasks} />
+            <br />
+            {task.metrics.map(metrica => {
+                return (
+                    <Box key={metrica.id}>
+                        <InputMetric metrica={metrica} task={task} tasks={tasks} setTasks={setTasks} />
+                        {metrica.icon}
+                    </Box>
+                )
+            })}
         </Box>
     );
 }

@@ -3,15 +3,15 @@ import { Button } from "antd";
 //import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
 import TaskManager from '../managers/TaskManager';
 
-function InputIncrementer({ mIndex, task, tasks, setTasks }) {
-    let m = task.metrics[0];
+function InputIncrementer({ metrica, task, tasks, setTasks }) {
+    let m = metrica;
 
     function onIncrementClick({ task, tasks, setTasks }) {
-        
-         TaskManager.increment(task, tasks, setTasks, 1, 0, 0, 0);
+
+        TaskManager.increment(task, tasks, setTasks, metrica, 1);
     }
     return (
-        <Button size="default" shape="circle" icon={<PlusOneIcon fontSize="small"/>}
+        <Button size="default" shape="circle" icon={<PlusOneIcon fontSize="small" />}
             onClick={() => onIncrementClick({ task, tasks, setTasks })} />
     );
 }

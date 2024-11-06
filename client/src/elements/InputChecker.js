@@ -2,22 +2,22 @@ import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button } from "antd";
 import TaskManager from '../managers/TaskManager';
 
-function InputChecker({ mIndex, task, tasks, setTasks }) {
-    let m = task.metrics[0];
+function InputChecker({ metrica: metric, task, tasks, setTasks }) {
 
     function onIncrementClick() {
-        TaskManager.increment(task, tasks, setTasks, 1, 0, 0, 0);
+        TaskManager.increment(task, tasks, setTasks, metric, 1);
     }
 
     function onCheckedClick() {
-        window.task = task;
-        let count = task.tiks.reduce((r, t) => { return r + t['m' + mIndex]; }, 0);
-        if (count) {
-            // if(alert()){
-            //     return;
-            // }
-        }
-        TaskManager.resetMetric(task, tasks, setTasks, mIndex);
+
+        //let count = task.tiks.reduce((r, t) => { return r + metric.value; }, 0);
+        // if (count) {
+        //     // if(alert()){
+        //     //     return;
+            
+        //     // }
+        // }
+        TaskManager.resetMetric(task, tasks, setTasks, metric);
     }
 
     //✅

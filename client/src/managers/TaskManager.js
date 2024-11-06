@@ -12,7 +12,6 @@ var apiTiks = apiUrl + "/tiks";
 function TaskManager() {
 }
 TaskManager.c = 0;
-console.log("!!!TASK MANAGER!!!", TaskManager.c++);
 
 TaskManager.lastOne = null;
 TaskManager.rememberTheLastOne = function (task, tik) {
@@ -39,7 +38,7 @@ TaskManager.getTable = function (tasks) {
             )
         });
 
-    // column headerds
+    // column headers
     out.cols = dates.map((date) => {
         return { datetime: date };
     });
@@ -50,14 +49,13 @@ TaskManager.getTable = function (tasks) {
         return {
             task: task,
             cells: task.metrics.map((metric) => {
-                let shortRows = [];
+                let row = [];
 
-                shortRows = dates.map((date) => {
+                row = dates.map((date) => {
                     let title = '';
-                    let thisDay = task.tiks
+                    let thisDay = metric.tiks
                         .filter((tik) => {
-                            return new Date(tik.datetime * 1000).getDate() ===
-                                date.getDate();
+                            return new Date(tik.datetime * 1000).getDate() === date.getDate();
                         });
 
                     let sum = thisDay
@@ -81,7 +79,7 @@ TaskManager.getTable = function (tasks) {
                     return { title: title };
                 });
 
-                return shortRows;
+                return row;
             })
         }
     })
@@ -89,7 +87,7 @@ TaskManager.getTable = function (tasks) {
     return out;
 }
 
-TaskManager.tikCreate = function (task, tasks, setTasks, value) {
+TaskManager.tikCreate = function (task, tasks, setTasks, metrica, value) {
 
     value = value !== undefined ? value : 0;
 
@@ -99,7 +97,7 @@ TaskManager.tikCreate = function (task, tasks, setTasks, value) {
         id: crypto.randomUUID(),
         uid: UserManager.getUid(),
         tid: task.id,
-        mid: task.metrics[0].id,
+        mid: metrica.id,
 
         datetime: newDateTime,
 
@@ -109,14 +107,19 @@ TaskManager.tikCreate = function (task, tasks, setTasks, value) {
     };
     let lastOne = TaskManager.getLastOne();
 
-    if (lastOne && lastOne.tik.tid === newTik.tid && lastOne.tik.datetime + 10 > newDateTime) {
+    // Magic logic.
+    if (lastOne && lastOne.tik.mid === newTik.mid && lastOne.tik.datetime + 10 > newDateTime) {
 
         lastOne.tik.value += newTik.value;
 
         lastOne.tik.needUpdate = true;
     } else {
 
-        task.tiks.push(newTik);
+        console.log(newTik);
+        console.log(metrica);
+        console.log(metrica.tiks);
+        window.mmm = metrica;
+        metrica.tiks.push(newTik);
         TaskManager.rememberTheLastOne(task, newTik);
     }
 
@@ -135,28 +138,28 @@ TaskManager.tikUpdate = function (tik, tasks, setTasks) {
     this.flush(tasks, setTasks);
 }
 
-TaskManager.commitNumber = function (task, tasks, setTasks, value) {
-    TaskManager.tikCreate(task, tasks, setTasks, value);
+TaskManager.commitNumber = function (task, tasks, setTasks, metrica, value) {
+    TaskManager.tikCreate(task, tasks, setTasks, metrica, value);
 };
 
-TaskManager.increment = function (task, tasks, setTasks, value) {
-    TaskManager.tikCreate(task, tasks, setTasks, value);
+TaskManager.increment = function (task, tasks, setTasks, metrica, value) {
+    TaskManager.tikCreate(task, tasks, setTasks, metrica, value);
 };
 
-TaskManager.resetMetric = function (task, tasks, setTasks, mIndex) {
+TaskManager.resetMetric = function (task, tasks, setTasks, metrica) {
     fetch_(apiTasks + '/metric/reset', 'post', {
         uid: UserManager.getUid(),
         taskId: task.id,
-        mIndex: mIndex
-    });
-
-    TaskManager.load(tasks, setTasks);
+        metricaId: metrica.id,
+        datetimeFrom: new Date(new Date().toDateString()).getTime() / 1000
+    }).then(() => {
+        TaskManager.load(tasks, setTasks);
+    })
 }
 
 TaskManager.add = function (task, tasks, setTasks) {
-    task.id = crypto.randomUUID();
+
     task.uid = UserManager.getUid();
-    if (!task.tiks) task.tiks = [];
     if (!task.metrics) task.metrics = [];
     task.needFlush = true;
 
@@ -208,40 +211,41 @@ TaskManager.flush = function (tasks, setTasks) {
                         task.needUpdate = false;
                     }));
         }
-        task.tiks.forEach((tik) => {
-            if (tik.needFlush === true) {
-                prs.push(
-                    fetch_(apiTiks + "/add", 'post', tik)
-                        .then((r) => {
-                            if (r === null) return;
-                            tik.needFlush = false;
-                        }));
-            }
-            if (tik.needArchive === true) {
-                prs.push(
-                    fetch_(apiTiks + '/archive', 'post', tik)
-                        .then((r) => {
-                            if (r === null) return;
-                            tik.needArchive = false;
-                            task.tiks = task.tiks.filter(t => t.id !== tik.id);
-                        }));
-            }
-            if (tik.needUpdate === true) {
-                prs.push(
-                    fetch_(apiTiks + '/update', 'post', tik)
-                        .then((r) => {
-                            if (r === null) return;
-                            task.needUpdate = false;
-                        }));
-            }
-        });
+
+        task.metrics.forEach(
+            (metric) =>
+                metric.tiks.forEach((tik) => {
+                    if (tik.needFlush === true) {
+                        prs.push(
+                            fetch_(apiTiks + "/add", 'post', tik)
+                                .then((r) => {
+                                    if (r === null) return;
+                                    tik.needFlush = false;
+                                }));
+                    }
+                    if (tik.needArchive === true) {
+                        prs.push(
+                            fetch_(apiTiks + '/archive', 'post', tik)
+                                .then((r) => {
+                                    if (r === null) return;
+                                    tik.needArchive = false;
+                                    metric.tiks = metric.tiks.filter(t => t.id !== tik.id);
+                                }));
+                    }
+                    if (tik.needUpdate === true) {
+                        prs.push(
+                            fetch_(apiTiks + '/update', 'post', tik)
+                                .then((r) => {
+                                    if (r === null) return;
+                                    tik.needUpdate = false;
+                                }));
+                    }
+                }));
     });
 
     Promise.all(prs).then((a) => {
         localStorage.tasks = JSON.stringify(tasks);
         setTasks([...tasks]);
-        console.log(tasks);
-
 
         setTimeout(() => {
             TaskManager.flushInProgress = false;

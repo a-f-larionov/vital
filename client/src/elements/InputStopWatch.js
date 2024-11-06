@@ -5,11 +5,11 @@ import { Button } from 'antd';
 import React from 'react';
 import TaskManager from '../managers/TaskManager';
 
-function InputStopWatch({ mIndex, task, tasks, setTasks }) {
-    let m  = task.metrics[0];
+function InputStopWatch({ metrica, task, tasks, setTasks }) {
+    let m  = metrica;
     let sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
-    console.log(m);
-    let swId = task.id + m.id + mIndex;
+   
+    let swId = task.id + m.id ;
 
     function onPlayHandler() {
         sw[swId] = { stopWatchStart: new Date().getTime() };
@@ -18,8 +18,8 @@ function InputStopWatch({ mIndex, task, tasks, setTasks }) {
     }
 
     function onStopHandler() {
-        let timer = Math.round((new Date() - sw[swId].stopWatchStart) / 1000);
-        TaskManager.commitNumber(task, tasks, setTasks, timer);
+        let seconds = Math.round((new Date() - sw[swId].stopWatchStart) / 1000);
+        TaskManager.commitNumber(task, tasks, setTasks, metrica, seconds);
         sw[swId] = null;
         localStorage.stopWatches = JSON.stringify(sw);
         TaskManager.flush(tasks, setTasks); // for redraw
@@ -62,7 +62,7 @@ function InputStopWatch({ mIndex, task, tasks, setTasks }) {
 
         return time.join(":");
     }
-    console.log(swId, sw[swId]);
+  
     if (!sw[swId]) {
         return (
             <Button size='default' icon={<PlayCircleIcon onClick={onPlayHandler} />} />

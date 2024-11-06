@@ -21,6 +21,7 @@ import {
 
 function TiksLits({ tasks, setTasks }) {
     let task = PageManager.pageParamA;
+    let metrica = PageManager.pageParamB;
 
     const [rowModesModel, setRowModesModel] = React.useState({});
 
@@ -33,7 +34,7 @@ function TiksLits({ tasks, setTasks }) {
     };
 
     const handleArchiveClick = (id) => () => {
-        TaskManager.tikArchive(task.tiks.find(tik => tik.id === id), tasks, setTasks);
+        TaskManager.tikArchive(metrica.tiks.find(tik => tik.id === id), tasks, setTasks);
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
 
@@ -41,7 +42,8 @@ function TiksLits({ tasks, setTasks }) {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true } });
     };
 
-    let rows = task.tiks;
+    let rows = metrica.tiks;
+    
     function RenderTikDateTimeEditCell({ id, field, value, colDef }) {
         const apiRef = useGridApiContext();
         return <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -106,14 +108,13 @@ function TiksLits({ tasks, setTasks }) {
                 break;
         }
 
-        console.log(column);
         columns.push(column);
     }
 
     const columns = [];
 
-    if (task.metrics[0]) {
-        columnsPushM(columns, 'value', task.metrics[0]);
+    if (metrica) {
+        columnsPushM(columns, 'value', metrica);
     }
 
     columns.push({
@@ -202,6 +203,7 @@ function TiksLits({ tasks, setTasks }) {
     return (
         <Box>
             <DataGrid
+                initialState={{ sorting: { sortModel: [{ field: 'datetime', sort: 'desc' }] } }}
                 rows={rows}
                 columns={columns}
                 editMode="row"
@@ -209,7 +211,7 @@ function TiksLits({ tasks, setTasks }) {
                 bordered
                 onRowEditStop={(a, b, c) => { console.log('onroweditstip', a, b, c); }}
                 processRowUpdate={(after, before) => {
-                    let tik = task.tiks.find(tik => tik.id === after.id);
+                    let tik = metrica.tiks.find(tik => tik.id === after.id);
                     tik.datetime = after.datetime;
                     tik.value = after.value;
                     TaskManager.tikUpdate(tik, tasks, setTasks);

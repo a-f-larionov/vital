@@ -12,17 +12,17 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
     let tableRow = 0;
 
     return (
-        <Grid2 container component={Paper} sx={{ paddingTop: 1, marginBottom: 1, marginLeft: 2, marginRight: 2 }}>
+        <Grid2 container component={Paper} sx={{ paddingTop: 0.5, marginBottom: 0.5, marginLeft: 2, marginRight: 2 }}>
 
-            <Grid2 size={1}  >
-                {task.metrics[0] ? task.metrics[0].icon : ''}
-            </Grid2>
-            <Grid2 size={10} textAlign="left">
+
+            <Grid2 size={11} textAlign="left" sx={{ padding: 0 }}>
                 &nbsp;&nbsp;&nbsp;{task.title}
             </Grid2>
-            <Grid2 size={1}>
+
+            <Grid2 size={1} sx={{ padding: 0 }}>
                 <TaskMenu task={task} tasks={tasks} setTasks={setTasks} />
             </Grid2>
+
 
 
             <Grid2 size={1} sx={{ verticalAlign: "bottom", paddingRight: 2 }}>
@@ -60,9 +60,9 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
                                 })}
                             </TableRow>
 
-                            {cells.map((shortRows) => {
+                            {cells.map((shortRow) => {
                                 return <TableRow key={tableRow++} sx={{ padding: 0, margin: 0 }} >
-                                    {shortRows.map((cell) => {
+                                    {shortRow.map((cell) => {
                                         return <TableCell
                                             key={++i}
                                             sx={{
@@ -70,7 +70,7 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
                                                 fontSize: 21, fontFamily: 'Digital-7',
                                                 lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0
                                             }}>
-                                            {cell.title}
+                                            {cell.title ? cell.title : '‎'}
                                         </TableCell>
                                     })}
                                 </TableRow>

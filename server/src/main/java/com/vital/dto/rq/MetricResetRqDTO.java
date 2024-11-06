@@ -1,10 +1,9 @@
 package com.vital.dto.rq;
 
-import org.hibernate.validator.constraints.Range;
-
-import com.fasterxml.jackson.annotation.JsonProperty;
+import java.time.Instant;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -16,8 +15,9 @@ public class MetricResetRqDTO {
     private String uid;
     @NotBlank
     private String taskId;
-
-    @Range(min = 1, max = 4)
-    @JsonProperty("mIndex")
-    private Integer mIndex;
+    @NotBlank
+    private String metricaId;
+    // Validate datetimeFrom no less then 24 hours ago
+    @NotNull
+    private Instant datetimeFrom;
 }

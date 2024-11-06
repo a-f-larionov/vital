@@ -16,7 +16,7 @@ function MetricElement({ metrica, elIndex, metricTemplates, views }) {
     return (
         <>
             <Grid2 size={3} alignContent={'center'}>
-                #{elIndex}:
+                #{elIndex + 1}:
             </Grid2>
             <Grid2 size={4}>
                 <FormControl fullWidth variant="standard" sx={{ m: 1, minWidth: 120 }}>

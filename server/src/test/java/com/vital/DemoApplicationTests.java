@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.vital;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -8,6 +8,7 @@ class DemoApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }
