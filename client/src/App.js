@@ -53,7 +53,6 @@ function App() {
         );
     } else {
 
-        //Todo many many many calls console.log(tasks);
         if (tasks === null || comments === null) {
             TaskManager.init(setTasks);
             CommentManager.init(setComments);

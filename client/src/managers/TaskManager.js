@@ -115,10 +115,6 @@ TaskManager.tikCreate = function (task, tasks, setTasks, metrica, value) {
         lastOne.tik.needUpdate = true;
     } else {
 
-        console.log(newTik);
-        console.log(metrica);
-        console.log(metrica.tiks);
-        window.mmm = metrica;
         metrica.tiks.push(newTik);
         TaskManager.rememberTheLastOne(task, newTik);
     }
