@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "Test",
+            "request": "launch",
+            "mainClass": "com.vital.Test",
+            "projectName": "vp"
+        },
+        {
+            "type": "java",
             "name": "Main",
             "request": "launch",
             "mainClass": "com.vital.Main",

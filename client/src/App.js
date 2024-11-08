@@ -1,30 +1,34 @@
 
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { AppBar, Avatar, Box, Button, Grid2, Popper, Snackbar, Toolbar, Typography } from "@mui/material";
+import { AppBar, Avatar, Box, Button, Grid2, Toolbar, Typography } from "@mui/material";
 import CircularProgress from '@mui/material/CircularProgress';
+import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from "@mui/material/Stack";
+import Switch from '@mui/material/Switch';
 import { GoogleLogin } from '@react-oauth/google';
 import { jwtDecode } from "jwt-decode";
 import React, { useState } from "react";
+import CommitedSnakbar from './elements/CommitedSnackbar';
 import ContentPage from "./elements/ContentPage";
 import ToolAddTask from "./elements/ToolAddTask";
+import CommentManager from './managers/CommentsManager';
 import MetricaManager from './managers/MetricaManager';
 import PageManager from './managers/PageManager';
 import TaskManager from "./managers/TaskManager";
 import UserManager from './managers/UserManager';
-import CommentManager from './managers/CommentsManager';
-import CommitedSnakbar from './elements/CommitedSnackbar';
 
 function App() {
     const [tasks, setTasks] = useState(null);
+    const [collapsAll, setCollapsAll] = useState(false);
     const [comments, setComments] = useState(null);
     const [userProfile, setUserProfile] = useState(() => {
         let userProfile = localStorage.getItem('userProfile');
         return userProfile ? JSON.parse(userProfile) : {};
     });
     const [currentPage, setCurrentPage] = useState(PageManager.PAGE_MAIN);
+    const [collapsed, setCollapsed] = useState({});
     const [metrica, setMetrica] = useState([]);
-    PageManager.init(currentPage, setCurrentPage);
+    PageManager.init(currentPage, setCurrentPage, collapsed, setCollapsed);
     UserManager.setUserProfile(userProfile);
     MetricaManager.load(metrica, setMetrica);
 
@@ -98,6 +102,15 @@ function App() {
                                 <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                                     {PageManager.pageTitle}
                                 </Typography>
+
+                                <FormControlLabel
+                                    control={<Switch checked={collapsAll}
+                                        onChange={() => { 
+                                            PageManager.collapsAll(tasks, setTasks, !collapsAll);
+                                            setCollapsAll(!collapsAll);
+                                        }} />}
+                                    label="Show"
+                                />
                                 <Button color="inherit">
                                     <Avatar src={UserManager.getPicture()}></Avatar>
                                 </Button>

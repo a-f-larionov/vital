@@ -1,5 +1,5 @@
-function PageManager() {
 
+function PageManager() {
 }
 
 PageManager.PAGE_MAIN = 1;
@@ -9,9 +9,11 @@ PageManager.pageParamB = undefined
 PageManager.currentPage = undefined;
 PageManager.pageTitle = "Vital Manager";
 
-PageManager.init = function (currentPage, setCurrentPage) {
+PageManager.init = function (currentPage, setCurrentPage, collapsed, setCollapsed) {
     PageManager.currentPage = currentPage;
     PageManager.setCurrentPage = setCurrentPage;
+    PageManager.collapsed = collapsed;
+    PageManager.setCollapsed = setCollapsed;
 }
 
 PageManager.setPage = function (pageId, title, pageParamA, pageParamB) {
@@ -23,6 +25,22 @@ PageManager.setPage = function (pageId, title, pageParamA, pageParamB) {
 
 PageManager.isMain = function () {
     return PageManager.currentPage === PageManager.PAGE_MAIN;
+}
+
+PageManager.isCollapsed = function (taskId) {
+    console.log(taskId);
+    return PageManager.collapsed[taskId] ? PageManager.collapsed[taskId] : false;
+}
+PageManager.collapsAll = function (tasks, setTasks, collapsAll) {
+    tasks.forEach(task => {
+        task.isCollapsed = collapsAll;
+    });
+    setTasks([...tasks]);
+}
+
+PageManager.toggleCollapse = function (task, tasks, setTasks) {
+    task.isCollapsed = task.isCollapsed !== undefined ? !task.isCollapsed : false;
+    setTasks([...tasks]);
 }
 
 export default PageManager;
