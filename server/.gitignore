@@ -21,7 +21,7 @@ target/
 
 ### NetBeans ###
 /nbproject/private/
-/nbbuild/
+/nbbuild/ 
 /dist/
 /nbdist/
 /.nb-gradle/
@@ -33,3 +33,5 @@ build/
 .vscode/
 
 *.env
+
+server\src\main\java\com\vital\Test.java

@@ -2,7 +2,7 @@ rem @echo off
 
 cd ..
 cd client
-call npm run build
+rem call npm run build
 
 cd ..
 cd server
