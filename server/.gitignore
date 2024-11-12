@@ -34,5 +34,4 @@ build/
 
 *.env
 
-server/src/main/java/com/vital/Test.java
 **/Scratch*.java
