@@ -156,8 +156,6 @@ TaskManager.resetMetric = function (task, tasks, setTasks, metrica) {
 
 TaskManager.add = function (task, tasks, setTasks) {
 
-    task.uid = UserManager.getUid();
-    if (!task.metrics) task.metrics = [];
     task.needFlush = true;
 
     tasks.push(task);

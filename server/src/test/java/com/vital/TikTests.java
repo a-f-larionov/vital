@@ -6,7 +6,6 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.Random;
 import java.util.UUID;
-import java.util.random.RandomGenerator;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,16 +13,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import com.vital.controllers.TikController;
 import com.vital.dto.TikDTO;
-import com.vital.dto.rq.TaskRqDTO;
-import com.vital.entities.TaskEntity;
 import com.vital.entities.TikEntity;
-import com.vital.repositories.TaskRepository;
 import com.vital.repositories.TiksRepository;
 
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
-// @DataJpaTest
 @Transactional
 class TikTests {
 

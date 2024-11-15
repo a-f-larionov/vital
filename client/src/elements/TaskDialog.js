@@ -9,6 +9,7 @@ import React from 'react';
 import MetricaManager from '../managers/MetricaManager';
 import TaskManager from '../managers/TaskManager';
 import MetricElement from './MetricElement';
+import UserManager from '../managers/UserManager';
 
 function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
     if (!task.metrics) task.metrics = [];
@@ -61,7 +62,8 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
             task.metrics[index].icon = metricTemplate.icon;
         });
         task.metrics = task.metrics.filter((metric, index) => { return index < formMetrics.length });
-
+        task.uid = UserManager.getUid();
+        task.created = (new Date().getTime()) / 1000;
 
         if (isNew) {
             TaskManager.add(task, tasks, setTasks);

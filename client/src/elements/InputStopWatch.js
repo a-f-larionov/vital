@@ -6,10 +6,9 @@ import React from 'react';
 import TaskManager from '../managers/TaskManager';
 
 function InputStopWatch({ metrica, task, tasks, setTasks }) {
-    let m  = metrica;
     let sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
    
-    let swId = task.id + m.id ;
+    let swId = task.id + metrica.id ;
 
     function onPlayHandler() {
         sw[swId] = { stopWatchStart: new Date().getTime() };
