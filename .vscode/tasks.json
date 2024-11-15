@@ -1,0 +1,32 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+
+		{
+			"label": "In Docker run",
+			"type": "shell",
+			"dependsOn": [
+				"Npm start",
+				"Docker start"
+			]
+		},
+		{
+			"label": "Npm start",
+			"type": "npm",
+			"script": "start",
+			"path": "client",
+			"problemMatcher": [],
+			"detail": "react-scripts start"
+		},
+		{
+			"label": "Docker start",
+			"type": "shell",
+			"command": "cd server && docker compose up -d",
+		},
+		{
+			"label": "Deploy",
+			"type": "shell",
+			"command": "cd server && deploy.bat"
+		}
+	]
+}

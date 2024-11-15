@@ -2,11 +2,11 @@ rem @echo off
 
 cd ..
 cd client
-rem call npm run build
+call npm run build
 
 cd ..
 cd server
-call mvn clean package -DskipTests
+call mvn clean package
 
 ssh root@prod-server-2.ru "rm -Rf /var/job/vp/client"
 ssh root@prod-server-2.ru "mkdir /var/job/vp/client"

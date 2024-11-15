@@ -11,4 +11,6 @@ public interface TikMapper {
 
     @Mapping(target = "isArchived", ignore = true)
     TikEntity toEntity(TikDTO dto);
+    
+    TikDTO toDTO(TikEntity tikEntity);
 }

@@ -1,7 +1,6 @@
 package com.vital;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.within;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -22,7 +21,6 @@ import com.vital.repositories.TaskRepository;
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
-// @DataJpaTest
 @Transactional
 class TaskTests {
 
@@ -164,7 +162,7 @@ class TaskTests {
 		assertThat(entity.getUid()).isEqualTo(rqDto.getUid());
 		assertThat(entity.getTitle()).isEqualTo(rqDto.getTitle());
 		assertThat(entity.getIsArchived()).isFalse();
-		assertThat(entity.getCreated()).isCloseTo(Instant.now(), within(30L, ChronoUnit.SECONDS));
+		assertThat(entity.getCreated()).isEqualTo(rqDto.getCreated());
 	}
 
 	private TaskRqDTO buildRqDto() {
@@ -172,6 +170,7 @@ class TaskTests {
 				.id(UUID.randomUUID().toString())
 				.uid(UUID.randomUUID().toString())
 				.title("title-001" + UUID.randomUUID().toString())
+				.created(Instant.now().minus(10, ChronoUnit.DAYS))
 				.build();
 	}
 

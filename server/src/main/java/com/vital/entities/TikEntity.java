@@ -36,7 +36,6 @@ public class TikEntity {
 
     private Boolean isArchived = false;
 
-    @CreationTimestamp
     private Instant datetime;
 
     @NotNull

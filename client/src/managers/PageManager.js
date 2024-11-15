@@ -28,7 +28,6 @@ PageManager.isMain = function () {
 }
 
 PageManager.isCollapsed = function (taskId) {
-    console.log(taskId);
     return PageManager.collapsed[taskId] ? PageManager.collapsed[taskId] : false;
 }
 PageManager.collapsAll = function (tasks, setTasks, collapsAll) {

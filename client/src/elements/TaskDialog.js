@@ -111,10 +111,6 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     </Grid2>
 
                     {Array.from({ length: showMetrics }, (nothing, i) => {
-                        /** elIndex == metrica.sort
-                         * sort == index
-                        */
-                       console.log(metricTemplates);
                         return <MetricElement key={i} elIndex={i} metrica={task.metrics[i]} metricTemplates={metricTemplates} views={views} />;
                     })}
 

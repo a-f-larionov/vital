@@ -1,1 +1,2 @@
-2024-11-08  Add Collapser functional
+2024-11-08  Feature Add Collapser functional
+2024-11-13  Bugfix  fix:Collapse reset on reload tasks, shortRow cell show value by date, but igonre month and year

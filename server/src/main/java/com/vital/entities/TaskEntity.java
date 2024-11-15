@@ -37,13 +37,8 @@ public class TaskEntity {
     @Column(nullable = false)
     private String uid;
 
-    @CreationTimestamp
     private Instant created;
 
-    // Например, по дефолту hibernate при удалении связанных сущностей вначалей
-    // делает update связанной сущности, присваивая внешнему ключу значение null, а
-    // лишь потом удаляет связанную сущность. Фиксится поведение указанием
-    // updatable=false в аннотации @JoinColumn.
     private Boolean isArchived = false;
 
     @Size(min = 1)

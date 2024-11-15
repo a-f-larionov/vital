@@ -55,7 +55,8 @@ TaskManager.getTable = function (tasks) {
                     let title = '';
                     let thisDay = metric.tiks
                         .filter((tik) => {
-                            return new Date(tik.datetime * 1000).getDate() === date.getDate();
+                            return new Date(tik.datetime * 1000)
+                                .toDateString() === date.toDateString();
                         });
 
                     let sum = thisDay
@@ -263,10 +264,15 @@ TaskManager.load = function (tasks, setTasks) {
     fetch_(apiTasks + '/list', 'post', { uid: UserManager.getUid() })
         .then((r) => {
             if (r === null) {
-                // skip data from server
+                // ingnore data from server
                 setTasks(tasks);
             } else {
-
+                if (tasks) {
+                    r.forEach(serverTask => {
+                        let clientTask = tasks.find(task => task.id === serverTask.id);
+                        serverTask.isCollapsed = clientTask ? clientTask.isCollapsed : false;
+                    })
+                }
                 localStorage.tasks = JSON.stringify(r);
                 setTasks(r);
             }
