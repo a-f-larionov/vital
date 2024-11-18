@@ -16,3 +16,38 @@ function fetch_(url, method, body) {
             return r.json();
         });
 }
+
+
+function s2hms(s) {
+
+    let time = [
+        Math.floor(s / 3600), // hours
+        Math.floor(s / 60) % 60, // minutes
+        Math.floor(s % 60) // seconds
+    ];
+
+    if (time[2] < 10) {
+
+        time[2] = "0" + time[2];
+    }
+
+    time.pop();
+    if (time[0] === 0) {
+
+        time.shift();
+    } else {
+
+        if (time[1] < 10) {
+
+            time[1] = "0" + time[1];
+        }
+    }
+
+    return time.join(":");
+}
+
+
+export default {
+    fetch_: fetch_,
+    s2hms: s2hms
+}

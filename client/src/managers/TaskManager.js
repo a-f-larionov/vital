@@ -1,13 +1,14 @@
 import UserManager from "./UserManager";
+import utils from "../utils";
 
-var apiUrl = "/api";
+let apiUrl = "/api";
 if (window.location.href.search("localhost") !== -1) {
     let port = (new URLSearchParams(window.location.search)).get('port');
     port = port ? port : 8081;
     apiUrl = "http://localhost:" + port + apiUrl;
 }
-var apiTasks = apiUrl + "/tasks";
-var apiTiks = apiUrl + "/tiks";
+let apiTasks = apiUrl + "/tasks";
+let apiTiks = apiUrl + "/tiks";
 
 function TaskManager() {
 }
@@ -31,31 +32,30 @@ TaskManager.getTable = function (tasks) {
     let getCells = function (task) {
         return task.metrics.map((metric) => {
 
-            return dates.
-                map((date) => {
-                    let title = '';
-                    let valueToday = metric.tiks.filter((tik) => new Date(tik.datetime * 1000)
-                        .toDateString() === date.toDateString());
+            return dates.map((date) => {
+                let title = '';
+                let valueToday = metric.tiks.filter((tik) => new Date(tik.datetime * 1000)
+                    .toDateString() === date.toDateString());
 
-                    let sum = valueToday.reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
-                    let cnt = valueToday.length;
+                let sum = valueToday.reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
+                let cnt = valueToday.length;
 
-                    title = sum + " " + cnt;
-                    if (metric && metric.viewCode === 'checker') {
-                        if (sum === 0) {
-                            title = cnt > 0 ? "✅" : "";
-                        } else {
-                            title = sum;
-                        }
+                title = sum + " " + cnt;
+                if (metric && metric.viewCode === 'checker') {
+                    if (sum === 0) {
+                        title = cnt > 0 ? "✅" : "";
                     } else {
                         title = sum;
-                        if (title && metric && metric.typeCode === "timestamp") {
-                            title = s2hms(title) + '';
-                        }
                     }
-                    if (!title) title = '';
-                    return { title: title };
-                });
+                } else {
+                    title = sum;
+                    if (title && metric && metric.typeCode === "timestamp") {
+                        title = utils.s2hms(title) + '';
+                    }
+                }
+                if (!title) title = '';
+                return { title: title };
+            });
         })
     }
     let tasksViewData = {};
@@ -130,7 +130,7 @@ TaskManager.increment = function (task, tasks, setTasks, metrica, value) {
 };
 
 TaskManager.resetMetric = function (task, tasks, setTasks, metrica) {
-    fetch_(apiTasks + '/metric/reset', 'post', {
+    utils.fetch_(apiTasks + '/metric/reset', 'post', {
         uid: UserManager.getUid(),
         taskId: task.id,
         metricaId: metrica.id,
@@ -169,7 +169,7 @@ TaskManager.flush = function (tasks, setTasks) {
     tasks.forEach(task => {
         if (task.needFlush === true) {
             prs.push(
-                fetch_(apiTasks + '/add', 'post', task)
+                utils.fetch_(apiTasks + '/add', 'post', task)
                     .then((r) => {
                         if (r === null) return;
                         task.needFlush = false;
@@ -177,7 +177,7 @@ TaskManager.flush = function (tasks, setTasks) {
         }
         if (task.needArchive === true) {
             prs.push(
-                fetch_(apiTasks + '/archive', 'post', { uid: UserManager.getUid(), id: task.id })
+                utils.fetch_(apiTasks + '/archive', 'post', { uid: UserManager.getUid(), id: task.id })
                     .then((r) => {
                         if (r === null) return;
                         task.needArchive = false;
@@ -186,7 +186,7 @@ TaskManager.flush = function (tasks, setTasks) {
         }
         if (task.needUpdate === true) {
             prs.push(
-                fetch_(apiTasks + '/update', 'post', task)
+                utils.fetch_(apiTasks + '/update', 'post', task)
                     .then((r) => {
                         if (r === null) return;
                         task.needUpdate = false;
@@ -198,7 +198,7 @@ TaskManager.flush = function (tasks, setTasks) {
                 metric.tiks.forEach((tik) => {
                     if (tik.needFlush === true) {
                         prs.push(
-                            fetch_(apiTiks + "/add", 'post', tik)
+                            utils.fetch_(apiTiks + "/add", 'post', tik)
                                 .then((r) => {
                                     if (r === null) return;
                                     tik.needFlush = false;
@@ -206,7 +206,7 @@ TaskManager.flush = function (tasks, setTasks) {
                     }
                     if (tik.needArchive === true) {
                         prs.push(
-                            fetch_(apiTiks + '/archive', 'post', tik)
+                            utils.fetch_(apiTiks + '/archive', 'post', tik)
                                 .then((r) => {
                                     if (r === null) return;
                                     tik.needArchive = false;
@@ -215,7 +215,7 @@ TaskManager.flush = function (tasks, setTasks) {
                     }
                     if (tik.needUpdate === true) {
                         prs.push(
-                            fetch_(apiTiks + '/update', 'post', tik)
+                            utils.fetch_(apiTiks + '/update', 'post', tik)
                                 .then((r) => {
                                     if (r === null) return;
                                     tik.needUpdate = false;
@@ -245,7 +245,7 @@ TaskManager.archive = function (task, tasks, setTasks) {
 
 TaskManager.load = function (tasks, setTasks) {
 
-    fetch_(apiTasks + '/list', 'post', { uid: UserManager.getUid() })
+    utils.fetch_(apiTasks + '/list', 'post', { uid: UserManager.getUid() })
         .then((r) => {
             if (r === null) {
                 // ingnore data from server
@@ -294,52 +294,6 @@ function getDates(tasks) {
     return dates;
 }
 
-function fetch_(url, method, body) {
-
-    if (!method) method = "get";
-
-    return fetch(url, {
-        method: method,
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        body: JSON.stringify(body)
-    })
-        .catch((e) => { console.error("Catche fetch exception", e); return {}; })
-        .then(r => {
-            if (r.status !== 200 || r.headers.get("Content-Type") !== "application/json") {
-                console.error("fetch error" + url, r);
-                return null;
-            }
-            return r.json();
-        });
-}
-
-function s2hms(s) {
-
-    var time = [
-        Math.floor(s / 3600), // hours
-        Math.floor(s / 60) % 60, // minutes
-        Math.floor(s % 60) // seconds
-    ];
-
-    if (time[2] < 10) {
-
-        time[2] = "0" + time[2];
-    }
-
-    time.pop();
-    if (time[0] === 0) {
-
-        time.shift();
-    } else {
-
-        if (time[1] < 10) {
-
-            time[1] = "0" + time[1];
-        }
-    }
-
-    return time.join(":");
-}
 
 
 export default TaskManager;

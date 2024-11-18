@@ -1,12 +1,13 @@
 import UserManager from "./UserManager";
+import utils from "../utils";
 
-var apiUrl = "/api";
+let apiUrl = "/api";
 if (window.location.href.search("localhost") !== -1) {
     let port = (new URLSearchParams(window.location.search)).get('port');
-    port = port ? port : 8081;
+    port = port || 8081;
     apiUrl = "http://localhost:" + port + apiUrl;
 }
-var apiComments = apiUrl + "/comments";
+let apiComments = apiUrl + "/comments";
 
 function CommentManager() {
 
@@ -59,7 +60,7 @@ CommentManager.flush = function () {
     comments.forEach(comment => {
         if (comment.needFlush === true) {
             prs.push(
-                fetch_(apiComments + '/add', 'post', comment)
+                utils.fetch_(apiComments + '/add', 'post', comment)
                     .then((r) => {
                         if (r === null) return;
                         comment.needFlush = false;
@@ -67,7 +68,7 @@ CommentManager.flush = function () {
         }
         if (comment.needArchive === true) {
             prs.push(
-                fetch_(apiComments + '/archive', 'post', { uid: UserManager.getUid(), id: comment.id })
+                utils.fetch_(apiComments + '/archive', 'post', { uid: UserManager.getUid(), id: comment.id })
                     .then((r) => {
                         if (r === null) return;
                         comment.needArchive = false;
@@ -76,7 +77,7 @@ CommentManager.flush = function () {
         }
         if (comment.needUpdate === true) {
             prs.push(
-                fetch_(apiComments + '/update', 'post', comment)
+                utils.fetch_(apiComments + '/update', 'post', comment)
                     .then((r) => {
                         if (r === null) return;
                         comment.needUpdate = false;
@@ -96,7 +97,7 @@ CommentManager.flush = function () {
 
 CommentManager.load = function (comments, setComments) {
 
-    fetch_(apiComments + '/list', 'post', { uid: UserManager.getUid() })
+    utils.fetch_(apiComments + '/list', 'post', { uid: UserManager.getUid() })
         .then((r) => {
             if (r === null) {
                 // skip data from server
@@ -106,24 +107,5 @@ CommentManager.load = function (comments, setComments) {
             }
         });
 };
-
-function fetch_(url, method, body) {
-
-    if (!method) method = "get";
-
-    return fetch(url, {
-        method: method,
-        headers: { 'Content-type': 'application/json; charset=UTF-8' },
-        body: JSON.stringify(body)
-    })
-        .catch((e) => { console.error("Catche fetch exception", e); return {}; })
-        .then(r => {
-            if (r.status !== 200 || r.headers.get("Content-Type") !== "application/json") {
-                console.error("fetch error" + url, r);
-                return null;
-            }
-            return r.json();
-        });
-}
 
 export default CommentManager;

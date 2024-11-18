@@ -10,6 +10,7 @@ import dayjs from 'dayjs';
 import React from "react";
 import PageManager from "../managers/PageManager";
 import TaskManager from "../managers/TaskManager";
+import utils from "../utils";
 
 import {
     DataGrid,
@@ -75,7 +76,7 @@ function TiksLits({ tasks, setTasks }) {
     function RenderCellMetricTime(params) {
         return <div>
             {dayjs(params.value).format('HH:mm')}
-            <i style={{ fontSize: 10 }}> / {s2hms(params.row[params.field])}m</i>
+            <i style={{ fontSize: 10 }}> / {utils.s2hms(params.row[params.field])}m</i>
         </div>;
     }
 
@@ -172,33 +173,6 @@ function TiksLits({ tasks, setTasks }) {
         },
     });
 
-    function s2hms(s) {
-
-        var time = [
-            Math.floor(s / 3600), // hours
-            Math.floor(s / 60) % 60, // minutes
-            Math.floor(s % 60) // seconds
-        ];
-
-        if (time[2] < 10) {
-
-            time[2] = "0" + time[2];
-        }
-
-        time.pop(); //remove seconds
-        if (time[0] === 0) {
-
-            time.shift();
-        } else {
-
-            if (time[1] < 10) {
-
-                time[1] = "0" + time[1];
-            }
-        }
-
-        return time.join(":");
-    }
 
     return (
         <Box>

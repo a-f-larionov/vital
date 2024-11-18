@@ -4,6 +4,7 @@ import { Box } from '@mui/material';
 import { Button } from 'antd';
 import React from 'react';
 import TaskManager from '../managers/TaskManager';
+import utils from "../utils";
 
 function InputStopWatch({ metrica, task, tasks, setTasks }) {
     let sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
@@ -32,36 +33,9 @@ function InputStopWatch({ metrica, task, tasks, setTasks }) {
         if (sw[swId] === undefined) return;
         if (timerRef.current === null) return;
         let timer = (new Date() - sw[swId].stopWatchStart) / 1000;
-        timerRef.current.innerHTML = s2hms(timer);
+        timerRef.current.innerHTML = utils.s2hms(timer);
     }
 
-    function s2hms(s) {
-
-        var time = [
-            Math.floor(s / 3600), // hours
-            Math.floor(s / 60) % 60, // minutes
-            Math.floor(s % 60) // seconds
-        ];
-
-        if (time[2] < 10) {
-
-            time[2] = "0" + time[2];
-        }
-
-        if (time[0] === 0) {
-
-            time.shift();
-        } else {
-
-            if (time[1] < 10) {
-
-                time[1] = "0" + time[1];
-            }
-        }
-
-        return time.join(":");
-    }
-  
     if (!sw[swId]) {
         return (
             <Button size='default' icon={<PlayCircleIcon onClick={onPlayHandler} />} />
