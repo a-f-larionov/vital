@@ -31,40 +31,36 @@ TaskManager.getTable = function (tasks) {
     let getCells = function (task) {
         return task.metrics.map((metric) => {
 
-            return dates.map((date) => {
-                let title = '';
-                let thisDay = metric.tiks
-                    .filter((tik) => new Date(tik.datetime * 1000)
+            return dates.
+                map((date) => {
+                    let title = '';
+                    let valueToday = metric.tiks.filter((tik) => new Date(tik.datetime * 1000)
                         .toDateString() === date.toDateString());
 
-                let sum = thisDay
-                    .reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
-                let cnt = thisDay.length;
+                    let sum = valueToday.reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
+                    let cnt = valueToday.length;
 
-                title = sum + " " + cnt;
-                if (metric && metric.viewCode === 'checker') {
-                    if (sum === 0) {
-                        title = cnt > 0 ? "✅" : "";
+                    title = sum + " " + cnt;
+                    if (metric && metric.viewCode === 'checker') {
+                        if (sum === 0) {
+                            title = cnt > 0 ? "✅" : "";
+                        } else {
+                            title = sum;
+                        }
                     } else {
                         title = sum;
+                        if (title && metric && metric.typeCode === "timestamp") {
+                            title = s2hms(title) + '';
+                        }
                     }
-                } else {
-                    title = sum;
-                    if (title && metric && metric.typeCode === "timestamp") {
-                        title = s2hms(title) + '';
-                    }
-                }
-                if (!title) title = '';
-                return { title: title };
-            });
+                    if (!title) title = '';
+                    return { title: title };
+                });
         })
     }
     let tasksViewData = {};
 
-    let deepDays = 100;
-
-    let dates = Array.from({ length: deepDays }, (v, i) => { return -deepDays + 1 + i; })
-        .map((offset) => new Date(new Date().getTime() + (offset * 86400000)));
+    let dates = getDates(tasks);
 
     tasksViewData.cols = dates.map(date => ({ datetime: date }));
 
@@ -278,6 +274,24 @@ TaskManager.init = function (setTasks) {
             setTasks(tasks);
         })
     });
+}
+
+function getDates(tasks) {
+    let deepDays = 100;
+
+    let dates = Array.from({ length: deepDays }, (v, i) => { return -deepDays + 1 + i; })
+        .map((offset) => new Date(new Date().getTime() + (offset * 86400000)));
+
+    // get all tiks from all metrics from all tasks and find min datetime
+    let minDate = tasks.map(
+        task => task.metrics.map(metric => metric.tiks)
+            .reduce((all, next) => [...all, ...next]))
+        .reduce((all, next) => [...all, ...next])
+        .map(tik => tik.datetime)
+        .reduce((min, next) => next < min ? next : min);
+
+    dates = dates.filter(date => date > new Date((minDate - 24 * 60 * 60) * 1000));
+    return dates;
 }
 
 function fetch_(url, method, body) {
