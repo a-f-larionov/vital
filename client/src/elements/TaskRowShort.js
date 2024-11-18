@@ -9,9 +9,9 @@ import TaskMenu from './TaskMenu';
 import Collapse from "@mui/material/Collapse";
 import PageManager from "../managers/PageManager";
 
-function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
-    let i = 0;
-    let tableRow = 0;
+function TaskRowShort({ cols, cells, task, tasks, setTasks }) {
+    let i = 1;
+    let tableRow = 1;
 
     return (
         <Grid2 container component={Paper} sx={{ paddingTop: 0.5, marginBottom: 0.5, marginLeft: 2, marginRight: 2 }}>
@@ -46,7 +46,7 @@ function TaskRowShort({ title, cells, cols, task, tasks, setTasks }) {
 
                                 <TableRow key={1}>
                                     {cols.map((col) => {
-                                        return <TableCell key={task.id + col.datetime.getDate()}
+                                        return <TableCell key={"cell_" + task.id + "_" + col.datetime.toDateString()}
                                             sx={{
                                                 width: 100,
                                                 minWidth: 50,

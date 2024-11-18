@@ -28,64 +28,54 @@ TaskManager.setSnackBarOpenCallback = function (setcallback) {
 
 TaskManager.getTable = function (tasks) {
 
-    let out = {};
+    let getCells = function (task) {
+        return task.metrics.map((metric) => {
 
-    //  dates
-    let dates = Array.from({ length: 21 }, (v, i) => { return -21 + 1 + i; })
-        .map((offset) => {
-            return new Date(
-                new Date().getTime() + (offset * 86400000)
-            )
-        });
+            return dates.map((date) => {
+                let title = '';
+                let thisDay = metric.tiks
+                    .filter((tik) => new Date(tik.datetime * 1000)
+                        .toDateString() === date.toDateString());
 
-    // column headers
-    out.cols = dates.map((date) => {
-        return { datetime: date };
-    });
+                let sum = thisDay
+                    .reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
+                let cnt = thisDay.length;
 
-
-    // one row = one task
-    out.rows = tasks.map((task) => {
-        return {
-            task: task,
-            cells: task.metrics.map((metric) => {
-                let row = [];
-
-                row = dates.map((date) => {
-                    let title = '';
-                    let thisDay = metric.tiks
-                        .filter((tik) => {
-                            return new Date(tik.datetime * 1000)
-                                .toDateString() === date.toDateString();
-                        });
-
-                    let sum = thisDay
-                        .reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
-                    let cnt = thisDay.length;
-
-                    title = sum + " " + cnt;
-                    if (metric && metric.viewCode === 'checker') {
-                        if (sum === 0) {
-                            title = cnt > 0 ? "✅" : "";
-                        } else {
-                            title = sum;
-                        }
+                title = sum + " " + cnt;
+                if (metric && metric.viewCode === 'checker') {
+                    if (sum === 0) {
+                        title = cnt > 0 ? "✅" : "";
                     } else {
                         title = sum;
-                        if (title && metric && metric.typeCode === "timestamp") {
-                            title = s2hms(title) + '';
-                        }
                     }
-                    if (!title) title = '';
-                    return { title: title };
-                });
+                } else {
+                    title = sum;
+                    if (title && metric && metric.typeCode === "timestamp") {
+                        title = s2hms(title) + '';
+                    }
+                }
+                if (!title) title = '';
+                return { title: title };
+            });
+        })
+    }
+    let tasksViewData = {};
 
-                return row;
-            })
+    let deepDays = 100;
+
+    let dates = Array.from({ length: deepDays }, (v, i) => { return -deepDays + 1 + i; })
+        .map((offset) => new Date(new Date().getTime() + (offset * 86400000)));
+
+    tasksViewData.cols = dates.map(date => ({ datetime: date }));
+
+    tasksViewData.metrics = tasks.map((task) => {
+        return {
+            task: task,
+            cells: getCells(task)
         }
     })
 
-    return out;
+    return tasksViewData;
 }
 
 TaskManager.tikCreate = function (task, tasks, setTasks, metrica, value) {

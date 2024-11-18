@@ -47,7 +47,7 @@
 			"label": "Docker up db",
 			"type": "shell",
 			"command": "cd server && docker compose up db -d",
-		},w
+		},
 		{
 			"label": "Deploy",
 			"type": "shell",

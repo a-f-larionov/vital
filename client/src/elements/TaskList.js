@@ -4,17 +4,16 @@ import TaskManager from "../managers/TaskManager";
 import TaskRowShort from "./TaskRowShort";
 
 function TaskList({ tasks, setTasks }) {
-  let table = TaskManager.getTable(tasks);
+  let tasksViewData = TaskManager.getTable(tasks);
 
   const rows =
-    table.rows
-      .map(row =>
+    tasksViewData
+      .metrics.map(metric =>
         <TaskRowShort
-          key={row.task.id}
-          cols={table.cols}
-          title={row.task.title}
-          cells={row.cells}
-          task={row.task}
+          key={"task" + metric.task.id}
+          task={metric.task}
+          cols={tasksViewData.cols}
+          cells={metric.cells}
           tasks={tasks} setTasks={setTasks} />
       );
 
