@@ -5,11 +5,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from "@mui/material/Stack";
 import Switch from '@mui/material/Switch';
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
 import React, { useState } from "react";
 import CommitedSnakbar from './elements/CommitedSnackbar';
 import ContentPage from "./elements/ContentPage";
+import Loading from "./elements/Loading";
 import ToolAddTask from "./elements/ToolAddTask";
 import CommentManager from './managers/CommentsManager';
 import MetricaManager from './managers/MetricaManager';
@@ -32,29 +31,8 @@ function App() {
     UserManager.setUserProfile(userProfile);
     MetricaManager.load(metrica, setMetrica);
 
-    let googleOk = function (d) {
-        let decoded = jwtDecode(d.credential)
-        UserManager.register(decoded.email, decoded.picture, setUserProfile);
-    }
-
     if (userProfile.id === undefined) {
-        return (
-            <Stack
-                direction="row"
-                justifyContent="center"
-                alignItems="center"
-                sx={{ width: 1, height: "100vh" }}>
-                <Grid2 container>
-                    <Grid2 size={4}></Grid2>
-                    <Grid2 size={1} sx={{ alignContent: 'center' }}>
-                        <GoogleLogin type="icon" onSuccess={googleOk} onError={console.log} />
-                    </Grid2>
-                    <Grid2 size={12} sx={{ marginBottom: 5, marginTop: 5 }}>
-                        Авторизутесь пжлст!
-                    </Grid2>
-                </Grid2>
-            </Stack>
-        );
+        return (<Loading setUserProfile={setUserProfile} />);
     } else {
 
         if (tasks === null || comments === null) {
@@ -105,7 +83,7 @@ function App() {
 
                                 <FormControlLabel
                                     control={<Switch checked={collapsAll}
-                                        onChange={() => { 
+                                        onChange={() => {
                                             PageManager.collapsAll(tasks, setTasks, !collapsAll);
                                             setCollapsAll(!collapsAll);
                                         }} />}
