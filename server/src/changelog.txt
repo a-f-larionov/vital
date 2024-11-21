@@ -1,2 +1,7 @@
 2024-11-08  Feature Add Collapser functional
 2024-11-13  Bugfix  fix:Collapse reset on reload tasks, shortRow cell show value by date, but igonre month and year
+2024-11-22  Bugfix StopWatch does't show seconds part
+2024-11-22  Hide window scrolls
+2024-11-22  Client refactoring
+2024-11-22  Sorting to Bottom
+2024-11-22  Sorting by last tik update

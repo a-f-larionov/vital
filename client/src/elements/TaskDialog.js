@@ -37,6 +37,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         if (isNew) {
             task.metrics = [];
             task.id = crypto.randomUUID();
+            task.sortToBottom = false;
         }
 
         task.title = formTitle;

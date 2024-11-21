@@ -168,6 +168,7 @@ class TaskTests {
 	private TaskRqDTO buildRqDto() {
 		return TaskRqDTO.builder()
 				.id(UUID.randomUUID().toString())
+				.sortToBottom(false)
 				.uid(UUID.randomUUID().toString())
 				.title("title-001" + UUID.randomUUID().toString())
 				.created(Instant.now().minus(10, ChronoUnit.DAYS))

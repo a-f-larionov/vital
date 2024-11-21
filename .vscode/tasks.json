@@ -2,9 +2,9 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
-			"label": "Mvn clean compile",
+			"label": "Mvn clean compile testCompile",
 			"type": "shell",
-			"command": "cd server && mvn clean compile",
+			"command": "cd server && mvn clean compile test-compile",
 		},
 		{
 			"label": "In Debug",
