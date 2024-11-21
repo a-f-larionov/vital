@@ -66,7 +66,7 @@ databaseChangeLog:
           changes:
               - sqlFile:
                     path: /db/changelog/009-metrica-restructuring.sql
-      
+
     - changeSet:
           id: "10"
           author: developer
@@ -74,3 +74,19 @@ databaseChangeLog:
           changes:
               - sqlFile:
                     path: /db/changelog/010-metrica-restructuring-2.sql
+
+    - changeSet:
+          id: "11"
+          author: developer
+          comment: add task tik_last_update column
+          changes:
+              - sqlFile:
+                    path: /db/changelog/011-task-add-column-tik-last-update.sql
+
+    - changeSet:
+          id: "12"
+          author: developer
+          comment: add task sort_to_bottom column
+          changes:
+              - sqlFile:
+                    path: /db/changelog/012-task-add-column-sort-to-bottom.sql

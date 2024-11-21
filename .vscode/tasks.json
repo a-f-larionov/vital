@@ -2,6 +2,11 @@
 	"version": "2.0.0",
 	"tasks": [
 		{
+			"label": "Mvn clean compile",
+			"type": "shell",
+			"command": "cd server && mvn clean compile",
+		},
+		{
 			"label": "In Debug",
 			"type": "shell",
 			"dependsOn": [
@@ -13,8 +18,7 @@
 		},
 		{
 			"label": "Application debug",
-			"command": "${command:workbench.action.debug.start}"
-
+			"command": "${command:workbench.action.debug.start} "
 		},
 		{
 			"label": "In Docker run",

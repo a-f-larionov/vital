@@ -7,7 +7,6 @@ import java.util.List;
 import com.vital.dto.MetricaDTO;
 
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,8 +28,11 @@ public class TaskRqDTO {
     @Size(min = 1)
     private String title = "";
 
-    @NotNull
     private Instant created;
+
+    private Instant tikLastUpdate;
+
+    private Boolean sortToBottom;
 
     private List<MetricaDTO> metrics = new ArrayList<>();
 }

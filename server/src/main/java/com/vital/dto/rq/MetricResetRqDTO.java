@@ -20,4 +20,6 @@ public class MetricResetRqDTO {
     // Validate datetimeFrom no less then 24 hours ago
     @NotNull
     private Instant datetimeFrom;
+    @NotNull
+    private Instant tikLastUpate;
 }

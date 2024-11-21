@@ -6,6 +6,13 @@
     "configurations": [
         {
             "type": "java",
+            "name": "scratch001",
+            "request": "launch",
+            "mainClass": "com.vital.scratch001",
+            "projectName": "vp"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
             "mainClass": "${file}"

@@ -1,10 +1,10 @@
-import UserManager from '../managers/UserManager';
-import { GoogleLogin } from '@react-oauth/google';
-import { jwtDecode } from "jwt-decode";
 import { Grid2 } from '@mui/material';
 import Stack from "@mui/material/Stack";
+import { GoogleLogin } from '@react-oauth/google';
+import { jwtDecode } from "jwt-decode";
+import UserManager from '../managers/UserManager';
 
-function Loading({ setUserProfile }) {
+function AuthForm({ setUserProfile }) {
 
     let googleOk = function (d) {
         let decoded = jwtDecode(d.credential)
@@ -28,4 +28,4 @@ function Loading({ setUserProfile }) {
     </Stack>
 }
 
-export default Loading;
+export default AuthForm;

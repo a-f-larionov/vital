@@ -18,7 +18,7 @@ function fetch_(url, method, body) {
 }
 
 
-function s2hms(s) {
+function s2hms(s, showSeconds) {
 
     let time = [
         Math.floor(s / 3600), // hours
@@ -30,8 +30,7 @@ function s2hms(s) {
 
         time[2] = "0" + time[2];
     }
-
-    time.pop();
+    if (!showSeconds) time.pop();
     if (time[0] === 0) {
 
         time.shift();
@@ -42,7 +41,7 @@ function s2hms(s) {
             time[1] = "0" + time[1];
         }
     }
-
+    
     return time.join(":");
 }
 

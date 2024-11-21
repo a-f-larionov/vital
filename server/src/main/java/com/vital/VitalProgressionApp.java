@@ -11,3 +11,4 @@ public class VitalProgressionApp {
 		SpringApplication.run(VitalProgressionApp.class, args);
 	}
 }
+ 

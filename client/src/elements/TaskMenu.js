@@ -6,6 +6,8 @@ import { Box, Fab, IconButton, Popper } from "@mui/material";
 import React from "react";
 import TaskManager from "../managers/TaskManager";
 import TaskDialog from './TaskDialog';
+import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
+import SortIcon from '@mui/icons-material/Sort';
 
 function TaskMenu({ task, tasks, setTasks }) {
 
@@ -58,9 +60,17 @@ function TaskMenu({ task, tasks, setTasks }) {
                             <EditIcon onClick={() => onEditClick({ task, tasks, setTasks })} color='primary' />
                         </Fab>
 
+                        <Fab size='small'>
+                            <VerticalAlignBottomIcon onClick={() => TaskManager.switchSortToBottom({task, tasks, setTasks})} />
+                        </Fab>
+
+                        <Fab size='small'>
+                            <SortIcon onClick={() => TaskManager.switchSortToBottom({task, tasks, setTasks})} />
+                        </Fab>
+
                     </Popper>
 
-                    <IconButton sx={{padding:0}}
+                    <IconButton sx={{ padding: 0 }}
                         id="basic-button"
                         aria-controls={menuOpen ? 'basic-menu' : undefined}
                         aria-expanded={menuOpen ? 'true' : undefined}
@@ -68,7 +78,7 @@ function TaskMenu({ task, tasks, setTasks }) {
                         size="small"
                         onClick={menuHandleClick}
                     >
-                        <MoreVertIcon size="small"/>
+                        <MoreVertIcon size="small" />
                     </IconButton>
 
                     <TaskDialog setOpenCallback={(handler) => { doOpenDialog = handler }}

@@ -21,6 +21,9 @@ public interface TaskMapper {
 
     TaskRsDTO toDTO(TaskEntity taskEntity);
 
+    @Mapping(target = "taskId", source = "task.id")
+    MetricaDTO toDTO(MetricaEntity taskEntity);
+
     void toUpdate(@MappingTarget TaskEntity entity, TaskRqDTO taskRqDTO);
 
 }

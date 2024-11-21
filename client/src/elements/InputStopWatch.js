@@ -8,17 +8,17 @@ import utils from "../utils";
 
 function InputStopWatch({ metrica, task, tasks, setTasks }) {
     let sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
-   
-    let swId = task.id + metrica.id ;
+
+    let swId = task.id + metrica.id;
 
     function onPlayHandler() {
-        sw[swId] = { stopWatchStart: new Date().getTime() };
+        sw[swId] = { start: new Date().getTime() };
         localStorage.stopWatches = JSON.stringify(sw);
         TaskManager.flush(tasks, setTasks); // for redraw
     }
 
     function onStopHandler() {
-        let seconds = Math.round((new Date() - sw[swId].stopWatchStart) / 1000);
+        let seconds = Math.round((new Date() - sw[swId].start) / 1000);
         TaskManager.commitNumber(task, tasks, setTasks, metrica, seconds);
         sw[swId] = null;
         localStorage.stopWatches = JSON.stringify(sw);
@@ -32,8 +32,8 @@ function InputStopWatch({ metrica, task, tasks, setTasks }) {
         if (sw[swId] === null) return;
         if (sw[swId] === undefined) return;
         if (timerRef.current === null) return;
-        let timer = (new Date() - sw[swId].stopWatchStart) / 1000;
-        timerRef.current.innerHTML = utils.s2hms(timer);
+        let timer = (new Date() - sw[swId].start) / 1000;
+        timerRef.current.innerHTML = utils.s2hms(timer, true);
     }
 
     if (!sw[swId]) {

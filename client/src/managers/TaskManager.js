@@ -27,6 +27,12 @@ TaskManager.setSnackBarOpenCallback = function (setcallback) {
     TaskManager.snackBarOpenCallback = setcallback;
 }
 
+TaskManager.switchSortToBottom = function ({ task, tasks, setTasks }) {
+    task.sortToBottom = !task.sortToBottom;
+    task.needUpdate = true;
+    this.flush(tasks, setTasks);
+}
+
 TaskManager.getTable = function (tasks) {
 
     let getCells = function (task) {
@@ -64,12 +70,15 @@ TaskManager.getTable = function (tasks) {
 
     tasksViewData.cols = dates.map(date => ({ datetime: date }));
 
-    tasksViewData.metrics = tasks.map((task) => {
-        return {
-            task: task,
-            cells: getCells(task)
-        }
-    })
+    tasksViewData.metrics = tasks
+        .sort((a, b) => a.tikLastUpdate - b.tikLastUpdate)
+        .sort((a, b) => a.sortToBottom - b.sortToBottom)
+        .map((task) => {
+            return {
+                task: task,
+                cells: getCells(task)
+            }
+        })
 
     return tasksViewData;
 }
@@ -134,6 +143,7 @@ TaskManager.resetMetric = function (task, tasks, setTasks, metrica) {
         uid: UserManager.getUid(),
         taskId: task.id,
         metricaId: metrica.id,
+        tikLastUpdate: new Date(new Date()).getTime() / 1000,
         datetimeFrom: new Date(new Date().toDateString()).getTime() / 1000
     }).then(() => {
         TaskManager.load(tasks, setTasks);
@@ -293,6 +303,7 @@ function getDates(tasks) {
     dates = dates.filter(date => date > new Date((minDate - 24 * 60 * 60) * 1000));
     return dates;
 }
+
 
 
 

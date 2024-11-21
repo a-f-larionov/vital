@@ -4,10 +4,12 @@ function PageManager() {
 
 PageManager.PAGE_MAIN = 1;
 PageManager.PAGE_EDIT_TIKS = 2;
+PageManager.PAGE_CALENDAR = 3;
 PageManager.pageParamA = undefined
 PageManager.pageParamB = undefined
 PageManager.currentPage = undefined;
-PageManager.pageTitle = "Vital Manager";
+PageManager.defaulTitle = "Я хочу и Я сделаю!";
+PageManager.pageTitle = PageManager.defaulTitle;
 
 PageManager.init = function (currentPage, setCurrentPage, collapsed, setCollapsed) {
     PageManager.currentPage = currentPage;
@@ -18,7 +20,7 @@ PageManager.init = function (currentPage, setCurrentPage, collapsed, setCollapse
 
 PageManager.setPage = function (pageId, title, pageParamA, pageParamB) {
     PageManager.setCurrentPage(pageId);
-    PageManager.pageTitle = title;
+    PageManager.pageTitle = title === '' ? PageManager.defaulTitle : title;
     PageManager.pageParamA = pageParamA;
     PageManager.pageParamB = pageParamB;
 };

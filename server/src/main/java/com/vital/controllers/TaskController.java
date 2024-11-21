@@ -23,12 +23,14 @@ import com.vital.repositories.MetricaRepository;
 import com.vital.repositories.TaskRepository;
 import com.vital.repositories.TiksRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/api/tasks")
+@Transactional
 public class TaskController {
 
     final TaskRepository taskRepository;
@@ -36,7 +38,7 @@ public class TaskController {
     final MetricaRepository metricaRepository;
     final TaskMapper taskMapper;
     final TikMapper tikMapper;
-
+ 
     @PostMapping("/add")
     public ResponseDTO add(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
@@ -83,12 +85,14 @@ public class TaskController {
     @PostMapping("/metric/reset")
     public ResponseDTO metricReset(@RequestBody @Valid MetricResetRqDTO rqDto) {
 
+        taskRepository.setTikLastUpdate(rqDto.getTikLastUpate(), rqDto.getTaskId());
+
         var tikList = tiksRepository.findAllByUidAndTidAndMidAndDatetimeAfterAndIsArchivedFalse(
                 rqDto.getUid(),
                 rqDto.getTaskId(),
                 rqDto.getMetricaId(),
                 rqDto.getDatetimeFrom());
-
+                
         tikList.forEach(tik -> {
             tik.setValue(0L);
             tiksRepository.save(tik);
