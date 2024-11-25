@@ -21,5 +21,5 @@ public class MetricResetRqDTO {
     @NotNull
     private Instant datetimeFrom;
     @NotNull
-    private Instant tikLastUpate;
+    private Instant tikLastUpdate;
 }

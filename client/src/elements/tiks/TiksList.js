@@ -3,22 +3,29 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import EditIcon from "@mui/icons-material/Edit";
 import SaveIcon from "@mui/icons-material/Save";
 import { Box } from "@mui/material";
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
-import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import dayjs from 'dayjs';
 import React from "react";
-import PageManager from "../managers/PageManager";
-import TaskManager from "../managers/TaskManager";
-import utils from "../utils";
+import PageManager from "../../managers/PageManager";
+import TaskManager from "../../managers/TaskManager";
+
+
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+
+import RenderMetricDateTimeEditCell from '../../elements/tiks/RenderMetricDateTimeEditCell';
+import RenderTikDateTimeEditCell from "../../elements/tiks/RenderTikDateTimeEditCell";
+import RenderCellMetricTime from "./RenderCellMetricTime";
 
 import {
     DataGrid,
     GridActionsCellItem,
-    GridRowModes,
-    useGridApiContext
+    GridRowModes
 } from '@mui/x-data-grid';
-
 
 function TiksLits({ tasks, setTasks }) {
     let task = PageManager.pageParamA;
@@ -30,63 +37,37 @@ function TiksLits({ tasks, setTasks }) {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.Edit } });
     };
 
-    const handleSaveClick = (id, a, b, c) => () => {
+    const handleSaveClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
     };
 
+    const [toArchiveId, setToArchiveId] = React.useState(null);
+
     const handleArchiveClick = (id) => () => {
-        TaskManager.tikArchive(metrica.tiks.find(tik => tik.id === id), tasks, setTasks);
-        setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View } });
+        setToArchiveId(id);
     };
+    const handleArchiveCancel = () => () => {
+        setToArchiveId(null);
+    };
+    const handleArchiveIt = () => () => {
+        TaskManager.tikArchive(metrica.tiks.find(tik => tik.id === toArchiveId), tasks, setTasks);
+        setRowModesModel({ ...rowModesModel, [toArchiveId]: { mode: GridRowModes.View } });
+        setToArchiveId(null);
+    }
 
     const handleCancelClick = (id) => () => {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true } });
     };
 
     let rows = metrica.tiks;
-    
-    function RenderTikDateTimeEditCell({ id, field, value, colDef }) {
-        const apiRef = useGridApiContext();
-        return <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker sx={{ '*': { padding: 0.5 } }}
-                ampm={false}
-                format={'MM/DD HH:mm'}
-                defaultValue={dayjs(value)}
-                onChange={(dayjsTime) => {
-                    apiRef.current.setEditCellValue({ id, field, value: new Date(dayjsTime) });
-                }}
-            />
-        </LocalizationProvider>;
-    }
 
-    function RenderMetricDateTimeEditCell({ id, field, value, colDef, row }) {
-        const apiRef = useGridApiContext();
-        return <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DateTimePicker sx={{ '*': { padding: 0.5 } }}
-                ampm={false}
-                format={'MM/DD HH:mm'}
-                defaultValue={dayjs(value)}
-                onChange={(dayjsTime) => {
-                    apiRef.current.setEditCellValue({ id, field, value: new Date(dayjsTime) });
-                }}
-            />
-        </LocalizationProvider>;
-    }
-
-    function RenderCellMetricTime(params) {
-        return <div>
-            {dayjs(params.value).format('HH:mm')}
-            <i style={{ fontSize: 10 }}> / {utils.s2hms(params.row[params.field])}m</i>
-        </div>;
-    }
-
-    function columnsPushM(columns, fieldName, m) {
+    function pushColumn(columns, fieldName, metrica) {
         let column = {
             field: fieldName,
-            headerName: m.icon,
+            headerName: metrica.icon,
             width: 120, align: 'left', headerAlign: 'left', editable: true
         };
-        switch (m.inputCode) {
+        switch (metrica.inputCode) {
             case 'stopwatch':
                 column = {
                     ...column,
@@ -115,7 +96,7 @@ function TiksLits({ tasks, setTasks }) {
     const columns = [];
 
     if (metrica) {
-        columnsPushM(columns, 'value', metrica);
+        pushColumn(columns, 'value', metrica);
     }
 
     columns.push({
@@ -139,13 +120,13 @@ function TiksLits({ tasks, setTasks }) {
 
             if (isInEditMode) {
                 return [
-                    <GridActionsCellItem
+                    <GridActionsCellItem key="id"
                         icon={<SaveIcon />}
-                        label="Save"
+                        label="Сохранить"
                         sx={{ color: 'primary.main' }}
                         onClick={handleSaveClick(id)}
                     />,
-                    <GridActionsCellItem
+                    <GridActionsCellItem key="id"
                         icon={<CancelIcon />}
                         label="Отмена"
                         className="textPrimary"
@@ -156,14 +137,14 @@ function TiksLits({ tasks, setTasks }) {
             }
 
             return [
-                <GridActionsCellItem
+                <GridActionsCellItem key="id"
                     icon={<EditIcon />}
                     label="Редактировать"
                     className="textPrimary"
                     onClick={handleEditClick(id)}
                     color="inherit"
                 />,
-                <GridActionsCellItem
+                <GridActionsCellItem key="id"
                     icon={<DeleteIcon />}
                     label="В архив"
                     onClick={handleArchiveClick(id)}
@@ -193,6 +174,25 @@ function TiksLits({ tasks, setTasks }) {
                 }}
                 onProcessRowUpdateError={console.log}
             />
+
+            <Dialog
+                open={toArchiveId != null}
+                //TransitionComponent={Transition}
+                keepMounted
+                onClose={console.log}
+                aria-describedby="alert-dialog-slide-description"
+            >
+                <DialogTitle>Удалить?</DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-slide-description">
+                        {task.title}:{metrica.title}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleArchiveCancel()}>Нет</Button>
+                    <Button onClick={handleArchiveIt()}>Да</Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     );
 }

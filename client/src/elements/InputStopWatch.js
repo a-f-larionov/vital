@@ -7,36 +7,35 @@ import TaskManager from '../managers/TaskManager';
 import utils from "../utils";
 
 function InputStopWatch({ metrica, task, tasks, setTasks }) {
-    let sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
 
-    let swId = task.id + metrica.id;
+    let swId = task.id + '_' + metrica.id;
 
     function onPlayHandler() {
-        sw[swId] = { start: new Date().getTime() };
-        localStorage.stopWatches = JSON.stringify(sw);
-        TaskManager.flush(tasks, setTasks); // for redraw
+        TaskManager.sw[swId] = { start: new Date().getTime() };
+        localStorage.stopWatches = JSON.stringify(TaskManager.sw);
+        TaskManager.flush(tasks, setTasks);
     }
 
     function onStopHandler() {
-        let seconds = Math.round((new Date() - sw[swId].start) / 1000);
+        let seconds = Math.round((new Date() - TaskManager.sw[swId].start) / 1000);
         TaskManager.commitNumber(task, tasks, setTasks, metrica, seconds);
-        sw[swId] = null;
-        localStorage.stopWatches = JSON.stringify(sw);
-        TaskManager.flush(tasks, setTasks); // for redraw
+        TaskManager.sw[swId] = null;
+        localStorage.stopWatches = JSON.stringify(TaskManager.sw);
+        TaskManager.flush(tasks, setTasks);
     }
 
     let timerRef = React.createRef();
 
     function timeoutHandler() {
         setTimeout(timeoutHandler, 1000 / 40);
-        if (sw[swId] === null) return;
-        if (sw[swId] === undefined) return;
+        if (TaskManager.sw[swId] === null) return;
+        if (TaskManager.sw[swId] === undefined) return;
         if (timerRef.current === null) return;
-        let timer = (new Date() - sw[swId].start) / 1000;
+        let timer = (new Date() - TaskManager.sw[swId].start) / 1000;
         timerRef.current.innerHTML = utils.s2hms(timer, true);
     }
 
-    if (!sw[swId]) {
+    if (!TaskManager.sw[swId]) {
         return (
             <Button size='default' icon={<PlayCircleIcon onClick={onPlayHandler} />} />
         );

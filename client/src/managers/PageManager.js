@@ -1,3 +1,4 @@
+import TaskManager from "./TaskManager";
 
 function PageManager() {
 }
@@ -29,12 +30,12 @@ PageManager.isMain = function () {
     return PageManager.currentPage === PageManager.PAGE_MAIN;
 }
 
-PageManager.isCollapsed = function (taskId) {
-    return PageManager.collapsed[taskId] ? PageManager.collapsed[taskId] : false;
-}
 PageManager.collapsAll = function (tasks, setTasks, collapsAll) {
     tasks.forEach(task => {
         task.isCollapsed = collapsAll;
+        task.metrics.forEach(metric => {
+            if (TaskManager.sw[task.id + '_' + metric.id]) task.isCollapsed = false;
+        });
     });
     setTasks([...tasks]);
 }

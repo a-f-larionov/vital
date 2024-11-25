@@ -1,6 +1,6 @@
 import PageManager from "../managers/PageManager";
 import TaskList from "../elements/TaskList";
-import TiksLits from "../elements/TiksList";
+import TiksList from "../elements/tiks/TiksList";
 import Calendar from "../elements/Calendar";
 import LoadingProgress from "../elements/LoadingProgress";
 
@@ -10,7 +10,7 @@ function ContentPage({ tasks, setTasks }) {
         case PageManager.PAGE_MAIN:
             return <TaskList tasks={tasks} setTasks={setTasks} />;
         case PageManager.PAGE_EDIT_TIKS:
-            return <TiksLits tasks={tasks} setTasks={setTasks} />;
+            return <TiksList tasks={tasks} setTasks={setTasks} />;
         case PageManager.PAGE_CALENDAR:
             return <Calendar tasks={tasks} />
         default:

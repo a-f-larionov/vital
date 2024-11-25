@@ -14,6 +14,8 @@ function TaskManager() {
 }
 TaskManager.c = 0;
 
+TaskManager.sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
+
 TaskManager.lastOne = null;
 TaskManager.rememberTheLastOne = function (task, tik) {
     TaskManager.lastOne = { task, tik };
@@ -73,6 +75,11 @@ TaskManager.getTable = function (tasks) {
     tasksViewData.metrics = tasks
         .sort((a, b) => a.tikLastUpdate - b.tikLastUpdate)
         .sort((a, b) => a.sortToBottom - b.sortToBottom)
+        .sort((a, b) => {
+            return TaskManager.isTaskHasStopWatch(b)
+                -
+                TaskManager.isTaskHasStopWatch(a);
+        })
         .map((task) => {
             return {
                 task: task,
@@ -81,6 +88,16 @@ TaskManager.getTable = function (tasks) {
         })
 
     return tasksViewData;
+}
+
+TaskManager.isTaskHasStopWatch = function (task) {
+    let answer = false;
+    task.metrics.forEach(metric => {
+        if (TaskManager.sw[task.id + '_' + metric.id]) {
+            answer = true;
+        }
+    });
+    return answer;
 }
 
 TaskManager.tikCreate = function (task, tasks, setTasks, metrica, value) {
@@ -101,6 +118,9 @@ TaskManager.tikCreate = function (task, tasks, setTasks, metrica, value) {
 
         needFlush: true
     };
+
+    task.tikLastUpdate = newDateTime;
+
     let lastOne = TaskManager.getLastOne();
 
     // Magic logic.
@@ -265,6 +285,10 @@ TaskManager.load = function (tasks, setTasks) {
                     r.forEach(serverTask => {
                         let clientTask = tasks.find(task => task.id === serverTask.id);
                         serverTask.isCollapsed = clientTask ? clientTask.isCollapsed : false;
+
+                        if (TaskManager.isTaskHasStopWatch(serverTask)) {
+                            serverTask.isCollapsed = false;
+                        }
                     })
                 }
                 localStorage.tasks = JSON.stringify(r);
