@@ -33,7 +33,8 @@ function App() {
         CommentManager.init(setComments);
         return <LoadingProgress />
     }
-    return <PageRouter tasks={tasks} setTasks={setTasks} collapsAll={collapsAll} setCollapsAll={setCollapsAll}/>
+    TaskManager.setState(tasks, setTasks);
+    return <PageRouter tasks={tasks} setTasks={setTasks} collapsAll={collapsAll} setCollapsAll={setCollapsAll} />
 }
 
 export default App;

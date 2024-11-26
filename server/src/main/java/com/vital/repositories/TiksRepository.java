@@ -9,7 +9,7 @@ import com.vital.entities.TikEntity;
 
 public interface TiksRepository extends PagingAndSortingRepository<TikEntity, String> {
 
-    public void save(TikEntity entity); 
+    public void save(TikEntity entity);
 
     public List<TikEntity> findAllByUid(String uid);
 
@@ -22,4 +22,6 @@ public interface TiksRepository extends PagingAndSortingRepository<TikEntity, St
             Instant datetime);
 
     public TikEntity findByUidAndId(String uid, String id);
+
+    public void deleteById(String uid);
 }

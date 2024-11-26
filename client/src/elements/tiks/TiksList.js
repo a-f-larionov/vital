@@ -15,6 +15,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
+import Slide from '@mui/material/Slide';
 
 
 import RenderMetricDateTimeEditCell from '../../elements/tiks/RenderMetricDateTimeEditCell';
@@ -27,6 +28,11 @@ import {
     GridRowModes
 } from '@mui/x-data-grid';
 
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+    return <Slide direction="up" ref={ref} {...props} />;
+  });
+  
 function TiksLits({ tasks, setTasks }) {
     let task = PageManager.pageParamA;
     let metrica = PageManager.pageParamB;
@@ -177,7 +183,7 @@ function TiksLits({ tasks, setTasks }) {
 
             <Dialog
                 open={toArchiveId != null}
-                //TransitionComponent={Transition}
+                TransitionComponent={Transition}
                 keepMounted
                 onClose={console.log}
                 aria-describedby="alert-dialog-slide-description"

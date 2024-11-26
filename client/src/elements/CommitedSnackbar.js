@@ -10,13 +10,13 @@ function CommitedSnakbar() {
 
     const [open, setOpen] = React.useState(false);
     const commentRef = React.createRef();
+    let lastOne = TaskManager.getLastOne();
 
     TaskManager.setSnackBarOpenCallback(setOpen);
-    
+
     function sendHandler() {
         setOpen(false);
         let comment = commentRef.current.input.value;
-        let lastOne = TaskManager.getLastOne();
         CommentManager.add(comment, lastOne.task.id, lastOne.tik.id);
     }
 
@@ -24,8 +24,12 @@ function CommitedSnakbar() {
         if (reason === 'clickaway') {
             return;
         }
-
         setOpen(false);
+    };
+
+    const handleUndo = (event, reason) => {
+        setOpen(false);
+        TaskManager.tikUndo(lastOne.tik);
     };
 
     const action = (
@@ -33,10 +37,14 @@ function CommitedSnakbar() {
         <Grid2 container sx={{ paddingRight: 0, margin: 0 }} >
 
             <Grid2 size={8}>
-                Message
+                {lastOne ? lastOne.task.title : ''}
+                :
+                {lastOne ? lastOne.metric.icon+ " " +lastOne.metric.title : ''}
+                &nbsp;
+                {lastOne ? lastOne.tik.value : ''}
             </Grid2>
             <Grid2 size={4} align="right" >
-                <Button color="secondary" size="small" onClick={handleClose}> UNDO</Button>
+                <Button color="secondary" size="small" onClick={handleUndo}>UNDO</Button>
 
                 <IconButton
                     size="small"

@@ -6,3 +6,4 @@
 2024-11-22  Sorting to Bottom
 2024-11-22  Sorting by last tik update
 2024-11-25  Add Delete Tik Confimation Dialog.
+2024-11-26  add "Undo" functional

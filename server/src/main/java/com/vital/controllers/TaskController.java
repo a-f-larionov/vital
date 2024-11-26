@@ -85,7 +85,7 @@ public class TaskController {
     @PostMapping("/metric/reset")
     public ResponseDTO metricReset(@RequestBody @Valid MetricResetRqDTO rqDto) {
 
-        taskRepository.setTikLastUpdate(rqDto.getTikLastUpdate(), rqDto.getTaskId());
+        taskRepository.setTikLastUpdate(rqDto.getTaskId());
 
         var tikList = tiksRepository.findAllByUidAndTidAndMidAndDatetimeAfterAndIsArchivedFalse(
                 rqDto.getUid(),

@@ -9,8 +9,6 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.vital.entities.TaskEntity;
 
-import jakarta.transaction.Transactional;
-
 public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, String> {
 
     void save(TaskEntity entity);
@@ -21,8 +19,7 @@ public interface TaskRepository extends PagingAndSortingRepository<TaskEntity, S
 
     void deleteByUidAndId(String uid, String id);
 
-    @Transactional
     @Modifying
-    @Query(nativeQuery = true, value = "update task_entity set tik_last_update = ? WHERE id = ?")
-    void setTikLastUpdate(Instant tikLastUpdate, String taskId);
+    @Query(nativeQuery = true, value = "update task_entity set tik_last_update = (select MAX(datetime) from tik_entity WHERE tid = :taskId) where id = :taskId")
+    void setTikLastUpdate(String taskId);
 }

@@ -17,8 +17,19 @@ TaskManager.c = 0;
 TaskManager.sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
 
 TaskManager.lastOne = null;
-TaskManager.rememberTheLastOne = function (task, tik) {
-    TaskManager.lastOne = { task, tik };
+TaskManager.tasks = null;
+TaskManager.setTasks = null;
+
+TaskManager.setState = function (tasks, setTasks) {
+    TaskManager.tasks = tasks;
+    TaskManager.setTasks = setTasks;
+}
+TaskManager.rememberTheLastOne = function (task, metric, tik) {
+    TaskManager.lastOne = { task, metric,tik };
+}
+TaskManager.tikUndo = function (tik) {
+    tik.needUndo = true;
+    TaskManager.flush(TaskManager.tasks, TaskManager.setTasks);
 }
 TaskManager.getLastOne = function () {
     return TaskManager.lastOne;
@@ -100,7 +111,7 @@ TaskManager.isTaskHasStopWatch = function (task) {
     return answer;
 }
 
-TaskManager.tikCreate = function (task, tasks, setTasks, metrica, value) {
+TaskManager.tikCreate = function (task, tasks, setTasks, metric, value) {
 
     value = value !== undefined ? value : 0;
 
@@ -110,7 +121,7 @@ TaskManager.tikCreate = function (task, tasks, setTasks, metrica, value) {
         id: crypto.randomUUID(),
         uid: UserManager.getUid(),
         tid: task.id,
-        mid: metrica.id,
+        mid: metric.id,
 
         datetime: newDateTime,
 
@@ -131,8 +142,8 @@ TaskManager.tikCreate = function (task, tasks, setTasks, metrica, value) {
         lastOne.tik.needUpdate = true;
     } else {
 
-        metrica.tiks.push(newTik);
-        TaskManager.rememberTheLastOne(task, newTik);
+        metric.tiks.push(newTik);
+        TaskManager.rememberTheLastOne(task, metric, newTik);
     }
 
     TaskManager.snackBarOpenCallback(true);
@@ -249,6 +260,15 @@ TaskManager.flush = function (tasks, setTasks) {
                                 .then((r) => {
                                     if (r === null) return;
                                     tik.needUpdate = false;
+                                }));
+                    }
+                    if (tik.needUndo === true) {
+                        prs.push(
+                            utils.fetch_(apiTiks + '/undo', 'post', tik)
+                                .then((r) => {
+                                    if (r === null) return;
+                                    tik.needUndo = false;
+                                    metric.tiks = metric.tiks.filter(t => t.id !== tik.id);
                                 }));
                     }
                 }));

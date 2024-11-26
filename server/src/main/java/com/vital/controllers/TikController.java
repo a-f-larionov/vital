@@ -12,12 +12,14 @@ import com.vital.mappers.TikMapper;
 import com.vital.repositories.TaskRepository;
 import com.vital.repositories.TiksRepository;
 
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
 @RequestMapping("/api/tiks")
+@Transactional
 public class TikController {
 
     final TaskRepository taskRepository;
@@ -27,7 +29,7 @@ public class TikController {
     @PostMapping("/add")
     public ResponseDTO tikAdd(@RequestBody @Valid TikDTO tikDto) {
 
-        taskRepository.setTikLastUpdate(tikDto.getDatetime(), tikDto.getTid());
+        taskRepository.setTikLastUpdate(tikDto.getTid());
 
         TikEntity entity = tikMapper.toEntity(tikDto);
 
@@ -41,6 +43,13 @@ public class TikController {
         var entity = tiksRepository.findByUidAndId(tikDto.getUid(), tikDto.getId());
         entity.setIsArchived(true);
         tiksRepository.save(entity);
+        return new ResponseDTO("OK");
+    }
+
+    @PostMapping("/undo")
+    public ResponseDTO undo(@RequestBody @Valid TikDTO tikDto) {
+        tiksRepository.deleteById(tikDto.getId());
+        taskRepository.setTikLastUpdate(tikDto.getTid());
         return new ResponseDTO("OK");
     }
 
