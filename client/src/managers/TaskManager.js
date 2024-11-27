@@ -20,12 +20,29 @@ TaskManager.lastOne = null;
 TaskManager.tasks = null;
 TaskManager.setTasks = null;
 
+TaskManager.getSum = function (metric, days, predictDays) {
+    let values = metric.tiks;
+    values = values.filter(tik => tik.datetime >= (Date.now() / 1000 - 3600 * 24 * days));
+    values = values.map(tik => tik.value);
+
+    let sum = 0;
+    if (values.length !== 0) sum = values.reduce((a, v) => a + v)
+
+    if (predictDays) {
+        sum = sum / days * predictDays;
+    }
+    switch (metric.typeCode) {
+        case 'timestamp': return utils.s2hms(sum, false, true);
+        default: return sum;
+    }
+}
+
 TaskManager.setState = function (tasks, setTasks) {
     TaskManager.tasks = tasks;
     TaskManager.setTasks = setTasks;
 }
 TaskManager.rememberTheLastOne = function (task, metric, tik) {
-    TaskManager.lastOne = { task, metric,tik };
+    TaskManager.lastOne = { task, metric, tik };
 }
 TaskManager.tikUndo = function (tik) {
     tik.needUndo = true;
@@ -46,12 +63,12 @@ TaskManager.switchSortToBottom = function ({ task, tasks, setTasks }) {
     this.flush(tasks, setTasks);
 }
 
-TaskManager.getTable = function (tasks) {
-
-    let getCells = function (task) {
+TaskManager.getTable = function () {
+    let tasks = TaskManager.tasks;
+    let getRows = function (task) {
         return task.metrics.map((metric) => {
 
-            return dates.map((date) => {
+            let cells = dates.map((date) => {
                 let title = '';
                 let valueToday = metric.tiks.filter((tik) => new Date(tik.datetime * 1000)
                     .toDateString() === date.toDateString());
@@ -75,6 +92,8 @@ TaskManager.getTable = function (tasks) {
                 if (!title) title = '';
                 return { title: title };
             });
+
+            return { cells: cells, metric: metric };
         })
     }
     let tasksViewData = {};
@@ -83,7 +102,7 @@ TaskManager.getTable = function (tasks) {
 
     tasksViewData.cols = dates.map(date => ({ datetime: date }));
 
-    tasksViewData.metrics = tasks
+    tasksViewData.tasks = tasks
         .sort((a, b) => a.tikLastUpdate - b.tikLastUpdate)
         .sort((a, b) => a.sortToBottom - b.sortToBottom)
         .sort((a, b) => {
@@ -94,7 +113,7 @@ TaskManager.getTable = function (tasks) {
         .map((task) => {
             return {
                 task: task,
-                cells: getCells(task)
+                rows: getRows(task)
             }
         })
 

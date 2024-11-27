@@ -1,19 +1,19 @@
 
 import { Grid2 } from "@mui/material";
 import TaskManager from "../managers/TaskManager";
-import TaskRowShort from "./TaskRowShort";
+import TaskRowShort from "./short/TaskRowShort";
 
 function TaskList({ tasks, setTasks }) {
-  let tasksViewData = TaskManager.getTable(tasks);
-
+  let tasksViewData = TaskManager.getTable();
+  
   const rows =
     tasksViewData
-      .metrics.map(metric =>
+      .tasks.map(task =>
         <TaskRowShort
-          key={"task" + metric.task.id}
-          task={metric.task}
+          key={"task" + task.task.id}
+          task={task.task}
+          rows={task.rows}
           cols={tasksViewData.cols}
-          cells={metric.cells}
           tasks={tasks} setTasks={setTasks} />
       );
 

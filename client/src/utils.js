@@ -18,7 +18,9 @@ function fetch_(url, method, body) {
 }
 
 
-function s2hms(s, showSeconds) {
+function s2hms(s, showSeconds, onlyHours) {
+
+    if (onlyHours) return Math.floor(s/3600);
 
     let time = [
         Math.floor(s / 3600), // hours
@@ -30,7 +32,7 @@ function s2hms(s, showSeconds) {
 
         time[2] = "0" + time[2];
     }
-    if (!showSeconds) time.pop();
+    if (!showSeconds) time.pop();    
     if (time[0] === 0) {
 
         time.shift();

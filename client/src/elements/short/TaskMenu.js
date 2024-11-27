@@ -4,8 +4,8 @@ import EditIcon from '@mui/icons-material/Edit';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import { Box, Fab, IconButton, Popper } from "@mui/material";
 import React from "react";
-import TaskManager from "../managers/TaskManager";
-import TaskDialog from './TaskDialog';
+import TaskManager from "../../managers/TaskManager";
+import TaskDialog from '../TaskDialog';
 import VerticalAlignBottomIcon from '@mui/icons-material/VerticalAlignBottom';
 import SortIcon from '@mui/icons-material/Sort';
 
