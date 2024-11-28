@@ -4,8 +4,7 @@ import InputMetric from '../InputMetric';
 
 function MetricLeftMenu({ task, tasks, setTasks }) {
     return (
-        <Box>
-            <br />
+        <Box sx={{ marginTop: 2 }}>
             {task.metrics.map(metrica => {
                 return (
                     <Box key={metrica.id}>

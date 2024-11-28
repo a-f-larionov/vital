@@ -1,4 +1,4 @@
-import { Grid2, Paper, TableCell, TableRow } from "@mui/material";
+import { Box, Grid2, Paper, TableCell, TableRow } from "@mui/material";
 
 import Collapse from "@mui/material/Collapse";
 import Table from "@mui/material/Table";
@@ -17,11 +17,19 @@ function TaskRowShort({ cols, rows, task, tasks, setTasks }) {
     return (
         <Grid2 container component={Paper} sx={{ paddingTop: 0.5, marginBottom: 0.5, marginLeft: 2, marginRight: 2 }}>
 
-            <Grid2 size={1} >
-            </Grid2>
-
-            <Grid2 size={10} textAlign="left" sx={{ padding: 0, cursor: 'hand' }} onClick={() => PageManager.toggleCollapse(task, tasks, setTasks)}>
+            <Grid2 size={11} textAlign="left" sx={{ padding: 0, cursor: 'hand' }} onClick={() => PageManager.toggleCollapse(task, tasks, setTasks)}>
                 &nbsp;{task.title}
+                <Box sx={{ fontSize: 8, textAlign: 'right', display: 'block', float: 'right' }}>
+                    {rows.map(row => {
+                        return <>
+                            ∑ {TaskManager.getSum(row.metric, 100000)}
+                            ,{TaskManager.getSum(row.metric, 10, 10)}
+                            ,{TaskManager.getSum(row.metric, 10, 30)}
+                            ,{TaskManager.getSum(row.metric, 10, 100)}
+                        </>
+                    })}
+                </Box>
+
             </Grid2>
 
             <Grid2 size={1}>
@@ -51,7 +59,7 @@ function TaskRowShort({ cols, rows, task, tasks, setTasks }) {
                                 <TableRow key={1}>
                                     {cols.map((col) => <TableCell key={"cell_" + task.id + "_" + col.datetime.toDateString()}
                                         sx={{
-                                            width: 100, minWidth: 50,
+                                            width: 100, minWidth: 50, padding: 0.3,
                                             overflow: 'hidden',
                                             textAlign: 'right', fontSize: 10,
                                             lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0
@@ -76,14 +84,6 @@ function TaskRowShort({ cols, rows, task, tasks, setTasks }) {
                                                 {cell.title ? cell.title : '‎'}
                                             </TableCell>
                                         })}
-                                        <TableCell sx={{fontSize:8}}>
-                                            
-                                            {/* {TaskManager.getSum(metricRow.metric, 100000)} */}
-                                              {TaskManager.getSum(metricRow.metric, 10, 10)}
-                                              ,{TaskManager.getSum(metricRow.metric, 10, 30)}
-                                              ,{TaskManager.getSum(metricRow.metric, 10, 100)}
-                                            
-                                        </TableCell>
                                     </TableRow>
                                 })}
                             </TableBody>
@@ -99,7 +99,7 @@ function TaskRowShort({ cols, rows, task, tasks, setTasks }) {
                             <TableBody key={task.id + 'body'}>
 
                                 <TableRow key={10}>
-                                    <TableCell sx={{ fontSize: 10, lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0 }}>&nbsp;</TableCell>
+                                    <TableCell sx={{ fontSize: 10, lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0, padding:0.3 }}>&nbsp;</TableCell>
                                 </TableRow>
 
                                 {task.metrics.map(metric => {

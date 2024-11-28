@@ -66,35 +66,37 @@ TaskManager.switchSortToBottom = function ({ task, tasks, setTasks }) {
 TaskManager.getTable = function () {
     let tasks = TaskManager.tasks;
     let getRows = function (task) {
-        return task.metrics.map((metric) => {
+        return task.metrics
+            .sort((a, b) => a.sort - b.sort)
+            .map((metric) => {
 
-            let cells = dates.map((date) => {
-                let title = '';
-                let valueToday = metric.tiks.filter((tik) => new Date(tik.datetime * 1000)
-                    .toDateString() === date.toDateString());
+                let cells = dates.map((date) => {
+                    let title = '';
+                    let valueToday = metric.tiks.filter((tik) => new Date(tik.datetime * 1000)
+                        .toDateString() === date.toDateString());
 
-                let sum = valueToday.reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
-                let cnt = valueToday.length;
+                    let sum = valueToday.reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
+                    let cnt = valueToday.length;
 
-                title = sum + " " + cnt;
-                if (metric && metric.viewCode === 'checker') {
-                    if (sum === 0) {
-                        title = cnt > 0 ? "✅" : "";
+                    title = sum + " " + cnt;
+                    if (metric && metric.viewCode === 'checker') {
+                        if (sum === 0) {
+                            title = cnt > 0 ? "✅" : "";
+                        } else {
+                            title = sum;
+                        }
                     } else {
                         title = sum;
+                        if (title && metric && metric.typeCode === "timestamp") {
+                            title = utils.s2hms(title) + '';
+                        }
                     }
-                } else {
-                    title = sum;
-                    if (title && metric && metric.typeCode === "timestamp") {
-                        title = utils.s2hms(title) + '';
-                    }
-                }
-                if (!title) title = '';
-                return { title: title };
-            });
+                    if (!title) title = '';
+                    return { title: title };
+                });
 
-            return { cells: cells, metric: metric };
-        })
+                return { cells: cells, metric: metric };
+            })
     }
     let tasksViewData = {};
 

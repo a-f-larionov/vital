@@ -13,6 +13,7 @@ import UserManager from '../managers/UserManager';
 
 function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
     if (!task.metrics) task.metrics = [];
+    task.metrics.sort((a, b) => a.sort - b.sort);
 
     const [dialogOpen, setDialogOpen] = React.useState(false);
     const [showMetrics, setShowMetrics] = React.useState(task.metrics.length == 0 ? 1 : task.metrics.length);
@@ -52,7 +53,7 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
             task.metrics[index].id = task.metrics[index].id ? task.metrics[index].id : crypto.randomUUID();
             task.metrics[index].tiks = task.metrics[index].tiks ? task.metrics[index].tiks : [];
             task.metrics[index].taskId = task.id;
-            task.metrics[index].sort = index;
+            task.metrics[index].sort = (index + 1) * 10;
 
             task.metrics[index].templateId = formMetric.templateId;
             task.metrics[index].viewCode = formMetric.viewCode;
@@ -120,13 +121,6 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
                     <Button onClick={() => { setShowMetrics(showMetrics + 1); }}>+ Add</Button>
                     <Button onClick={() => { setShowMetrics(Math.max(showMetrics - 1, 1)); }}>- Remove</Button>
 
-
-                    {/* <Grid2 size={3} >Материалы:</Grid2>
-                    <Grid2 size={6}>
-                        <Input fullWidth></Input>
-                        <Input fullWidth></Input>
-                        <Input fullWidth></Input>
-                    </Grid2> */}
                 </Grid2>
 
             </DialogContent>
