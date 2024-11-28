@@ -5,9 +5,9 @@ import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableContainer from "@mui/material/TableContainer";
 import PageManager from "../../managers/PageManager";
-import TaskManager from "../../managers/TaskManager";
 import MetricLeftMenu from './MetricLeftMenu';
 import MetricRightMenu from "./MetricRightMenu";
+import Prediction from "./Prediction";
 import TaskMenu from './TaskMenu';
 
 function TaskRowShort({ cols, rows, task, tasks, setTasks }) {
@@ -22,10 +22,11 @@ function TaskRowShort({ cols, rows, task, tasks, setTasks }) {
                 <Box sx={{ fontSize: 8, textAlign: 'right', display: 'block', float: 'right' }}>
                     {rows.map(row => {
                         return <>
-                            ∑ {TaskManager.getSum(row.metric, 100000)}
-                            ,{TaskManager.getSum(row.metric, 10, 10)}
-                            ,{TaskManager.getSum(row.metric, 10, 30)}
-                            ,{TaskManager.getSum(row.metric, 10, 100)}
+                            [
+                            <Prediction metric={row.metric} />
+                            ]
+                            &nbsp;
+                            &nbsp;
                         </>
                     })}
                 </Box>
@@ -99,7 +100,7 @@ function TaskRowShort({ cols, rows, task, tasks, setTasks }) {
                             <TableBody key={task.id + 'body'}>
 
                                 <TableRow key={10}>
-                                    <TableCell sx={{ fontSize: 10, lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0, padding:0.3 }}>&nbsp;</TableCell>
+                                    <TableCell sx={{ fontSize: 10, lineHeight: 1, margin: 0, paddingLeft: 0, paddingRight: 0, padding: 0.3 }}>&nbsp;</TableCell>
                                 </TableRow>
 
                                 {task.metrics.map(metric => {

@@ -31,6 +31,7 @@ TaskManager.getSum = function (metric, days, predictDays) {
     if (predictDays) {
         sum = sum / days * predictDays;
     }
+    sum = Math.floor(sum);
     switch (metric.typeCode) {
         case 'timestamp': return utils.s2hms(sum, false, true);
         default: return sum;
