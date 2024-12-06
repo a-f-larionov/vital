@@ -9,7 +9,7 @@ PageManager.PAGE_CALENDAR = 3;
 PageManager.pageParamA = undefined
 PageManager.pageParamB = undefined
 PageManager.currentPage = undefined;
-PageManager.defaulTitle = "Я хочу и Я сделаю!";
+PageManager.defaulTitle = "Достигейт!🚀";
 PageManager.pageTitle = PageManager.defaulTitle;
 
 PageManager.init = function (currentPage, setCurrentPage, collapsed, setCollapsed) {
@@ -37,12 +37,12 @@ PageManager.collapsAll = function (tasks, setTasks, collapsAll) {
             if (TaskManager.sw[task.id + '_' + metric.id]) task.isCollapsed = false;
         });
     });
-    setTasks([...tasks]);
+    TaskManager.setTasks([...tasks]);
 }
 
-PageManager.toggleCollapse = function (task, tasks, setTasks) {
+PageManager.toggleCollapse = function (task, tasks) {
     task.isCollapsed = task.isCollapsed !== undefined ? !task.isCollapsed : false;
-    setTasks([...tasks]);
+    TaskManager.setTasks([...tasks]);
 }
 
 export default PageManager;

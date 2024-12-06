@@ -29,11 +29,10 @@ public class TikController {
     @PostMapping("/add")
     public ResponseDTO tikAdd(@RequestBody @Valid TikDTO tikDto) {
 
-        taskRepository.setTikLastUpdate(tikDto.getTid());
-
         TikEntity entity = tikMapper.toEntity(tikDto);
-
         tiksRepository.save(entity);
+        
+        taskRepository.setTikLastUpdate(tikDto.getTid());
 
         return new ResponseDTO("OK");
     }
@@ -43,13 +42,18 @@ public class TikController {
         var entity = tiksRepository.findByUidAndId(tikDto.getUid(), tikDto.getId());
         entity.setIsArchived(true);
         tiksRepository.save(entity);
+
+        taskRepository.setTikLastUpdate(tikDto.getTid());
+
         return new ResponseDTO("OK");
     }
 
     @PostMapping("/undo")
     public ResponseDTO undo(@RequestBody @Valid TikDTO tikDto) {
         tiksRepository.deleteById(tikDto.getId());
+        
         taskRepository.setTikLastUpdate(tikDto.getTid());
+
         return new ResponseDTO("OK");
     }
 
@@ -59,6 +63,8 @@ public class TikController {
         var entity = tikMapper.toEntity(taskDto);
 
         tiksRepository.save(entity);
+
+        taskRepository.setTikLastUpdate(taskDto.getTid());
 
         return new ResponseDTO("OK");
     }

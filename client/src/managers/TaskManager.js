@@ -1,5 +1,6 @@
 import UserManager from "./UserManager";
 import utils from "../utils";
+import React from "react";
 
 let apiUrl = "/api";
 if (window.location.href.search("localhost") !== -1) {
@@ -16,9 +17,12 @@ TaskManager.c = 0;
 
 TaskManager.sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches : '{}');
 
-TaskManager.lastOne = null;
+
 TaskManager.tasks = null;
 TaskManager.setTasks = null;
+TaskManager.lastOne = null;
+TaskManager.setLastOne = null;
+TaskManager.tikUpdateDelay = 15;
 
 TaskManager.getSum = function (metric, days, predictDays) {
     let values = metric.tiks;
@@ -38,19 +42,50 @@ TaskManager.getSum = function (metric, days, predictDays) {
     }
 }
 
-TaskManager.setState = function (tasks, setTasks) {
+TaskManager.setState = function (tasks, lastOne, setLastOne) {
     TaskManager.tasks = tasks;
-    TaskManager.setTasks = setTasks;
+    TaskManager.lastOne = lastOne;
+    TaskManager.setLastOne = setLastOne;
 }
-TaskManager.rememberTheLastOne = function (task, metric, tik) {
-    TaskManager.lastOne = { task, metric, tik };
+
+TaskManager.rememberTheLastOne = function (task, metric, newTik) {
+
+    let lastOne = structuredClone(TaskManager.lastOne);
+
+    let lastTask = lastOne.taskId ? TaskManager.tasks.find((task) => lastOne.taskId == task.id) : null;
+    let lastMetrics = lastTask ? lastTask.metrics.filter((metric) => lastOne.metricIds.includes(metric.id)) : null;
+    let lastTikDatetime = lastMetrics ? Math.max(...lastMetrics.map((metric) => Math.max(...metric.tiks.map(tik => tik.datetime)))) : null;
+
+    window.metric = metric;
+    window.newTik = newTik;
+    window.lastMetrics = lastMetrics;
+
+    if (lastTask && lastTask.id === task.id && (lastTikDatetime + TaskManager.tikUpdateDelay) >= (Date.now() / 1000)) {
+
+        if (lastMetrics.find(m => m.id === metric.id)) {
+            
+            metric.tiks.sort((a, b) => b.datetime - a.datetime);
+            metric.tiks[0].value += newTik.value;
+            metric.tiks[0].datetime = newTik.datetime;
+            metric.tiks[0].needUpdate = true;
+
+        } else {
+            newTik.needFlush = true;
+            metric.tiks.push(newTik);
+            lastOne.metricIds.push(metric.id);
+        }
+    } else {
+        newTik.needFlush = true;
+        metric.tiks.push(newTik);
+        lastOne = { taskId: task.id, metricIds: [metric.id] };
+    }
+
+    TaskManager.setLastOne(lastOne);
 }
+
 TaskManager.tikUndo = function (tik) {
     tik.needUndo = true;
-    TaskManager.flush(TaskManager.tasks, TaskManager.setTasks);
-}
-TaskManager.getLastOne = function () {
-    return TaskManager.lastOne;
+    TaskManager.flush();
 }
 
 TaskManager.snackBarOpenCallback = null;
@@ -58,10 +93,10 @@ TaskManager.setSnackBarOpenCallback = function (setcallback) {
     TaskManager.snackBarOpenCallback = setcallback;
 }
 
-TaskManager.switchSortToBottom = function ({ task, tasks, setTasks }) {
+TaskManager.switchSortToBottom = function ({ task }) {
     task.sortToBottom = !task.sortToBottom;
     task.needUpdate = true;
-    this.flush(tasks, setTasks);
+    this.flush();
 }
 
 TaskManager.getTable = function () {
@@ -133,11 +168,11 @@ TaskManager.isTaskHasStopWatch = function (task) {
     return answer;
 }
 
-TaskManager.tikCreate = function (task, tasks, setTasks, metric, value) {
+TaskManager.tikCreate = function (task, tasks, metric, value) {
 
     value = value !== undefined ? value : 0;
 
-    let newDateTime = new Date().getTime() / 1000;
+    let datetime = Date.now() / 1000;
 
     let newTik = {
         id: crypto.randomUUID(),
@@ -145,53 +180,41 @@ TaskManager.tikCreate = function (task, tasks, setTasks, metric, value) {
         tid: task.id,
         mid: metric.id,
 
-        datetime: newDateTime,
-
-        value: value,
-
-        needFlush: true
+        datetime: datetime,
+        value: value
     };
 
-    task.tikLastUpdate = newDateTime;
+    setTimeout(function () {
+        //       task.tikLastUpdate = datetime;
+    }, TaskManager.tikUpdateDelay * 1000);
 
-    let lastOne = TaskManager.getLastOne();
-
-    // Magic logic.
-    if (lastOne && lastOne.tik.mid === newTik.mid && lastOne.tik.datetime + 10 > newDateTime) {
-
-        lastOne.tik.value += newTik.value;
-
-        lastOne.tik.needUpdate = true;
-    } else {
-
-        metric.tiks.push(newTik);
-        TaskManager.rememberTheLastOne(task, metric, newTik);
-    }
+    TaskManager.rememberTheLastOne(task, metric, newTik);
 
     TaskManager.snackBarOpenCallback(true);
-    this.flush(tasks, setTasks);
+    this.flush();
+
 }
 
-TaskManager.tikArchive = function (tik, tasks, setTasks) {
+TaskManager.tikArchive = function (tik) {
 
     tik.needArchive = true;
-    this.flush(tasks, setTasks);
+    this.flush();
 }
 
-TaskManager.tikUpdate = function (tik, tasks, setTasks) {
+TaskManager.tikUpdate = function (tik) {
     tik.needUpdate = true;
-    this.flush(tasks, setTasks);
+    this.flush();
 }
 
-TaskManager.commitNumber = function (task, tasks, setTasks, metrica, value) {
-    TaskManager.tikCreate(task, tasks, setTasks, metrica, value);
+TaskManager.commitNumber = function (task, tasks, metrica, value) {
+    TaskManager.tikCreate(task, tasks, metrica, value);
 };
 
-TaskManager.increment = function (task, tasks, setTasks, metrica, value) {
-    TaskManager.tikCreate(task, tasks, setTasks, metrica, value);
+TaskManager.increment = function (task, tasks, metrica, value) {
+    TaskManager.tikCreate(task, tasks, metrica, value);
 };
 
-TaskManager.resetMetric = function (task, tasks, setTasks, metrica) {
+TaskManager.resetMetric = function (task, tasks, metrica) {
     utils.fetch_(apiTasks + '/metric/reset', 'post', {
         uid: UserManager.getUid(),
         taskId: task.id,
@@ -199,29 +222,29 @@ TaskManager.resetMetric = function (task, tasks, setTasks, metrica) {
         tikLastUpdate: new Date(new Date()).getTime() / 1000,
         datetimeFrom: new Date(new Date().toDateString()).getTime() / 1000
     }).then(() => {
-        TaskManager.load(tasks, setTasks);
+        TaskManager.load(tasks);
     })
 }
 
-TaskManager.add = function (task, tasks, setTasks) {
+TaskManager.add = function (task) {
 
     task.needFlush = true;
 
-    tasks.push(task);
+    TaskManager.tasks.push(task);
 
-    this.flush(tasks, setTasks);
+    this.flush();
 }
 
-TaskManager.taskUpdate = function (task, tasks, setTasks) {
+TaskManager.taskUpdate = function (task) {
     task.needUpdate = true;
 
-    this.flush(tasks, setTasks);
+    this.flush();
 }
 
 TaskManager.flushInProgress = false;
 TaskManager.needFlush = false;
-TaskManager.flush = function (tasks, setTasks) {
-
+TaskManager.flush = function (setTasks) {
+    let tasks = TaskManager.tasks;
     if (TaskManager.flushInProgress) {
         TaskManager.needFlush = true;
         return;
@@ -297,58 +320,72 @@ TaskManager.flush = function (tasks, setTasks) {
     });
 
     Promise.all(prs).then((a) => {
-        localStorage.tasks = JSON.stringify(tasks);
-        setTasks([...tasks]);
+        if (setTasks) {
+            setTasks([...tasks]);
+        } else {
+            TaskManager.setTasks([...tasks]);
+        }
 
         setTimeout(() => {
             TaskManager.flushInProgress = false;
             if (TaskManager.needFlush) {
+                TaskManager.flush();
                 TaskManager.needFlush = false;
-                TaskManager.flush(tasks, setTasks);
             }
         }, 1000);
     });
 }
-TaskManager.archive = function (task, tasks, setTasks) {
+TaskManager.archive = function (task) {
     task.needArchive = true;
 
-    this.flush(tasks, setTasks);
+    this.flush();
 }
 
-TaskManager.load = function (tasks, setTasks) {
+TaskManager.load = function (clientTasks, setTasks) {
 
     utils.fetch_(apiTasks + '/list', 'post', { uid: UserManager.getUid() })
-        .then((r) => {
-            if (r === null) {
-                // ingnore data from server
-                setTasks(tasks);
+        .then((serverTasks) => {
+            if (serverTasks === null) {
+                // ignore data from server
+                TaskManager.setTasks(clientTasks);
             } else {
-                if (tasks) {
-                    r.forEach(serverTask => {
-                        let clientTask = tasks.find(task => task.id === serverTask.id);
+                // Set isCollapsed is here! Its like merge serverTasks and clientTasks
+                if (clientTasks) {
+                    serverTasks.forEach(serverTask => {
+                        let clientTask = clientTasks.find(task => task.id === serverTask.id);
                         serverTask.isCollapsed = clientTask ? clientTask.isCollapsed : false;
 
                         if (TaskManager.isTaskHasStopWatch(serverTask)) {
                             serverTask.isCollapsed = false;
                         }
-                    })
+                    });
                 }
-                localStorage.tasks = JSON.stringify(r);
-                setTasks(r);
+                TaskManager.setTasks(serverTasks);
             }
         });
 };
 
-TaskManager.init = function (setTasks) {
-    let tasks = localStorage.tasks === undefined ? [] : JSON.parse(localStorage.tasks)
-    this.flush(tasks, (ts) => {
 
-        tasks = ts;
-        this.load(tasks, (ts) => {
-            tasks = ts;
-            localStorage.tasks = JSON.stringify(tasks);
-            setTasks(tasks);
-        })
+TaskManager.init = function (setTasks) {
+    if (TaskManager.init.inProgress) return;
+    TaskManager.init.inProgress = true;
+    let clientTasks;
+    try {
+        clientTasks = JSON.parse(localStorage.tasks)
+        if (!Array.isArray(clientTasks)) {
+            clientTasks = [];
+        }
+    } catch {
+        clientTasks = [];
+    }
+    TaskManager.setTasks = function (tasks) {
+        setTasks(tasks);
+        localStorage.tasks = JSON.stringify(tasks);
+    };
+    TaskManager.tasks = clientTasks;
+    setTasks(clientTasks);
+    this.flush((flushedTasks) => {
+        this.load(flushedTasks);
     });
 }
 
@@ -359,12 +396,17 @@ function getDates(tasks) {
         .map((offset) => new Date(new Date().getTime() + (offset * 86400000)));
 
     // get all tiks from all metrics from all tasks and find min datetime
-    let minDate = tasks.map(
-        task => task.metrics.map(metric => metric.tiks)
-            .reduce((all, next) => [...all, ...next]))
-        .reduce((all, next) => [...all, ...next])
-        .map(tik => tik.datetime)
-        .reduce((min, next) => next < min ? next : min);
+    let minDate;
+    if (tasks.length > 0) {
+        minDate = tasks.map(
+            task => task.metrics.map(metric => metric.tiks)
+                .reduce((all, next) => [...all, ...next]))
+            .reduce((all, next) => [...all, ...next])
+            .map(tik => tik.datetime)
+            .reduce((min, next) => next < min ? next : min);
+    } else {
+        minDate = Date.now();
+    }
 
     dates = dates.filter(date => date > new Date((minDate - 24 * 60 * 60) * 1000));
     return dates;

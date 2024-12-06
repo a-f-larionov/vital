@@ -13,15 +13,15 @@ function InputStopWatch({ metrica, task, tasks, setTasks }) {
     function onPlayHandler() {
         TaskManager.sw[swId] = { start: new Date().getTime() };
         localStorage.stopWatches = JSON.stringify(TaskManager.sw);
-        TaskManager.flush(tasks, setTasks);
+        TaskManager.flush();
     }
 
     function onStopHandler() {
         let seconds = Math.round((new Date() - TaskManager.sw[swId].start) / 1000);
-        TaskManager.commitNumber(task, tasks, setTasks, metrica, seconds);
+        TaskManager.commitNumber(task, tasks, metrica, seconds);
         TaskManager.sw[swId] = null;
         localStorage.stopWatches = JSON.stringify(TaskManager.sw);
-        TaskManager.flush(tasks, setTasks);
+        TaskManager.flush();
     }
 
     let timerRef = React.createRef();

@@ -11,6 +11,7 @@ import UserManager from './managers/UserManager';
 
 function App() {
     const [tasks, setTasks] = useState(null);
+    const [lastOne, setLastOne] = useState({});
     const [collapsAll, setCollapsAll] = useState(false);
     const [comments, setComments] = useState(null);
     const [userProfile, setUserProfile] = useState(() => {
@@ -28,12 +29,12 @@ function App() {
         return (<AuthForm setUserProfile={setUserProfile} />);
     }
 
-    if (tasks === null || comments === null) {
+    if (tasks === null) {
         TaskManager.init(setTasks);
         CommentManager.init(setComments);
         return <LoadingProgress />
     }
-    TaskManager.setState(tasks, setTasks);
+    TaskManager.setState(tasks, lastOne, setLastOne);
     return <PageRouter tasks={tasks} setTasks={setTasks} collapsAll={collapsAll} setCollapsAll={setCollapsAll} />
 }
 

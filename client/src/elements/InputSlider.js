@@ -19,7 +19,7 @@ function InputSlider({ metrica, task, tasks, setTasks }) {
         setMenuOpen(false);
         if (value > 0) {
             setSVal(0);
-            TaskManager.commitNumber(task, tasks, setTasks, value);
+            TaskManager.commitNumber(task, tasks, value);
         }
     }
 

@@ -27,14 +27,14 @@ function TaskTools({ task, tasks, setTasks }) {
     };
 
     function onIncrementClick({ task, tasks, setTasks }) {
-        TaskManager.increment(task, tasks, setTasks);
+        TaskManager.increment(task, tasks);
     }
 
     let magicInputRef = React.createRef();
 
     function onNumberCommit({ task, tasks, setTasks }) {
         let amount = parseInt(magicInputRef.current.value);
-        TaskManager.commitNumber(task, tasks, setTasks, amount);
+        TaskManager.commitNumber(task, tasks, amount);
     }
 
     function onArchiveClick({ task, tasks, setTasks }) {
@@ -88,9 +88,9 @@ function TaskTools({ task, tasks, setTasks }) {
                 anchorEl={menuAnchorEl}
                 open={menuOpen}
                 onClose={menuHandleClose}
-                // MenuListProps={{
-                //     'aria-labelledby': 'basic-button',
-                // }}
+            // MenuListProps={{
+            //     'aria-labelledby': 'basic-button',
+            // }}
             >
                 <MenuItem onClick={() => onEditClick({ task, tasks, setTasks })}>
                     <EditIcon />

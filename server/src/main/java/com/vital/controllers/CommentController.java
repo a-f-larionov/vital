@@ -37,6 +37,7 @@ public class CommentController {
         var entity = commentRepository.findByUidAndId(tikDTO.getUid(), tikDTO.getId());
         entity.setIsArchived(true);
         commentRepository.save(entity);
+
         return new ResponseDTO("OK");
     }
 
@@ -44,7 +45,6 @@ public class CommentController {
     public ResponseDTO update(@RequestBody @Valid CommentRqDTO taskDTO) {
 
         var entity = commentMapper.toEntity(taskDTO);
-
         commentRepository.save(entity);
 
         return new ResponseDTO("OK");

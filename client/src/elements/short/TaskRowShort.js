@@ -21,13 +21,13 @@ function TaskRowShort({ cols, rows, task, tasks, setTasks }) {
                 &nbsp;{task.title}
                 <Box sx={{ fontSize: 8, textAlign: 'right', display: 'block', float: 'right' }}>
                     {rows.map(row => {
-                        return <>
+                        return <Box key={row.metric.id}>
                             [
                             <Prediction metric={row.metric} />
                             ]
                             &nbsp;
                             &nbsp;
-                        </>
+                        </Box>
                     })}
                 </Box>
 

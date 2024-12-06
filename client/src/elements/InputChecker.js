@@ -5,19 +5,11 @@ import TaskManager from '../managers/TaskManager';
 function InputChecker({ metrica: metric, task, tasks, setTasks }) {
 
     function onIncrementClick() {
-        TaskManager.increment(task, tasks, setTasks, metric, 1);
+        TaskManager.increment(task, tasks, metric, 1);
     }
 
     function onCheckedClick() {
-
-        //let count = task.tiks.reduce((r, t) => { return r + metric.value; }, 0);
-        // if (count) {
-        //     // if(alert()){
-        //     //     return;
-            
-        //     // }
-        // }
-        TaskManager.resetMetric(task, tasks, setTasks, metric);
+        TaskManager.resetMetric(task, tasks, metric);
     }
 
     //✅
