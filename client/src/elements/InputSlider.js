@@ -4,9 +4,9 @@ import { Slider } from 'antd';
 import React from 'react';
 import TaskManager from '../managers/TaskManager';
 
-function InputSlider({ metrica, task }) {
-    let m = metrica;
-    
+function InputSlider({ metric, task }) {
+    let m = metric;
+
     const [menuOpen, setMenuOpen] = React.useState(false);
     const [sVal, setSVal] = React.useState(0);
 

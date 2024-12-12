@@ -6,22 +6,22 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.vital.dto.rs.MetricaTemplateRsDTO;
-import com.vital.mappers.MetricaTemplateMapper;
-import com.vital.repositories.MetricaTemplateRepository;
+import com.vital.dto.rs.MetricTemplateRsDTO;
+import com.vital.mappers.MetricTemplateMapper;
+import com.vital.repositories.MetricTemplateRepository;
 
 import lombok.AllArgsConstructor;
 
 @RestController
 @AllArgsConstructor
-@RequestMapping("/api/metrica")
-public class MetricaController {
+@RequestMapping("/api/metric")
+public class MetricController {
     
-    private final MetricaTemplateRepository metricaTemplateRepository; 
-    private final MetricaTemplateMapper metricaTemplateMapper;
+    private final MetricTemplateRepository metricaTemplateRepository; 
+    private final MetricTemplateMapper metricaTemplateMapper;
 
     @GetMapping("/list-templates")
-    public List<MetricaTemplateRsDTO> listTemplates(){
+    public List<MetricTemplateRsDTO> listTemplates(){
 
         var list = metricaTemplateRepository.findAll();
 

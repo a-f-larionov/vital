@@ -205,19 +205,19 @@ TaskManager.tikUpdate = function (tik) {
     this.flush();
 }
 
-TaskManager.commitNumber = function (task, metrica, value) {
-    TaskManager.tikCreate(task, metrica, value);
+TaskManager.commitNumber = function (task, metric, value) {
+    TaskManager.tikCreate(task, metric, value);
 };
 
-TaskManager.increment = function (task, metrica, value) {
-    TaskManager.tikCreate(task, metrica, value);
+TaskManager.increment = function (task, metric, value) {
+    TaskManager.tikCreate(task, metric, value);
 };
 
-TaskManager.resetMetric = function (task, metrica) {
+TaskManager.resetMetric = function (task, metric) {
     utils.fetch_(apiTasks + '/metric/reset', 'post', {
         uid: UserManager.getUid(),
         taskId: task.id,
-        metricaId: metrica.id,
+        metricaId: metric.id,
         tikLastUpdate: new Date(new Date()).getTime() / 1000,
         datetimeFrom: new Date(new Date().toDateString()).getTime() / 1000
     }).then(() => {

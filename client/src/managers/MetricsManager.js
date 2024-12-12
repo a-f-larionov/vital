@@ -6,27 +6,27 @@ if (window.location.href.search("localhost") !== -1) {
     apiUrl = "http://localhost:" + port + apiUrl;
 }
 
-let apiMetrica = apiUrl + "/metrica";
+let apiMetric = apiUrl + "/metric";
 
-function MetricaManager() {
+function MetricsManager() {
 
 }
 
-MetricaManager.metricTemplates = [];
+MetricsManager.metricTemplates = [];
 
-MetricaManager.inProcess = false;
-MetricaManager.load = function (metrica, setMetrica) {
+MetricsManager.inProcess = false;
+MetricsManager.load = function (metric, setMetric) {
 
-    if (MetricaManager.metricTemplates.length > 0) {
+    if (MetricsManager.metricTemplates.length > 0) {
         return;
     }
-    MetricaManager.metricTemplates = metrica;
+    MetricsManager.metricTemplates = metric;
 
-    if (MetricaManager.inProcess) return;
-    MetricaManager.inProcess = true;
-    utils.fetch_(apiMetrica + "/list-templates")
-        .then(metricaData => {
-            metricaData = metricaData.filter((m) => {
+    if (MetricsManager.inProcess) return;
+    MetricsManager.inProcess = true;
+    utils.fetch_(apiMetric + "/list-templates")
+        .then(metricData => {
+            metricData = metricData.filter((m) => {
                 let s = {
                     'stopwatch': true,
                     'incrementer': true,
@@ -37,9 +37,9 @@ MetricaManager.load = function (metrica, setMetrica) {
                 };
                 return s[m.inputCode];
             });
-            setMetrica(metricaData);
+            setMetric(metricData);
         });
 
 }
 
-export default MetricaManager;
+export default MetricsManager;

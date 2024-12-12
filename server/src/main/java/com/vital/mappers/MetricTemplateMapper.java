@@ -4,12 +4,12 @@ import java.util.List;
 
 import org.mapstruct.Mapper;
 
-import com.vital.dto.rs.MetricaTemplateRsDTO;
+import com.vital.dto.rs.MetricTemplateRsDTO;
 import com.vital.entities.MetricaTemplateEntity;
 
 @Mapper(componentModel = "spring")
-public interface MetricaTemplateMapper {
+public interface MetricTemplateMapper {
 
-    public List<MetricaTemplateRsDTO> toDTO(List<MetricaTemplateEntity> list);
+    public List<MetricTemplateRsDTO> toDTO(List<MetricaTemplateEntity> list);
 
 }

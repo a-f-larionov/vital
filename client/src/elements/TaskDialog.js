@@ -6,7 +6,7 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import React from 'react';
-import MetricaManager from '../managers/MetricaManager';
+import MetricsManager from '../managers/MetricsManager';
 import TaskManager from '../managers/TaskManager';
 import MetricElement from './MetricElement';
 import UserManager from '../managers/UserManager';
@@ -22,7 +22,7 @@ function TaskDialog({ setOpenCallback, task }) {
         { code: 'checker', title: 'Чекер', icon: '✅' },
     ];
 
-    const metricTemplates = MetricaManager.metricTemplates;
+    const metricTemplates = MetricsManager.metricTemplates;
 
     let isNew = task.id ? false : true;
 
@@ -115,7 +115,7 @@ function TaskDialog({ setOpenCallback, task }) {
                     </Grid2>
 
                     {Array.from({ length: showMetrics }, (nothing, i) => {
-                        return <MetricElement key={i} elIndex={i} metrica={task.metrics[i]} metricTemplates={metricTemplates} views={views} />;
+                        return <MetricElement key={i} elIndex={i} metric={task.metrics[i]} metricTemplates={metricTemplates} views={views} />;
                     })}
 
                     <Button onClick={() => { setShowMetrics(showMetrics + 1); }}>+ Add</Button>

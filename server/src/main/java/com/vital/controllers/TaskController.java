@@ -19,7 +19,7 @@ import com.vital.entities.TaskEntity;
 import com.vital.entities.TikEntity;
 import com.vital.mappers.TaskMapper;
 import com.vital.mappers.TikMapper;
-import com.vital.repositories.MetricaRepository;
+import com.vital.repositories.MetricRepository;
 import com.vital.repositories.TaskRepository;
 import com.vital.repositories.TiksRepository;
 
@@ -35,7 +35,7 @@ public class TaskController {
 
     final TaskRepository taskRepository;
     final TiksRepository tiksRepository;
-    final MetricaRepository metricaRepository;
+    final MetricRepository metricaRepository;
     final TaskMapper taskMapper;
     final TikMapper tikMapper;
  

@@ -2,14 +2,14 @@ import { CheckOutlined, PlusOutlined } from '@ant-design/icons';
 import { Button } from "antd";
 import TaskManager from '../managers/TaskManager';
 
-function InputChecker({ task, metrica }) {
+function InputChecker({ task, metric }) {
 
     function onIncrementClick() {
-        TaskManager.increment(task, metrica, 1);
+        TaskManager.increment(task, metric, 1);
     }
 
     function onCheckedClick() {
-        TaskManager.resetMetric(task, metrica);
+        TaskManager.resetMetric(task, metric);
     }
 
     //✅

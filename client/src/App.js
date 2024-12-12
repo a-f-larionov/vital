@@ -4,7 +4,7 @@ import AuthForm from "./elements/AuthForm";
 import LoadingProgress from './elements/LoadingProgress';
 import PageRouter from './elements/PageRouters';
 import CommentManager from './managers/CommentsManager';
-import MetricaManager from './managers/MetricaManager';
+import MetricsManager from './managers/MetricsManager';
 import PageManager from './managers/PageManager';
 import TaskManager from "./managers/TaskManager";
 import UserManager from './managers/UserManager';
@@ -20,10 +20,10 @@ function App() {
     });
     const [currentPage, setCurrentPage] = useState(PageManager.PAGE_MAIN);
     const [collapsed, setCollapsed] = useState({});
-    const [metrica, setMetrica] = useState([]);
+    const [metrics, setMetrics] = useState([]);
     PageManager.init(currentPage, setCurrentPage, collapsed, setCollapsed);
     UserManager.setUserProfile(userProfile);
-    MetricaManager.load(metrica, setMetrica);
+    MetricsManager.load(metrics, setMetrics);
 
     if (userProfile.id === undefined) {
         return (<AuthForm setUserProfile={setUserProfile} />);

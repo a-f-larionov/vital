@@ -6,9 +6,9 @@ import React from 'react';
 import TaskManager from '../managers/TaskManager';
 import utils from "../utils";
 
-function InputStopWatch({ metrica, task }) {
+function InputStopWatch({ task, metric }) {
 
-    let swId = task.id + '_' + metrica.id;
+    let swId = task.id + '_' + metric.id;
     let timerRef = React.createRef();
 
     if (!TaskManager.sw[swId]) {
@@ -16,7 +16,7 @@ function InputStopWatch({ metrica, task }) {
             <Button size='default' icon={<PlayCircleIcon onClick={() => InputStopWatch.onPlayHandler(swId)} />} />
         );
     } else {
-        const el = <Button size='default' icon={<StopCircleIcon onClick={() => InputStopWatch.onStopHandler(swId, task, metrica)} />}>
+        const el = <Button size='default' icon={<StopCircleIcon onClick={() => InputStopWatch.onStopHandler(swId, task, metric)} />}>
             <Box ref={timerRef}></Box>
         </Button>;
         InputStopWatch.timeoutHandler(swId, timerRef);
@@ -32,9 +32,9 @@ InputStopWatch.onPlayHandler = (swId) => {
 }
 
 
-InputStopWatch.onStopHandler = (swId, task, metrica) => {
+InputStopWatch.onStopHandler = (swId, task, metric) => {
     let seconds = Math.round((new Date() - TaskManager.sw[swId].start) / 1000);
-    TaskManager.commitNumber(task, metrica, seconds);
+    TaskManager.commitNumber(task, metric, seconds);
     TaskManager.sw[swId] = null;
     localStorage.stopWatches = JSON.stringify(TaskManager.sw);
     TaskManager.flush();

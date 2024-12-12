@@ -6,7 +6,7 @@ import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.vital.entities.MetricaEntity;
 
-public interface MetricaRepository extends PagingAndSortingRepository<MetricaEntity, String> {
+public interface MetricRepository extends PagingAndSortingRepository<MetricaEntity, String> {
 
     public List<MetricaEntity> findAll();
 

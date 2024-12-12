@@ -1,14 +1,14 @@
 import { FormControl, Grid2, InputLabel, MenuItem, Select } from "@mui/material";
 import React from "react";
 
-function MetricElement({ metrica, elIndex, metricTemplates, views }) {
+function MetricElement({ metric, elIndex, metricTemplates, views }) {
 
-    const [mIdState, setMIdState] = React.useState(metrica ? metrica.templateId : "");
+    const [mIdState, setMIdState] = React.useState(metric ? metric.templateId : "");
     const handleTypeChange = (event) => {
         setMIdState(event.target.value);
     };
 
-    const [viewCodeState, setViewCode] = React.useState(metrica ? metrica.viewCode : "");
+    const [viewCodeState, setViewCode] = React.useState(metric ? metric.viewCode : "");
     const handleViewChange = (event) => {
         setViewCode(event.target.value);
     };

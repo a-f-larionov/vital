@@ -35,7 +35,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 function TiksLits({ tasks, setTasks }) {
     let task = PageManager.pageParamA;
-    let metrica = PageManager.pageParamB;
+    let metric = PageManager.pageParamB;
 
     const [rowModesModel, setRowModesModel] = React.useState({});
 
@@ -56,7 +56,7 @@ function TiksLits({ tasks, setTasks }) {
         setToArchiveId(null);
     };
     const handleArchiveIt = () => () => {
-        TaskManager.tikArchive(metrica.tiks.find(tik => tik.id === toArchiveId), tasks, setTasks);
+        TaskManager.tikArchive(metric.tiks.find(tik => tik.id === toArchiveId), tasks, setTasks);
         setRowModesModel({ ...rowModesModel, [toArchiveId]: { mode: GridRowModes.View } });
         setToArchiveId(null);
     }
@@ -65,15 +65,15 @@ function TiksLits({ tasks, setTasks }) {
         setRowModesModel({ ...rowModesModel, [id]: { mode: GridRowModes.View, ignoreModifications: true } });
     };
 
-    let rows = metrica.tiks;
+    let rows = metric.tiks;
 
-    function pushColumn(columns, fieldName, metrica) {
+    function pushColumn(columns, fieldName, metric) {
         let column = {
             field: fieldName,
-            headerName: metrica.icon,
+            headerName: metric.icon,
             width: 120, align: 'left', headerAlign: 'left', editable: true
         };
-        switch (metrica.inputCode) {
+        switch (metric.inputCode) {
             case 'stopwatch':
                 column = {
                     ...column,
@@ -101,8 +101,8 @@ function TiksLits({ tasks, setTasks }) {
 
     const columns = [];
 
-    if (metrica) {
-        pushColumn(columns, 'value', metrica);
+    if (metric) {
+        pushColumn(columns, 'value', metric);
     }
 
     columns.push({
@@ -172,7 +172,7 @@ function TiksLits({ tasks, setTasks }) {
                 bordered
                 onRowEditStop={(a, b, c) => { console.log('onroweditstip', a, b, c); }}
                 processRowUpdate={(after, before) => {
-                    let tik = metrica.tiks.find(tik => tik.id === after.id);
+                    let tik = metric.tiks.find(tik => tik.id === after.id);
                     tik.datetime = after.datetime;
                     tik.value = after.value;
                     TaskManager.tikUpdate(tik, tasks, setTasks);
@@ -191,7 +191,7 @@ function TiksLits({ tasks, setTasks }) {
                 <DialogTitle>Удалить?</DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-slide-description">
-                        {task.title}:{metrica.title}
+                        {task.title}:{metric.title}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
