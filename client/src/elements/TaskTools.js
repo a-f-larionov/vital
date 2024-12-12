@@ -26,25 +26,25 @@ function TaskTools({ task, tasks, setTasks }) {
         setAnchorEl(null);
     };
 
-    function onIncrementClick({ task, tasks, setTasks }) {
-        TaskManager.increment(task, tasks);
+    function onIncrementClick({ task }) {
+        TaskManager.increment(task);
     }
 
     let magicInputRef = React.createRef();
 
-    function onNumberCommit({ task, tasks, setTasks }) {
+    function onNumberCommit({ task }) {
         let amount = parseInt(magicInputRef.current.value);
-        TaskManager.commitNumber(task, tasks, amount);
+        TaskManager.commitNumber(task, amount);
     }
 
-    function onArchiveClick({ task, tasks, setTasks }) {
-        TaskManager.archive(task, tasks, setTasks);
+    function onArchiveClick({ task }) {
+        TaskManager.archive(task);
         menuHandleClose();
     }
 
     let doOpenDialog = function () { console.error(" must be redefine") };
 
-    function onEditClick({ task, tasks, setTasks }) {
+    function onEditClick() {
         doOpenDialog(true);
         menuHandleClose();
     }

@@ -1,21 +1,13 @@
 import React, { useState } from 'react';
-
-//import { DayPilotCalendar } from "@daypilot/daypilot-pro-react";
-//import { DayPilotNavigator } from "@daypilot/daypilot-pro-react";
-import { DayPilotNavigator } from "daypilot-pro-react";
-import { DayPilotCalendar } from "daypilot-pro-react";
-
 import TaskManager from '../managers/TaskManager';
-/** 
- *  https://code.daypilot.org/42221/react-weekly-calendar-tutorial
- */
-
 
 function Calendar({ tasks }) {
 
     const [startDate, setStartDate] = useState("2025-10-04");
 
     let tableData = TaskManager.getTable();
+    // random color
+    //Math.floor((Math.abs(Math.sin(seed) * 16777215))).toString(16);
 
     let events = [];
     tasks.map(task => {
@@ -46,20 +38,11 @@ function Calendar({ tasks }) {
         })
     })
 
-    const config = {
-        locale: "ru-ru",
-        viewType: "Week",
-        cellDuration: 30,
-        cellHeight: 30,
-        dayBeginsHour: 6,
-        dayEndsHour: 23,
-        businessBeginsHour: 7,
-        businessEndsHour: 18,
-        eventArrangement: "SideBySide",
-        timeRangeSelectedHandling: "Enabled",
-    };
 
     let hours = [];
+    let min = Math.min(...tasks.map(task => Math.min(...task.metrics.map(metric => Math.min(...metric.tiks.map(tik => tik.datetime)))))) * 1000;
+    let max = Math.max(...tasks.map(task => Math.max(...task.metrics.map(metric => Math.max(...metric.tiks.map(tik => tik.datetime)))))) * 1000;
+    
     for (var i = 0; i < 24; i++) {
         hours.push({ hour: i });
     }
@@ -115,7 +98,7 @@ function Calendar({ tasks }) {
                                     return metric.tiks
                                         .map((tik) => {
 
-                                            let title = task.title.substring(0,8) ;
+                                            let title = task.title.substring(0, 15);
                                             let d = new Date(tik.datetime * 1000);
                                             let duration = tik.value / 60 / 1.5;
                                             let backColor;
@@ -129,14 +112,15 @@ function Calendar({ tasks }) {
                                                 case "👨‍💻Проект Life Tracker ": backColor = "#cc99ff"; break;
                                                 case "🐶Прогулка с Купером": backColor = "#F44"; break;
                                                 case "🐀Прогулка крыс": backColor = "#F44"; break;
+                                                default: backColor = "#eee"; break;
                                             }
                                             let top = d.getHours() * 51 + d.getMinutes() / 1.1 - duration;
-                                            
-                                            let left = (d.getDate() - 10) * 100 + (d.getMonth() - 9) * (31 * 100)  +50;
-                                            
+
+                                            let left = (d.getDate() - 5) * 100 + (d.getMonth() - 9) * (31 * 100) + 50;
+
                                             return <div key={tik.id}
                                                 style={{ position: 'relative', left: left, top: top, width: 0, height: 0, fontSize: 10 }}>
-                                                <div style={{ width: 90, height: duration, background: backColor, borderRadius: 2 }}>
+                                                <div style={{ width: 95, height: duration, background: backColor, borderRadius: 4, textAlign:'center' }}>
                                                     {title}
                                                 </div>
                                             </div>

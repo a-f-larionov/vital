@@ -4,7 +4,7 @@ import { Slider } from 'antd';
 import React from 'react';
 import TaskManager from '../managers/TaskManager';
 
-function InputSlider({ metrica, task, tasks, setTasks }) {
+function InputSlider({ metrica, task }) {
     let m = metrica;
     
     const [menuOpen, setMenuOpen] = React.useState(false);
@@ -19,7 +19,7 @@ function InputSlider({ metrica, task, tasks, setTasks }) {
         setMenuOpen(false);
         if (value > 0) {
             setSVal(0);
-            TaskManager.commitNumber(task, tasks, value);
+            TaskManager.commitNumber(task, value);
         }
     }
 

@@ -3,9 +3,9 @@ import { Grid2 } from "@mui/material";
 import TaskManager from "../managers/TaskManager";
 import TaskRowShort from "./short/TaskRowShort";
 
-function TaskList({ tasks, setTasks }) {
+function TaskList() {
   let tasksViewData = TaskManager.getTable();
-  
+
   const rows =
     tasksViewData
       .tasks.map(task =>
@@ -13,8 +13,7 @@ function TaskList({ tasks, setTasks }) {
           key={"task" + task.task.id}
           task={task.task}
           rows={task.rows}
-          cols={tasksViewData.cols}
-          tasks={tasks} setTasks={setTasks} />
+        />
       );
 
   return (

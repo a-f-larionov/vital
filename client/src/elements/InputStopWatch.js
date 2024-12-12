@@ -6,48 +6,47 @@ import React from 'react';
 import TaskManager from '../managers/TaskManager';
 import utils from "../utils";
 
-function InputStopWatch({ metrica, task, tasks, setTasks }) {
+function InputStopWatch({ metrica, task }) {
 
     let swId = task.id + '_' + metrica.id;
-
-    function onPlayHandler() {
-        TaskManager.sw[swId] = { start: new Date().getTime() };
-        localStorage.stopWatches = JSON.stringify(TaskManager.sw);
-        TaskManager.flush();
-    }
-
-    function onStopHandler() {
-        let seconds = Math.round((new Date() - TaskManager.sw[swId].start) / 1000);
-        TaskManager.commitNumber(task, tasks, metrica, seconds);
-        TaskManager.sw[swId] = null;
-        localStorage.stopWatches = JSON.stringify(TaskManager.sw);
-        TaskManager.flush();
-    }
-
     let timerRef = React.createRef();
-
-    function timeoutHandler() {
-        setTimeout(timeoutHandler, 1000 / 40);
-        if (TaskManager.sw[swId] === null) return;
-        if (TaskManager.sw[swId] === undefined) return;
-        if (timerRef.current === null) return;
-        let timer = (new Date() - TaskManager.sw[swId].start) / 1000;
-        timerRef.current.innerHTML = utils.s2hms(timer, true);
-    }
 
     if (!TaskManager.sw[swId]) {
         return (
-            <Button size='default' icon={<PlayCircleIcon onClick={onPlayHandler} />} />
+            <Button size='default' icon={<PlayCircleIcon onClick={() => InputStopWatch.onPlayHandler(swId)} />} />
         );
     } else {
-        timeoutHandler();
-        return (
-            <Button size='default' icon={<StopCircleIcon onClick={onStopHandler} />}>
-                <Box ref={timerRef}></Box>
-            </Button>
-        );
+        const el = <Button size='default' icon={<StopCircleIcon onClick={() => InputStopWatch.onStopHandler(swId, task, metrica)} />}>
+            <Box ref={timerRef}></Box>
+        </Button>;
+        InputStopWatch.timeoutHandler(swId, timerRef);
+        return el;
 
     }
+}
+
+InputStopWatch.onPlayHandler = (swId) => {
+    TaskManager.sw[swId] = { start: new Date().getTime() };
+    localStorage.stopWatches = JSON.stringify(TaskManager.sw);
+    TaskManager.flush();
+}
+
+
+InputStopWatch.onStopHandler = (swId, task, metrica) => {
+    let seconds = Math.round((new Date() - TaskManager.sw[swId].start) / 1000);
+    TaskManager.commitNumber(task, metrica, seconds);
+    TaskManager.sw[swId] = null;
+    localStorage.stopWatches = JSON.stringify(TaskManager.sw);
+    TaskManager.flush();
+}
+
+InputStopWatch.timeoutHandler = (swId, timerRef) => {
+    setTimeout(() => InputStopWatch.timeoutHandler(swId, timerRef), 1000 / 40);
+    if (TaskManager.sw[swId] === null) return;
+    if (TaskManager.sw[swId] === undefined) return;
+    if (timerRef.current === null) return;
+    let timer = (new Date() - TaskManager.sw[swId].start) / 1000;
+    timerRef.current.innerHTML = utils.s2hms(timer, true);
 }
 
 export default InputStopWatch;

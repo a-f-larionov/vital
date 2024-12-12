@@ -4,22 +4,19 @@ import InputIncrementer from './InputIncrementer';
 import InputSlider from './InputSlider';
 import InputStopWatch from './InputStopWatch';
 
-function InputMetric({ metrica, task, tasks, setTasks }) {
+function InputMetric({ metrica, task }) {
 
-    let m = metrica;
-    if (m) {
-        switch (m.inputCode) {
-            case 'stopwatch':
-                return <InputStopWatch metrica={m} task={task} tasks={tasks} setTasks={setTasks} />;
-            case 'incrementer':
-                return <InputIncrementer metrica={m} task={task} tasks={tasks} setTasks={setTasks} />;
-            case 'slider':
-                return <InputSlider metrica={m} task={task} tasks={tasks} setTasks={setTasks} />;
-            case 'checker':
-                return <InputChecker metrica={m} task={task} tasks={tasks} setTasks={setTasks} />;
-            default:
-                return 'n/a';
-        }
+    switch (metrica.inputCode) {
+        case 'stopwatch':
+            return <InputStopWatch metrica={metrica} task={task} />;
+        case 'incrementer':
+            return <InputIncrementer metrica={metrica} task={task} />;
+        case 'slider':
+            return <InputSlider metrica={metrica} task={task} />;
+        case 'checker':
+            return <InputChecker metrica={metrica} task={task} />;
+        default:
+            return 'n/a';
     }
 }
 

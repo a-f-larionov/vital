@@ -8,7 +8,7 @@ function ContentPage({ tasks, setTasks }) {
 
     switch (PageManager.currentPage) {
         case PageManager.PAGE_MAIN:
-            return <TaskList tasks={tasks} setTasks={setTasks} />;
+            return <TaskList />;
         case PageManager.PAGE_EDIT_TIKS:
             return <TiksList tasks={tasks} setTasks={setTasks} />;
         case PageManager.PAGE_CALENDAR:

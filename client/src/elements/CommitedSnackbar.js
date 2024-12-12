@@ -1,9 +1,9 @@
 import CloseIcon from "@mui/icons-material/Close";
+import HistoryIcon from '@mui/icons-material/History';
 import SendIcon from '@mui/icons-material/Send';
-import { Button, Grid2, IconButton, Snackbar, Box } from "@mui/material";
+import { Box, Button, Grid2, IconButton, Snackbar } from "@mui/material";
 import { Input } from "antd";
 import React from "react";
-import CommentManager from "../managers/CommentsManager";
 import TaskManager from "../managers/TaskManager";
 import utils from "../utils";
 
@@ -12,7 +12,7 @@ function CommitedSnakbar() {
     const [open, setOpen] = React.useState(false);
     const commentRef = React.createRef();
     let lastOne = TaskManager.lastOne;
-    let task = lastOne.taskId ? TaskManager.tasks.find((task) => lastOne.taskId == task.id) : null;
+    let task = lastOne.taskId ? TaskManager.tasks.find((task) => lastOne.taskId === task.id) : null;
     let metrics = task ? task.metrics.filter((metric) => lastOne.metricIds.includes(metric.id)) : null;
 
     TaskManager.setSnackBarOpenCallback(setOpen);
@@ -30,9 +30,14 @@ function CommitedSnakbar() {
         setOpen(false);
     };
 
-    const handleUndo = (event, reason) => {
-        setOpen(false);
-        //TaskManager.tikUndo(lastOne.metrics.);
+    const handleUndo = (tik) => {
+        lastOne.metricIds = lastOne.metricIds.filter(id => id !== tik.mid);
+        if (lastOne.metricIds.length === 0) {
+            setOpen(false);
+            lastOne = {};
+        }
+        TaskManager.setLastOne(lastOne);
+        TaskManager.tikUndo(tik);
     };
 
     const action = (
@@ -51,11 +56,15 @@ function CommitedSnakbar() {
                             value = utils.s2hms(value, true);
                         }
 
-                        return <Box key={metric.id}>{metricTitle} {value}</Box>;
+                        return <Box key={metric.id}>
+                            {metricTitle} {value}
+                            <Button color="secondary" size="small" onClick={() => handleUndo(tik)}><HistoryIcon /></Button>
+                        </Box>;
                     }) : ''}
             </Grid2>
             <Grid2 size={4} align="right" >
-                <Button color="secondary" size="small" onClick={handleUndo}>UNDO</Button>
+
+
 
                 <IconButton
                     size="small"

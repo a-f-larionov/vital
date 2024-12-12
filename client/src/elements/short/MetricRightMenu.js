@@ -5,58 +5,40 @@ import { Box, Fab, IconButton, Popper } from "@mui/material";
 import React from "react";
 import PageManager from "../../managers/PageManager";
 
-function MetricRightMenu({ metric, task, tasks, setTasks }) {
+const sxBox = { minWidth: 0, margin: 0, paddingRight: 0 };
+const sxButton = { padding: 0, height: 15 };
+const sxPopper = { '& > :not(style)': { marginLeft: '8px', backgroundColor: '#fff' } };
 
-    const [menuAnchorEl, setAnchorEl] = React.useState(null);
-    const menuOpen = Boolean(menuAnchorEl);
-    const [currentMetric, setCurrentMetric] = React.useState(null);
-
-    const menuHandleClick = (event, metric) => {
-        if (menuAnchorEl === null) {
-            setAnchorEl(event.currentTarget);
-            setCurrentMetric(metric);
-        } else {
-            menuHandleClose();
-        }
-    };
-
-    const menuHandleClose = () => {
-        setAnchorEl(null);
-        setCurrentMetric(null);
-    };
-
-    function onEditMenuClick({ metric, task, tasks, setTasks }) {
-        PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task.title + " > " + currentMetric.title + currentMetric.icon, task, currentMetric);
-    }
+function MetricRightMenu({ task, metric }) {
+    const [anchorlEl, setAnchorEl] = React.useState(null);
 
     return (
-        <ClickAwayListener onClickAway={menuHandleClose}>
-            <Box key={metric.id} sx={{ minWidth: 0, margin: 0, paddingRight: 0 }}>
+        <ClickAwayListener onClickAway={() => setAnchorEl(null)}>
+            <Box key={metric.id} sx={sxBox}>
+
+                <IconButton sx={sxButton}
+                    onClick={(e) => setAnchorEl(anchorlEl === null ? e.currentTarget : null)}>
+                    <MoreVertIcon />
+                </IconButton>
 
                 <Popper
-                    id="menu{metric.id}"
+                    open={Boolean(anchorlEl)}
+                    anchorEl={anchorlEl}
+                    sx={sxPopper}
                     placement="left"
-                    open={menuOpen}
-                    anchorEl={menuAnchorEl}
-                    onClose={menuHandleClose}
-                    sx={{ '& > :not(style)': { marginLeft: '8px', backgroundColor: '#fff' } }}>
-                    <Fab size='small'>
-                        <EditIcon onClick={() => onEditMenuClick({ currentMetric, task, tasks, setTasks })} color='primary' />
+                >
+                    <Fab size='small' onClick={() => MetricRightMenu.onClickEdit(task, metric)} >
+                        <EditIcon color='primary' />
                     </Fab>
                 </Popper>
 
-                <IconButton
-                    aria-controls={menuOpen ? ('menu' + metric.id) : undefined}
-                    aria-expanded={menuOpen ? 'true' : undefined}
-                    aria-haspopup="true"
-                    onClick={(e) => menuHandleClick(e, metric)}
-                    sx={{ padding: 0, margin: 0, height: 15 }}
-                >
-                    <MoreVertIcon sx={{ padding: 0, margin: 0 }} />
-                </IconButton>
             </Box>
         </ClickAwayListener>
     );
+}
+
+MetricRightMenu.onClickEdit = function (task, metric) {
+    PageManager.setPage(PageManager.PAGE_EDIT_TIKS, task.title + " > " + metric.title + metric.icon, task, metric);
 }
 
 export default MetricRightMenu;

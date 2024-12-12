@@ -2,7 +2,6 @@ import TaskManager from "../../managers/TaskManager";
 
 function Prediction({ metric }) {
 
-
     let all = TaskManager.getSum(metric, 100000);
     let lastSeven = TaskManager.getSum(metric, 7);
     let twoWeeks = TaskManager.getSum(metric, 14);
@@ -13,7 +12,7 @@ function Prediction({ metric }) {
 
     if (all === 0) return <></>;
     return <>
-
+        [
         {rocket ? '🚀' + rocket : ''}
 
         ∑ {all}
@@ -25,6 +24,7 @@ function Prediction({ metric }) {
         {monthPrediction === 0 ? '' : ' ' + monthPrediction}
 
         {hundredPrediction === 0 ? '' : ' ' + hundredPrediction}
+        ]
     </>
 }
 

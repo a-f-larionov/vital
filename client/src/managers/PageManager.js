@@ -40,7 +40,8 @@ PageManager.collapsAll = function (tasks, setTasks, collapsAll) {
     TaskManager.setTasks([...tasks]);
 }
 
-PageManager.toggleCollapse = function (task, tasks) {
+PageManager.toggleCollapse = function (task) {
+    let tasks = TaskManager.tasks;
     task.isCollapsed = task.isCollapsed !== undefined ? !task.isCollapsed : false;
     TaskManager.setTasks([...tasks]);
 }

@@ -11,7 +11,7 @@ import TaskManager from '../managers/TaskManager';
 import MetricElement from './MetricElement';
 import UserManager from '../managers/UserManager';
 
-function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
+function TaskDialog({ setOpenCallback, task }) {
     if (!task.metrics) task.metrics = [];
     task.metrics.sort((a, b) => a.sort - b.sort);
 
@@ -68,9 +68,9 @@ function TaskDialog({ setOpenCallback, task, tasks, setTasks }) {
         task.created = (new Date().getTime()) / 1000;
 
         if (isNew) {
-            TaskManager.add(task, tasks, setTasks);
+            TaskManager.add(task);
         } else {
-            TaskManager.taskUpdate(task, tasks, setTasks);
+            TaskManager.taskUpdate(task);
         }
 
         dialogHandleClose();

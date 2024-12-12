@@ -20,7 +20,7 @@ TaskManager.sw = JSON.parse(localStorage.stopWatches ? localStorage.stopWatches 
 
 TaskManager.tasks = null;
 TaskManager.setTasks = null;
-TaskManager.lastOne = null;
+TaskManager.lastOne = {};
 TaskManager.setLastOne = null;
 TaskManager.tikUpdateDelay = 15;
 
@@ -63,7 +63,7 @@ TaskManager.rememberTheLastOne = function (task, metric, newTik) {
     if (lastTask && lastTask.id === task.id && (lastTikDatetime + TaskManager.tikUpdateDelay) >= (Date.now() / 1000)) {
 
         if (lastMetrics.find(m => m.id === metric.id)) {
-            
+
             metric.tiks.sort((a, b) => b.datetime - a.datetime);
             metric.tiks[0].value += newTik.value;
             metric.tiks[0].datetime = newTik.datetime;
@@ -79,7 +79,6 @@ TaskManager.rememberTheLastOne = function (task, metric, newTik) {
         metric.tiks.push(newTik);
         lastOne = { taskId: task.id, metricIds: [metric.id] };
     }
-
     TaskManager.setLastOne(lastOne);
 }
 
@@ -107,27 +106,28 @@ TaskManager.getTable = function () {
             .map((metric) => {
 
                 let cells = dates.map((date) => {
-                    let title = '';
+                    let title = "‎";
                     let valueToday = metric.tiks.filter((tik) => new Date(tik.datetime * 1000)
                         .toDateString() === date.toDateString());
 
                     let sum = valueToday.reduce((r, tik) => { return r + (metric ? tik.value : 1); }, 0);
                     let cnt = valueToday.length;
 
-                    title = sum + " " + cnt;
-                    if (metric && metric.viewCode === 'checker') {
+                    if (metric.viewCode === 'checker') {
                         if (sum === 0) {
-                            title = cnt > 0 ? "✅" : "";
+                            title = cnt > 0 ? "✅" : "‎";
                         } else {
                             title = sum;
                         }
                     } else {
-                        title = sum;
-                        if (title && metric && metric.typeCode === "timestamp") {
-                            title = utils.s2hms(title) + '';
+
+                        if (sum && metric.typeCode === "timestamp") {
+                            title = utils.s2hms(sum) + '';
+                        } else {
+                            if (sum > 0) title = sum;
                         }
                     }
-                    if (!title) title = '';
+
                     return { title: title };
                 });
 
@@ -136,7 +136,7 @@ TaskManager.getTable = function () {
     }
     let tasksViewData = {};
 
-    let dates = getDates(tasks);
+    let dates = TaskManager.getDates(tasks);
 
     tasksViewData.cols = dates.map(date => ({ datetime: date }));
 
@@ -168,7 +168,7 @@ TaskManager.isTaskHasStopWatch = function (task) {
     return answer;
 }
 
-TaskManager.tikCreate = function (task, tasks, metric, value) {
+TaskManager.tikCreate = function (task, metric, value) {
 
     value = value !== undefined ? value : 0;
 
@@ -185,14 +185,13 @@ TaskManager.tikCreate = function (task, tasks, metric, value) {
     };
 
     setTimeout(function () {
-        //       task.tikLastUpdate = datetime;
+        task.tikLastUpdate = datetime;
     }, TaskManager.tikUpdateDelay * 1000);
 
     TaskManager.rememberTheLastOne(task, metric, newTik);
-
     TaskManager.snackBarOpenCallback(true);
-    this.flush();
 
+    this.flush();
 }
 
 TaskManager.tikArchive = function (tik) {
@@ -206,15 +205,15 @@ TaskManager.tikUpdate = function (tik) {
     this.flush();
 }
 
-TaskManager.commitNumber = function (task, tasks, metrica, value) {
-    TaskManager.tikCreate(task, tasks, metrica, value);
+TaskManager.commitNumber = function (task, metrica, value) {
+    TaskManager.tikCreate(task, metrica, value);
 };
 
-TaskManager.increment = function (task, tasks, metrica, value) {
-    TaskManager.tikCreate(task, tasks, metrica, value);
+TaskManager.increment = function (task, metrica, value) {
+    TaskManager.tikCreate(task, metrica, value);
 };
 
-TaskManager.resetMetric = function (task, tasks, metrica) {
+TaskManager.resetMetric = function (task, metrica) {
     utils.fetch_(apiTasks + '/metric/reset', 'post', {
         uid: UserManager.getUid(),
         taskId: task.id,
@@ -222,7 +221,7 @@ TaskManager.resetMetric = function (task, tasks, metrica) {
         tikLastUpdate: new Date(new Date()).getTime() / 1000,
         datetimeFrom: new Date(new Date().toDateString()).getTime() / 1000
     }).then(() => {
-        TaskManager.load(tasks);
+        TaskManager.load();
     })
 }
 
@@ -341,7 +340,7 @@ TaskManager.archive = function (task) {
     this.flush();
 }
 
-TaskManager.load = function (clientTasks, setTasks) {
+TaskManager.load = function (clientTasks) {
 
     utils.fetch_(apiTasks + '/list', 'post', { uid: UserManager.getUid() })
         .then((serverTasks) => {
@@ -389,8 +388,9 @@ TaskManager.init = function (setTasks) {
     });
 }
 
-function getDates(tasks) {
-    let deepDays = 100;
+TaskManager.getDates = () => {
+    let tasks = TaskManager.tasks;
+    let deepDays = 50;
 
     let dates = Array.from({ length: deepDays }, (v, i) => { return -deepDays + 1 + i; })
         .map((offset) => new Date(new Date().getTime() + (offset * 86400000)));
