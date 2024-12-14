@@ -25,7 +25,7 @@ function TaskRowShort({ rows, task }) {
 
             <Grid2 size={11} textAlign="left" sx={{ padding: 0, cursor: 'hand' }} onClick={() => PageManager.toggleCollapse(task)}>
                 &nbsp;{task.title}
-                <Box sx={{ fontSize: 8, float: 'right' }}>
+                <Box sx={{ fontSize: 9  , float: 'right' }}>
                     {rows.map(row => <Prediction key={row.metric.id} metric={row.metric} />)}
                 </Box>
             </Grid2>
@@ -39,7 +39,7 @@ function TaskRowShort({ rows, task }) {
                 <Collapse orientation="vertical" in={!task.isCollapsed}>
 
 
-                    <TableContainer sx={{ overflow: 'hidden' }}>
+                    <TableContainer sx={{ overflow: 'visible' }}>
                         <Table size="small">
                             <TableBody key={task.id + 'body'}>
 

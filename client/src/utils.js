@@ -18,9 +18,9 @@ function fetch_(url, method, body) {
 }
 
 
-function s2hms(s, showSeconds, onlyHours) {
+function s2hms(s, showSeconds, onlyHours, returnData) {
 
-    if (onlyHours) return Math.floor(s/3600);
+    if (onlyHours) return Math.floor(s / 3600);
 
     let time = [
         Math.floor(s / 3600), // hours
@@ -29,11 +29,11 @@ function s2hms(s, showSeconds, onlyHours) {
     ];
 
     if (time[2] < 10) {
-
         time[2] = "0" + time[2];
     }
-    if (!showSeconds) time.pop();    
-    if (time[0] === 0) {
+    if (!showSeconds) time.pop();
+
+    if (time[0] === 0 && onlyHours === undefined) {
 
         time.shift();
     } else {
@@ -43,7 +43,10 @@ function s2hms(s, showSeconds, onlyHours) {
             time[1] = "0" + time[1];
         }
     }
-    
+
+    if (returnData) {
+        return time;
+    }
     return time.join(":");
 }
 

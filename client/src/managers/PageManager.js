@@ -9,7 +9,7 @@ PageManager.PAGE_CALENDAR = 3;
 PageManager.pageParamA = undefined
 PageManager.pageParamB = undefined
 PageManager.currentPage = undefined;
-PageManager.defaulTitle = "Достигейт!🚀";
+PageManager.defaulTitle = "Достигейтинг!🚀";
 PageManager.pageTitle = PageManager.defaulTitle;
 
 PageManager.init = function (currentPage, setCurrentPage, collapsed, setCollapsed) {
