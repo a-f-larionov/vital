@@ -328,8 +328,8 @@ TaskManager.flush = function (setTasks) {
         setTimeout(() => {
             TaskManager.flushInProgress = false;
             if (TaskManager.needFlush) {
-                TaskManager.flush();
                 TaskManager.needFlush = false;
+                TaskManager.flush();
             }
         }, 1000);
     });

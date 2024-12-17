@@ -3,7 +3,6 @@ import utils from "../../utils";
 
 function Prediction({ metric }) {
 
-    window.tasks = TaskManager.tasks;
     let all = TaskManager.getSum(metric, 100000);
     let lastSeven = TaskManager.getSum(metric, 7);
     let hundredPrediction = TaskManager.getSum(metric, 14, 100);
@@ -28,7 +27,6 @@ function Prediction({ metric }) {
         }
         byWeeks.push(sum);
     }
-    console.log(byWeeks);
 
     //groupedByWeek
     //🔮

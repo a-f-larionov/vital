@@ -15,10 +15,10 @@ function MetricElement({ metric, elIndex, metricTemplates, views }) {
 
     return (
         <>
-            <Grid2 size={3} alignContent={'center'}>
+            <Grid2 size={1} alignContent={'center'}>
                 #{elIndex + 1}:
             </Grid2>
-            <Grid2 size={4}>
+            <Grid2 size={5}>
                 <FormControl fullWidth variant="standard" sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel >Шаблон</InputLabel>
                     <Select
@@ -41,7 +41,7 @@ function MetricElement({ metric, elIndex, metricTemplates, views }) {
                 </FormControl>
             </Grid2>
 
-            <Grid2 size={4}>
+            <Grid2 size={5}>
                 <FormControl fullWidth variant="standard" sx={{ m: 1, minWidth: 120 }}>
                     <InputLabel >Вид</InputLabel>
                     <Select
