@@ -1,6 +1,5 @@
 package com.vital.dto;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
@@ -43,6 +42,6 @@ public class MetricaDTO {
     @NotBlank
     private String templateId;
 
-    private List <TikDTO> tiks = new ArrayList<>();
+    private List <TikDTO> tiks;
     
 }

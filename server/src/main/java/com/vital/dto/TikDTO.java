@@ -23,13 +23,12 @@ public class TikDTO {
     private String uid;
 
     @NotBlank
-    private String mid;
+    private String tid;
     
     @NotBlank
-    private String tid;
-    private String oid;
-
-    private Instant datetime;
+    private String mid;
 
     private Long value;
+
+    private Instant datetime;
 }

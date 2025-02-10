@@ -1,43 +1,45 @@
 package com.vital.entities;
 
-import java.time.Instant;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
-@Setter
-@Getter
+import java.time.Instant;
+
 @NoArgsConstructor
 @AllArgsConstructor
+@Setter
+@Getter
+@Builder
 @Entity
 public class TikEntity {
 
+    @Size(min = 36, max = 36)
     @Id
     private String id;
-    
-    @NotBlank
-    private String mid;
-    
+
+    @Size(min = 36, max = 36)
     @NotBlank
     private String uid;
 
+    @Size(min = 36, max = 36)
     @NotBlank
     private String tid;
 
-    private String oid;
+    @Size(min = 36, max = 36)
+    @NotBlank
+    private String mid; // renamte to metric[A]Id
 
-    private Boolean isArchived = false;
+    //
 
-    private Instant datetime;
+    private Long value;
 
     @NotNull
-    private Long value;
+    private Instant datetime;
+
+    @Builder.Default
+    private Boolean isArchived = false;
 }

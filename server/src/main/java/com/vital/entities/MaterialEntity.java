@@ -1,20 +1,20 @@
 package com.vital.entities;
 
-import java.time.Instant;
-
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@Entity
+import java.time.Instant;
+
 @Getter
 @Setter
 @NoArgsConstructor
+@Entity
+@Table(name = "material_entity")
 public class MaterialEntity {
 
     @Id
@@ -26,8 +26,9 @@ public class MaterialEntity {
     @NotBlank
     private String title;
 
-    @CreationTimestamp
     private Instant created;
+
+    private Boolean isArchived = false;
 
     private Instant finished;
 }

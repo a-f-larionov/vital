@@ -25,7 +25,6 @@ public class CommentEntity {
     @NotBlank
     private String uid;
 
-    @NotBlank
     private String tikId;
 
     @NotBlank

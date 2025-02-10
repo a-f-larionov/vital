@@ -1,24 +1,18 @@
 package com.vital;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.Random;
-import java.util.UUID;
-
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.vital.controllers.TikController;
-import com.vital.dto.TikDTO;
 import com.vital.entities.TikEntity;
 import com.vital.repositories.TiksRepository;
+import com.vital.utils.Asserters;
+import com.vital.utils.Fixtures;
 
 import jakarta.transaction.Transactional;
 
-@SpringBootTest
+@SpringBootTest()
 @Transactional
 class TikTests {
 
@@ -29,39 +23,16 @@ class TikTests {
 	TikController tikController;
 
 	@Test
-	void addTask() {
+	void addTik() {
 		// given
-		var rqDto = buildRqDto();
+		var rqDto = Fixtures.buildTikDto();
 
 		// when
 		tikController.tikAdd(rqDto);
 
 		// then
 		TikEntity entity = tiksRepository.findByUidAndId(rqDto.getUid(), rqDto.getId());
-		
-		 assertTaskEntityToDTo(rqDto, entity);
-	}
-
-	private void assertTaskEntityToDTo(TikDTO rqDto, TikEntity entity) {
-		assertThat(rqDto.getId()).isEqualTo(entity.getId());
-		assertThat(rqDto.getUid()).isEqualTo(entity.getUid());
-		assertThat(rqDto.getMid()).isEqualTo(entity.getMid());
-		assertThat(rqDto.getTid()).isEqualTo(entity.getTid());
-		assertThat(rqDto.getOid()).isEqualTo(entity.getOid());
-		assertThat(rqDto.getDatetime()).isEqualTo(entity.getDatetime());
-		assertThat(rqDto.getValue()).isEqualTo(entity.getValue());
-	}
-
-	private TikDTO buildRqDto() {
-		return TikDTO.builder()
-				.id(UUID.randomUUID().toString())
-				.uid(UUID.randomUUID().toString())
-				.mid(UUID.randomUUID().toString())
-				.tid(UUID.randomUUID().toString())
-				.oid(UUID.randomUUID().toString())
-				.datetime(Instant.now().minus(10, ChronoUnit.DAYS))
-				.value((new Random()).nextLong())
-				.build();
+		Asserters.assertTaskEntityToDTo(rqDto, entity);
 	}
 
 }

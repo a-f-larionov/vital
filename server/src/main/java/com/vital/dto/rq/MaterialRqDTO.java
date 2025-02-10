@@ -2,32 +2,30 @@ package com.vital.dto.rq;
 
 import java.time.Instant;
 
-import org.hibernate.annotations.CreationTimestamp;
-
 import jakarta.validation.constraints.NotBlank;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Getter
 @Setter
-@NoArgsConstructor
-public class CommentRqDTO {
+public class MaterialRqDTO {
 
     @NotBlank
     private String id;
-    
+
     @NotBlank
     private String uid;
 
     @NotBlank
-    private String taskId;
+    private String title;
 
-    private String tikId;
-
-    @CreationTimestamp
     private Instant created;
-    
-    @NotBlank
-    private String text;
+
+    private Instant finished;
 }

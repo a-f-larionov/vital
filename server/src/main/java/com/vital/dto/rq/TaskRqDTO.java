@@ -1,7 +1,6 @@
 package com.vital.dto.rq;
 
 import java.time.Instant;
-import java.util.ArrayList;
 import java.util.List;
 
 import com.vital.dto.MetricaDTO;
@@ -26,13 +25,14 @@ public class TaskRqDTO {
     private String uid;
 
     @Size(min = 1)
-    private String title = "";
+    private String title;
 
+    //@todo-r created auto-truncate seconds???
     private Instant created;
 
     private Instant tikLastUpdate;
 
     private Boolean sortToBottom;
 
-    private List<MetricaDTO> metrics = new ArrayList<>();
+    private List<MetricaDTO> metrics;
 }

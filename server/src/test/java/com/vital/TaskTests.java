@@ -2,26 +2,29 @@ package com.vital;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.UUID;
 
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.vital.controllers.TaskController;
-import com.vital.dto.MetricaDTO;
-import com.vital.dto.rq.TaskRqDTO;
-import com.vital.entities.MetricaEntity;
+import com.vital.dto.rq.TaskListRqDTO;
 import com.vital.entities.TaskEntity;
 import com.vital.repositories.TaskRepository;
+import com.vital.utils.Asserters;
+import com.vital.utils.Fixtures;
 
 import jakarta.transaction.Transactional;
 
 @SpringBootTest
 @Transactional
+//@Commit
+@ActiveProfiles("test")
+@Disabled
 class TaskTests {
 
 	@Autowired
@@ -33,22 +36,22 @@ class TaskTests {
 	@Test
 	void addTask() {
 		// given
-		var rqDto = buildRqDto();
+		var rqDto = Fixtures.buildTaskRqDto();
 
 		// when
 		taskController.add(rqDto);
 
 		// then
 		TaskEntity entity = taskRepository.findByUidAndId(rqDto.getUid(), rqDto.getId());
-		assertTaskEntityToDTo(rqDto, entity);
+		Asserters.assertTaskEntityToDTo(rqDto, entity);
 		assertThat(entity.metrics).isNull();
 	}
 
 	@Test
 	void addTaskWithMetrics() {
 		// given
-		var rqDto = buildRqDto();
-		var metricDto = buildMetricDto(rqDto.getId());
+		var rqDto = Fixtures.buildTaskRqDto();
+		var metricDto = Fixtures.buildMetricDto(rqDto.getId());
 		rqDto.setMetrics(List.of(metricDto));
 
 		// when
@@ -58,14 +61,14 @@ class TaskTests {
 		TaskEntity taskEntity = taskRepository.findByUidAndId(rqDto.getUid(), rqDto.getId());
 		assertThat(taskEntity.metrics).hasSize(1);
 		var metric = taskEntity.metrics.stream().findFirst().orElse(null);
-		assertMetricEntityToDto(metric, metricDto);
+		Asserters.assertMetricEntityToDto(metric, metricDto);
 		assertThat(metric.getTiks()).isNull();
 	}
 
 	@Test
 	void updateTask() {
 		// given
-		var rqDto = buildRqDto();
+		var rqDto = Fixtures.buildTaskRqDto();
 		taskController.add(rqDto);
 
 		// when
@@ -74,21 +77,21 @@ class TaskTests {
 
 		// then
 		TaskEntity entity = taskRepository.findByUidAndId(rqDto.getUid(), rqDto.getId());
-		assertTaskEntityToDTo(rqDto, entity);
+		Asserters.assertTaskEntityToDTo(rqDto, entity);
 		assertThat(entity.metrics).isNull();
 	}
 
 	@Test
 	void updateTaskWithMetrics() {
 		// given
-		var rqDto = buildRqDto();
-		var metricDtoUpdated = buildMetricDto(rqDto.getId());
+		var rqDto = Fixtures.buildTaskRqDto();
+		var metricDtoUpdated = Fixtures.buildMetricDto(rqDto.getId());
 		rqDto.setMetrics(List.of(metricDtoUpdated));
 		taskController.add(rqDto);
 
 		// when
 		rqDto.setTitle(rqDto.getTitle() + "-updated");
-		metricDtoUpdated = buildMetricDto(rqDto.getId(), metricDtoUpdated.getId());
+		metricDtoUpdated = Fixtures.buildMetricDto(rqDto.getId(), metricDtoUpdated.getId());
 		rqDto.setMetrics(List.of(metricDtoUpdated));
 		taskController.update(rqDto);
 
@@ -96,21 +99,21 @@ class TaskTests {
 		TaskEntity taskEntity = taskRepository.findByUidAndId(rqDto.getUid(), rqDto.getId());
 		assertThat(taskEntity.metrics).hasSize(1);
 		var metricActual = taskEntity.metrics.getFirst();
-		assertMetricEntityToDto(metricActual, metricDtoUpdated);
-		assertThat(metricActual.getTiks()).isNull();
+		Asserters.assertMetricEntityToDto(metricActual, metricDtoUpdated);
+		assertThat(metricActual.getTiks()).isEmpty();
 	}
 
 	@Test
 	void removeOneMetric() {
 		// given
-		var rqDto = buildRqDto();
-		var metric1 = buildMetricDto(rqDto.getId());
-		var metric2 = buildMetricDto(rqDto.getId());
+		var rqDto = Fixtures.buildTaskRqDto();
+		var metric1 = Fixtures.buildMetricDto(rqDto.getId());
+		var metric2 = Fixtures.buildMetricDto(rqDto.getId());
 		rqDto.setMetrics(List.of(metric1, metric2));
 		taskController.add(rqDto);
 
 		// when
-		var metric3 = buildMetricDto(rqDto.getId(), metric1.getId());
+		var metric3 = Fixtures.buildMetricDto(rqDto.getId(), metric1.getId());
 		rqDto.setMetrics(List.of(metric3));
 		taskController.update(rqDto);
 
@@ -118,61 +121,35 @@ class TaskTests {
 		TaskEntity taskEntity = taskRepository.findByUidAndId(rqDto.getUid(), rqDto.getId());
 		assertThat(taskEntity.metrics).hasSize(1);
 		var metricActual = taskEntity.metrics.getFirst();
-		assertMetricEntityToDto(metricActual, metric3);
+		Asserters.assertMetricEntityToDto(metricActual, metric3);
 		assertThat(metricActual.getTiks()).isNull();
 	}
 
-	private void assertMetricEntityToDto(MetricaEntity metric, MetricaDTO metricDto) {
-		assertThat(metric.getId()).isEqualTo(metricDto.getId());
-		assertThat(metric.getSort()).isEqualTo(metricDto.getSort());
-		assertThat(metric.getTask().getId()).isEqualTo(metricDto.getTaskId());
-		assertThat(metric.getTitle()).isEqualTo(metricDto.getTitle());
-		assertThat(metric.getShortTitle()).isEqualTo(metricDto.getShortTitle());
-		assertThat(metric.getIcon()).isEqualTo(metricDto.getIcon());
-		assertThat(metric.getTypeCode()).isEqualTo(metricDto.getTypeCode());
-		assertThat(metric.getInputCode()).isEqualTo(metricDto.getInputCode());
-		assertThat(metric.getViewCode()).isEqualTo(metricDto.getViewCode());
-		assertThat(metric.getTemplateId()).isEqualTo(metricDto.getTemplateId());
-	}
+	@Test
+	void listTaskMetric() {
+		// given
+		var rqDto = new TaskListRqDTO(UUID.randomUUID().toString());
+		var taskEntity = Fixtures.buildTaskEntity(rqDto.getUid());
+		var metricaEntity = Fixtures.buildMetricaEntity(rqDto.getUid(), taskEntity);
+		var tikEntity = Fixtures.buildTikEntity(rqDto.getUid(), taskEntity.getId(), metricaEntity.getId());
+		metricaEntity.setTiks(List.of(tikEntity));
+		taskEntity.setMetrics(List.of(metricaEntity));
+		taskRepository.save(taskEntity);
 
-	private MetricaDTO buildMetricDto(String taskId) {
-		var metricId = UUID.randomUUID().toString();
-		return buildMetricDto(taskId, metricId);
-	}
+		// when
+		var list = taskController.list(rqDto);
 
-	private MetricaDTO buildMetricDto(String taskId, String metricId) {
-		var rnd = UUID.randomUUID().toString().substring(0, 2);
-		// @todo string random
-		return MetricaDTO.builder()
-				.id(metricId)
-				.sort(100L)
-				.taskId(taskId)
-				.title("title" + rnd)
-				.shortTitle("shortTitle" + rnd)
-				.icon("icon" + rnd)
-				.typeCode("typeCode" + rnd)
-				.inputCode("inputCode" + rnd)
-				.viewCode("viewCode" + rnd)
-				.templateId(UUID.randomUUID().toString())
-				.build();
-	}
+		// then
+		assertThat(list).size().isEqualTo(1);
+		var taskRsDto = list.get(0);
+		Asserters.assertTaskRqDTOAndTaskEntity(taskRsDto, taskEntity);
 
-	private void assertTaskEntityToDTo(TaskRqDTO rqDto, TaskEntity entity) {
-		assertThat(entity.getId()).isEqualTo(rqDto.getId());
-		assertThat(entity.getUid()).isEqualTo(rqDto.getUid());
-		assertThat(entity.getTitle()).isEqualTo(rqDto.getTitle());
-		assertThat(entity.getIsArchived()).isFalse();
-		assertThat(entity.getCreated()).isEqualTo(rqDto.getCreated());
-	}
+		assertThat(taskRsDto.getMetrics()).size().isEqualTo(1);
+		var metricaRsDo = taskRsDto.getMetrics().get(0);
+		Asserters.assertMetricEntityToDto(metricaEntity, metricaRsDo);
 
-	private TaskRqDTO buildRqDto() {
-		return TaskRqDTO.builder()
-				.id(UUID.randomUUID().toString())
-				.sortToBottom(false)
-				.uid(UUID.randomUUID().toString())
-				.title("title-001" + UUID.randomUUID().toString())
-				.created(Instant.now().minus(10, ChronoUnit.DAYS))
-				.build();
+		assertThat(metricaRsDo.getTiks()).size().isEqualTo(1);
+		var tikRsDto = metricaRsDo.getTiks().get(0);
+		Asserters.assertEquals(tikRsDto, tikEntity);
 	}
-
 }

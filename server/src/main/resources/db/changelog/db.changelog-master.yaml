@@ -1,92 +1,115 @@
 databaseChangeLog:
-    - changeSet:
-          id: "1"
-          author: developer
-          comment: "Create Task Table"
-          changes:
-              - sqlFile:
-                    path: /db/changelog/001-create-task-table.sql
-    - changeSet:
-          id: "2"
-          author: developer
-          comment: "Create Tik Table"
-          changes:
-              - sqlFile:
-                    path: /db/changelog/002-create-tik-table.sql
-    - changeSet:
-          id: "3"
-          author: developer
-          comment: "Create Metrica Table"
-          changes:
-              - sqlFile:
-                    path: /db/changelog/003-create-metrica-table.sql
-    - changeSet:
-          id: "4"
-          author: developer
-          comment: " add user entity"
-          changes:
-              - sqlFile:
-                    path: /db/changelog/004-create-user-entity.sql
-    - changeSet:
-          id: "5"
-          author: developer
-          comment: Metrica base data
-          changes:
-              - sqlFile:
-                    path: /db/changelog/005-insert-metrica.sql
+      - changeSet:
+              id: "1"
+              author: developer
+              comment: "Create Task Table"
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/001-create-task-table.sql
+      - changeSet:
+              id: "2"
+              author: developer
+              comment: "Create Tik Table"
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/002-create-tik-table.sql
+      - changeSet:
+              id: "3"
+              author: developer
+              comment: "Create Metrica Table"
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/003-create-metrica-table.sql
+      - changeSet:
+              id: "4"
+              author: developer
+              comment: " add user entity"
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/004-create-user-entity.sql
+      - changeSet:
+              id: "5"
+              author: developer
+              comment: Metrica base data
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/005-insert-metrica.sql
 
-    - changeSet:
-          id: "6"
-          author: developer
-          comment: Comments table
-          changes:
-              - sqlFile:
-                    path: /db/changelog/006-create-comment-entity.sql
+      - changeSet:
+              id: "6"
+              author: developer
+              comment: Comments table
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/006-create-comment-entity.sql
 
-    - changeSet:
-          id: "7"
-          author: developer
-          comment: Metrica checker
-          changes:
-              - sqlFile:
-                    path: /db/changelog/007-metrica-insert-checker.sql
+      - changeSet:
+              id: "7"
+              author: developer
+              comment: Metrica checker
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/007-metrica-insert-checker.sql
 
-    - changeSet:
-          id: "8"
-          author: developer
-          comment: Metrica remove m2,m3,m4
-          changes:
-              - sqlFile:
-                    path: /db/changelog/008-metrica-remove-m234.sql
+      - changeSet:
+              id: "8"
+              author: developer
+              comment: Metrica remove m2,m3,m4
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/008-metrica-remove-m234.sql
 
-    - changeSet:
-          id: "9"
-          author: developer
-          comment: restructing metrica
-          changes:
-              - sqlFile:
-                    path: /db/changelog/009-metrica-restructuring.sql
+      - changeSet:
+              id: "9"
+              author: developer
+              comment: restructing metrica
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/009-metrica-restructuring.sql
 
-    - changeSet:
-          id: "10"
-          author: developer
-          comment: resturction metrics 2
-          changes:
-              - sqlFile:
-                    path: /db/changelog/010-metrica-restructuring-2.sql
+      - changeSet:
+              id: "10"
+              author: developer
+              comment: resturction metrics 2
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/010-metrica-restructuring-2.sql
 
-    - changeSet:
-          id: "11"
-          author: developer
-          comment: add task tik_last_update column
-          changes:
-              - sqlFile:
-                    path: /db/changelog/011-task-add-column-tik-last-update.sql
+      - changeSet:
+              id: "11"
+              author: developer
+              comment: add task tik_last_update column
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/011-task-add-column-tik-last-update.sql
 
-    - changeSet:
-          id: "12"
-          author: developer
-          comment: add task sort_to_bottom column
-          changes:
-              - sqlFile:
-                    path: /db/changelog/012-task-add-column-sort-to-bottom.sql
+      - changeSet:
+              id: "12"
+              author: developer
+              comment: add task sort_to_bottom column
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/012-task-add-column-sort-to-bottom.sql
+
+      - changeSet:
+              id: "13"
+              author: developer
+              comment: create material table
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/013-create-material-table.sql
+
+      - changeSet:
+              id: "14"
+              author: developer
+              comment: create material table
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/014-alter-comments-tik-maybe-null.sql
+      - changeSet:
+              id: "15"
+              author: developer
+              comment: create material table
+              changes:
+                    - sqlFile:
+                            path: /db/changelog/015-add-is-archived-materials.sql

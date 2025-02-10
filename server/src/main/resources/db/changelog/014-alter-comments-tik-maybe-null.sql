@@ -1,0 +1,1 @@
+ALTER TABLE comment_entity ALTER COLUMN tik_id drop not null;

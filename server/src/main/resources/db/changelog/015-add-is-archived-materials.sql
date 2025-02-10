@@ -1,0 +1,1 @@
+ALTER TABLE material_entity add column is_archived boolean not null default false;

@@ -38,7 +38,7 @@ public class TaskController {
     final MetricRepository metricaRepository;
     final TaskMapper taskMapper;
     final TikMapper tikMapper;
- 
+
     @PostMapping("/add")
     public ResponseDTO add(@RequestBody @Valid TaskRqDTO taskRqDto) {
 
@@ -92,22 +92,22 @@ public class TaskController {
                 rqDto.getTaskId(),
                 rqDto.getMetricaId(),
                 rqDto.getDatetimeFrom());
-                
+
         tikList.forEach(tik -> {
             tik.setValue(0L);
             tiksRepository.save(tik);
         });
 
         if (tikList.isEmpty()) {
-            tiksRepository.save(new TikEntity(
-                    UUID.randomUUID().toString(),
-                    rqDto.getMetricaId(),
-                    rqDto.getUid(),
-                    rqDto.getTaskId(),
-                    null,
-                    false,
-                    Instant.now(),
-                    0L));
+            tiksRepository.save(
+                    new TikEntity(
+                            UUID.randomUUID().toString(),
+                            rqDto.getUid(),
+                            rqDto.getTaskId(),
+                            rqDto.getMetricaId(),
+                            0L,
+                            Instant.now(),
+                            false));
         }
 
         return new ResponseDTO("OK");

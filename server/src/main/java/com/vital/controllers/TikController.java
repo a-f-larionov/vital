@@ -31,7 +31,7 @@ public class TikController {
 
         TikEntity entity = tikMapper.toEntity(tikDto);
         tiksRepository.save(entity);
-        
+
         taskRepository.setTikLastUpdate(tikDto.getTid());
 
         return new ResponseDTO("OK");
@@ -51,7 +51,7 @@ public class TikController {
     @PostMapping("/undo")
     public ResponseDTO undo(@RequestBody @Valid TikDTO tikDto) {
         tiksRepository.deleteById(tikDto.getId());
-        
+
         taskRepository.setTikLastUpdate(tikDto.getTid());
 
         return new ResponseDTO("OK");
