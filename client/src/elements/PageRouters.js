@@ -3,11 +3,11 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import { AppBar, Avatar, Box, Button, Grid2, Toolbar, Typography } from "@mui/material";
 import React from "react";
 import AppMenuRightButtons from "../elements/AppMenuRightButtons";
-import CommitedSnakbar from '../elements/CommitedSnackbar';
 import ContentPage from "../elements/ContentPage";
 import ToolAddTask from "../elements/ToolAddTask";
 import PageManager from '../managers/PageManager';
 import UserManager from '../managers/UserManager';
+import CommitedSnakbar from './snackbar/CommitedSnackbar';
 
 function PageRouter({ tasks, setTasks, collapsAll, setCollapsAll }) {
     return (
@@ -53,7 +53,10 @@ function PageRouter({ tasks, setTasks, collapsAll, setCollapsAll }) {
                 <ContentPage tasks={tasks} setTasks={setTasks} />
 
             </Grid2>
-            <CommitedSnakbar />
+
+            <Grid2 size="13">
+                <CommitedSnakbar />
+            </Grid2>
         </Grid2 >);
 }
 

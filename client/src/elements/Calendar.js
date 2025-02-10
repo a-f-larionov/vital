@@ -42,7 +42,7 @@ function Calendar({ tasks }) {
     let hours = [];
     let min = Math.min(...tasks.map(task => Math.min(...task.metrics.map(metric => Math.min(...metric.tiks.map(tik => tik.datetime)))))) * 1000;
     let max = Math.max(...tasks.map(task => Math.max(...task.metrics.map(metric => Math.max(...metric.tiks.map(tik => tik.datetime)))))) * 1000;
-    
+
     for (var i = 0; i < 24; i++) {
         hours.push({ hour: i });
     }
@@ -120,7 +120,7 @@ function Calendar({ tasks }) {
 
                                             return <div key={tik.id}
                                                 style={{ position: 'relative', left: left, top: top, width: 0, height: 0, fontSize: 10 }}>
-                                                <div style={{ width: 95, height: duration, background: backColor, borderRadius: 4, textAlign:'center' }}>
+                                                <div style={{ width: 95, height: duration, background: backColor, borderRadius: 4, textAlign: 'center' }}>
                                                     {title}
                                                 </div>
                                             </div>

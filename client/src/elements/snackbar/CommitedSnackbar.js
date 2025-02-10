@@ -4,8 +4,12 @@ import SendIcon from '@mui/icons-material/Send';
 import { Box, Button, Grid2, IconButton, Snackbar } from "@mui/material";
 import { Input } from "antd";
 import React from "react";
-import TaskManager from "../managers/TaskManager";
-import utils from "../utils";
+import CommentManager from "../../managers/CommentsManager";
+import TaskManager from "../../managers/TaskManager";
+import utils from "../../utils";
+
+import MaterialSelector from "./MaterialSelector";
+import TaskSelector from "./TaskSelector";
 
 function CommitedSnakbar() {
 
@@ -20,7 +24,7 @@ function CommitedSnakbar() {
     function sendHandler() {
         setOpen(false);
         let comment = commentRef.current.input.value;
-        //   CommentManager.add(comment, lastOne.task.id, lastOne.tik.id);
+        CommentManager.add(comment, task.id);
     }
 
     const handleClose = (event, reason) => {
@@ -40,9 +44,21 @@ function CommitedSnakbar() {
         TaskManager.tikUndo(tik);
     };
 
+    function materialOnChange(material) {
+        console.log("set ",material);
+    }
+
     const action = (
 
         <Grid2 container sx={{ paddingRight: 0, margin: 0 }} >
+
+            <Grid2 size={8}>
+
+                <MaterialSelector onChangeValue={materialOnChange} />
+
+                <TaskSelector onChangeValue={materialOnChange} />
+
+            </Grid2>
 
             <Grid2 size={8}>
                 {task ? task.title : ''}
@@ -63,8 +79,6 @@ function CommitedSnakbar() {
                     }) : ''}
             </Grid2>
             <Grid2 size={4} align="right" >
-
-
 
                 <IconButton
                     size="small"
@@ -87,13 +101,16 @@ function CommitedSnakbar() {
 
     );
 
+
     return <Snackbar
-        sx={{ "& div.MuiSnackbarContent-action ": { margin: 0, padding: '1px' } }}
+        sx={{ "& div.MuiSnackbarContent-action ": { margin: 0, padding: '1px' }, width: '100 %' }}
         open={open}
+        aria-hidden={true}
         autoHideDuration={50000}
         onClose={handleClose}
         action={action}
     />
+
 }
 
 export default CommitedSnakbar;

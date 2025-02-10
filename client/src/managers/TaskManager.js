@@ -398,12 +398,11 @@ TaskManager.getDates = () => {
     // get all tiks from all metrics from all tasks and find min datetime
     let minDate;
     if (tasks.length > 0) {
-        minDate = tasks.map(
-            task => task.metrics.map(metric => metric.tiks)
-                .reduce((all, next) => [...all, ...next]))
-            .reduce((all, next) => [...all, ...next])
+        minDate = Math.min(...tasks
+            .flatMap(task => task.metrics)
+            .flatMap(metric => metric.tiks)
             .map(tik => tik.datetime)
-            .reduce((min, next) => next < min ? next : min);
+        );
     } else {
         minDate = Date.now();
     }
