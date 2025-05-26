@@ -58,13 +58,13 @@ public class TikController {
     }
 
     @PostMapping("/update")
-    public ResponseDTO update(@RequestBody @Valid TikDTO taskDto) {
+    public ResponseDTO update(@RequestBody @Valid TikDTO tikDto) {
 
-        var entity = tikMapper.toEntity(taskDto);
+        var entity = tikMapper.toEntity(tikDto);
 
         tiksRepository.save(entity);
 
-        taskRepository.setTikLastUpdate(taskDto.getTid());
+        taskRepository.setTikLastUpdate(tikDto.getTid());
 
         return new ResponseDTO("OK");
     }
