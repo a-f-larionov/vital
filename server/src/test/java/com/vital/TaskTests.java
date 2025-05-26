@@ -22,7 +22,6 @@ import jakarta.transaction.Transactional;
 
 @SpringBootTest
 @Transactional
-//@Commit
 @ActiveProfiles("test")
 @Disabled
 class TaskTests {

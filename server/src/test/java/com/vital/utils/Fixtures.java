@@ -101,7 +101,7 @@ public class Fixtures {
         return MaterialRqDTO.builder()
                 .id(UUID.randomUUID().toString())
                 .uid(UUID.randomUUID().toString())
-                .title("title-001" + UUID.randomUUID())
+                .title("title " + UUID.randomUUID())
                 .created(Instant.now().truncatedTo(ChronoUnit.SECONDS))
                 .build();
     }
